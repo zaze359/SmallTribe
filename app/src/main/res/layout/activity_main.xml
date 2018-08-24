@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout>
+
+    <data>
+
+        <variable
+            name="playerManager"
+            type="com.zaze.tribe.util.MediaPlayerManager" />
+
+    </data>
+
+    <android.support.v4.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/main_drawer_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fitsSystemWindows="true"
+        android:orientation="vertical"
+        tools:context="com.zaze.tribe.MainActivity">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <com.ashokvarma.bottomnavigation.BottomNavigationBar
+                android:id="@+id/main_navigation_bar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                tools:background="@color/grey" />
+
+            <include
+                android:id="@+id/music_navigation_bar"
+                layout="@layout/music_nav_bar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_above="@id/main_navigation_bar"
+                app:music="@{playerManager.curMusicData}"
+                app:playerManager="@{playerManager}" />
+
+
+            <android.support.design.widget.CoordinatorLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_above="@id/music_navigation_bar"
+                android:layout_alignParentTop="true">
+
+                <android.support.design.widget.AppBarLayout
+                    android:id="@+id/main_app_bar_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <!--<android.support.design.widget.CollapsingToolbarLayout-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"-->
+                    <!--app:layout_scrollFlags="scroll|exitUntilCollapsed">-->
+
+                    <android.support.v7.widget.Toolbar
+                        android:id="@+id/main_toolbar"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="?attr/colorPrimary"
+                        android:minHeight="?attr/actionBarSize"
+                        android:theme="@style/ThemeOverlay.AppCompat.Dark"
+                        app:layout_scrollFlags="scroll|enterAlways" />
+
+                    <!--</android.support.design.widget.CollapsingToolbarLayout>-->
+
+                </android.support.design.widget.AppBarLayout>
+
+                <FrameLayout
+                    android:id="@+id/main_content_fl"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+                    tools:background="@color/black" />
+            </android.support.design.widget.CoordinatorLayout>
+
+        </RelativeLayout>
+
+
+        <!-- Navigation Drawer -->
+        <android.support.design.widget.NavigationView
+            android:id="@+id/main_left_nav"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="start"
+            app:headerLayout="@layout/drawer_header_layout"
+            app:menu="@menu/drawer_actions" />
+    </android.support.v4.widget.DrawerLayout>
+
+</layout>
+
