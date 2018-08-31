@@ -1,14 +1,16 @@
 package com.zaze.tribe.util
 
-import android.app.Application
+import android.content.Intent
+import android.databinding.ObservableBoolean
 import android.databinding.ObservableField
 import android.databinding.ObservableInt
-import android.media.MediaPlayer
-import android.net.Uri
-import android.os.Build
+import com.zaze.tribe.App
 import com.zaze.tribe.data.dto.MusicInfo
+import com.zaze.tribe.service.PlayerService
+import com.zaze.utils.JsonUtil
 import com.zaze.utils.log.ZLog
 import com.zaze.utils.log.ZTag
+import java.util.*
 
 /**
  * Description :
@@ -16,97 +18,131 @@ import com.zaze.utils.log.ZTag
  * @author : ZAZE
  * @version : 2018-07-23 - 18:58
  */
-class MediaPlayerManager private constructor(private val context: Application) {
-    private var mediaPlayer: MediaPlayer? = null
-    private var startTimeMillis = 0L
-    private var pauseTimeMillis = 0L
+object MediaPlayerManager {
+    @JvmStatic
     val curMusicData = ObservableField<MusicInfo>()
-    val progress = ObservableInt()
 
-    private val errorListener = MediaPlayer.OnErrorListener { mp, what, extra ->
-        true
+    @JvmStatic
+    val progress = ObservableInt(0)
+    /**
+     * 仅用于UI的显示，不负责逻辑判断
+     */
+    @JvmStatic
+    val isPaused = ObservableBoolean(true)
+    /**
+     * 循环模式 LoopMode
+     */
+    @JvmStatic
+    val loopMode = ObservableInt(LoopMode.LIST)
+
+    /**
+     * 播放列表
+     */
+    @JvmStatic
+    val playerList = ArrayList<MusicInfo>()
+
+    @JvmStatic
+    fun start(musicInfo: MusicInfo?) {
+        addToPlayerlist(musicInfo)
+        startService(PlayerService.PLAY, musicInfo)
     }
 
-    companion object {
-        @Volatile
-        private var INSTANCE: MediaPlayerManager? = null
-
-        fun getInstance(context: Application) = INSTANCE
-                ?: synchronized(ViewModelFactory::class.java) {
-                    INSTANCE ?: MediaPlayerManager(context).also {
-                        INSTANCE = it
-                    }
-                }
-    }
-
-    @Synchronized
-    fun start(musicInfo: MusicInfo) {
-        mediaPlayer ?: MediaPlayer.create(context, Uri.parse("file://${musicInfo.localPath}")).let {
-            mediaPlayer = it
-            it.setOnErrorListener(errorListener)
-        }
-        mediaPlayer?.apply {
-            if (isPlaying) {
-                val curMusic = curMusicData.get()
-                if (curMusic != null && musicInfo.localPath == curMusic.localPath) {
-                    this@MediaPlayerManager.pause()
-                } else {
-                    this@MediaPlayerManager.stop()
-                    this@MediaPlayerManager.start(musicInfo)
-                }
-            } else {
-                curMusicData.set(musicInfo)
-                ZLog.i(ZTag.TAG_DEBUG, "startPlaying : $musicInfo")
-                start()
-                startTimeMillis = System.currentTimeMillis()
-            }
-        }
-    }
-
-    @Synchronized
+    @JvmStatic
     fun pause() {
-        mediaPlayer?.let {
-            if (it.isPlaying) {
-                ZLog.i(ZTag.TAG_DEBUG, "pausePlaying : ${curMusicData.get()}")
-                it.pause()
-                pauseTimeMillis = System.currentTimeMillis()
-            }
-        }
+        startService(PlayerService.PAUSE, null)
     }
 
-    @Synchronized
+    @JvmStatic
     fun stop() {
-        mediaPlayer?.let {
-            if (it.isPlaying) {
-                ZLog.i(ZTag.TAG_DEBUG, "stopPlaying : ${curMusicData.get()}")
-                it.stop()
-                it.release()
-                mediaPlayer = null
-                startTimeMillis = 0L
-                pauseTimeMillis = 0L
-            }
-        }
+        startService(PlayerService.STOP, null)
     }
 
-    @Synchronized
+    @JvmStatic
     fun seekTo(musicInfo: MusicInfo, seekTimeMillis: Long) {
-        start(musicInfo)
-        startTimeMillis = System.currentTimeMillis() - seekTimeMillis
-        mediaPlayer?.let {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                it.seekTo(seekTimeMillis, MediaPlayer.SEEK_PREVIOUS_SYNC)
-            } else {
-                it.seekTo(seekTimeMillis.toInt())
+    }
+
+    private fun startService(action: String, musicInfo: MusicInfo?) {
+        val intent = Intent(App.INSTANCE, PlayerService::class.java)
+        intent.action = action
+        musicInfo?.let {
+            intent.putExtra(PlayerService.MUSIC, JsonUtil.objToJson(musicInfo))
+        }
+        App.INSTANCE.startService(intent)
+    }
+
+
+    @JvmStatic
+    fun doNext() {
+        ZLog.i(ZTag.TAG_DEBUG, "doNext")
+        when (loopMode.get()) {
+            LoopMode.LIST_LOOP -> {
+                start(getNext(true))
+            }
+            LoopMode.LIST -> {
+                start(getNext(false))
+            }
+            LoopMode.SINGLE_LOOP -> {
+            }
+            else -> {
             }
         }
     }
-    // --------------------------------------------------
 
-    inner class NotifyProgressRunnable : Runnable {
-
-        override fun run() {
+    @JvmStatic
+    private fun getNext(looper: Boolean): MusicInfo? {
+        val curMusic = curMusicData.get()
+        if (!playerList.isEmpty()) {
+            if (curMusic != null) {
+                var limit = 0
+                for (music in playerList) {
+                    if (music.localPath == curMusic.localPath) {
+                        break
+                    }
+                    limit++
+                }
+                // 定位到下一首
+                limit++
+                if (limit >= playerList.size) {
+                    limit = 0
+                }
+                return playerList[limit]
+            }
         }
-
+        return if (looper) {
+            curMusic
+        } else {
+            null
+        }
     }
 
+    @JvmStatic
+    fun addToPlayerlist(musicInfo: MusicInfo?) {
+        musicInfo?.let {
+            addToPlayerlist(Arrays.asList(musicInfo))
+        }
+    }
+
+    @JvmStatic
+    fun addToPlayerlist(musicList: List<MusicInfo>) {
+        musicList.let {
+            val set = HashSet<String>()
+            playerList.forEach {
+                set.add(it.localPath)
+            }
+            musicList.forEach {
+                if (!set.contains(it.localPath)) {
+                    playerList.add(it)
+                }
+            }
+        }
+    }
+
+    // --------------------------------------------------
+    // --------------------------------------------------
+    object LoopMode {
+        const val LIST_LOOP = 0
+        const val SINGLE_LOOP = 1
+        const val SINGLE = 2
+        const val LIST = 3
+    }
 }

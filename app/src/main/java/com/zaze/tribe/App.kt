@@ -1,6 +1,7 @@
 package com.zaze.tribe
 
 import android.app.Application
+import com.squareup.leakcanary.LeakCanary
 import com.zaze.utils.ZDisplayUtil
 
 /**
@@ -17,6 +18,7 @@ class App : Application() {
 
     override fun onCreate() {
         super.onCreate()
+        LeakCanary.install(this);
         INSTANCE = this
         ZDisplayUtil.init(this)
     }

@@ -13,4 +13,6 @@
     <color name="grey">#999999</color>
     <color name="orange">#F57C00</color>
     <color name="half_trans">#80000000</color>
+    <color name="main_split_line">#e1e1e1</color>
+
 </resources>

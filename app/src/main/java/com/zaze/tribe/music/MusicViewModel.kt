@@ -133,7 +133,7 @@ class MusicViewModel(
      * [music] music
      */
     fun startPlaying(music: MusicInfo) {
-        MediaPlayerManager.getInstance(context).start(music)
+        MediaPlayerManager.start(music)
     }
 
     /**

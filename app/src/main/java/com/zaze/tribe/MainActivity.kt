@@ -16,7 +16,6 @@ import com.ashokvarma.bottomnavigation.BottomNavigationItem
 import com.zaze.common.base.BaseActivity
 import com.zaze.tribe.databinding.ActivityMainBinding
 import com.zaze.tribe.music.MusicFragment
-import com.zaze.tribe.util.MediaPlayerManager
 import com.zaze.tribe.util.replaceFragmentInActivity
 import com.zaze.tribe.util.setImmersion
 import com.zaze.tribe.util.setupActionBar
@@ -36,7 +35,6 @@ class MainActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         viewDataBinding = DataBindingUtil.setContentView(this, R.layout.activity_main)
-        viewDataBinding.playerManager = MediaPlayerManager.getInstance(this.application)
 
         setupPermission()
         setImmersion()

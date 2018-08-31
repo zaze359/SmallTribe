@@ -24,6 +24,9 @@
             android:name=".music.MusicPlayerActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme" />
+
+        <service android:name=".service.PlayerService" />
+
     </application>
 
 </manifest>

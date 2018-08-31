@@ -12,7 +12,7 @@ import android.graphics.Bitmap
  * @version : 2018-07-05 - 21:48
  */
 @Entity(tableName = "Music")
-data class MusicInfo(
+data class MusicInfo (
         /**
          * id
          */

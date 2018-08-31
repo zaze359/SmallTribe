@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <layout>
 
     <data>
@@ -8,11 +7,8 @@
             name="music"
             type="com.zaze.tribe.data.dto.MusicInfo" />
 
-        <variable
-            name="playerManager"
-            type="com.zaze.tribe.util.MediaPlayerManager" />
+        <import type="com.zaze.tribe.util.MediaPlayerManager" />
     </data>
-
 
     <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -23,13 +19,15 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:padding="@dimen/dp_4">
 
             <ImageView
-                android:id="@+id/music_item_album_iv"
                 android:layout_width="@dimen/dp_48"
                 android:layout_height="@dimen/dp_48"
-                android:layout_margin="@dimen/dp_8"
+                android:layout_marginLeft="@dimen/dp_4"
+                android:layout_marginRight="@dimen/dp_4"
+                android:layout_marginTop="@dimen/dp_4"
                 android:contentDescription="@null"
                 android:scaleType="fitCenter"
                 app:bmp="@{music}"
@@ -39,27 +37,40 @@
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingBottom="@dimen/dp_4"
-                android:paddingTop="@dimen/dp_4">
+                android:layout_gravity="center">
 
                 <ImageView
-                    android:id="@+id/music_item_more_iv"
-                    android:layout_width="@dimen/dp_54"
-                    android:layout_height="@dimen/dp_54"
+                    android:id="@+id/music_nav_list_iv"
+                    android:layout_width="@dimen/dp_32"
+                    android:layout_height="@dimen/dp_32"
                     android:layout_alignParentEnd="true"
                     android:layout_alignParentRight="true"
+                    android:layout_centerHorizontal="true"
                     android:layout_centerVertical="true"
+                    android:layout_marginLeft="@dimen/dp_4"
+                    android:layout_marginRight="@dimen/dp_4"
                     android:contentDescription="@null"
-                    android:scaleType="center"
                     android:src="@drawable/ic_more_vert" />
 
+                <ImageView
+                    android:id="@+id/music_nav_status_iv"
+                    android:layout_width="@dimen/dp_32"
+                    android:layout_height="@dimen/dp_32"
+                    android:layout_centerVertical="true"
+                    android:layout_marginEnd="@dimen/dp_4"
+                    android:layout_marginRight="@dimen/dp_4"
+                    android:layout_toLeftOf="@id/music_nav_list_iv"
+                    android:layout_toStartOf="@id/music_nav_list_iv"
+                    android:contentDescription="@null"
+                    android:onClick="@{()->MediaPlayerManager.start(music)}"
+                    android:src="@{MediaPlayerManager.isPaused()?@drawable/ic_play_circle_outline_black_24dp:@drawable/ic_pause_circle_outline_black_24dp}" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_centerInParent="true"
-                    android:layout_toLeftOf="@id/music_item_more_iv"
-                    android:layout_toStartOf="@id/music_item_more_iv"
+                    android:layout_toLeftOf="@id/music_nav_status_iv"
+                    android:layout_toStartOf="@id/music_nav_status_iv"
                     android:orientation="vertical">
 
                     <TextView
@@ -93,7 +104,8 @@
             style="?android:attr/progressBarStyleHorizontal"
             android:layout_width="match_parent"
             android:layout_height="@dimen/dp_4"
-            android:progress="80"
+            android:max="10000"
+            android:progress="@{MediaPlayerManager.progress}"
             android:progressDrawable="@drawable/progress_horizontal" />
 
         <View
