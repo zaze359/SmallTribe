@@ -1,12 +1,19 @@
 package com.zaze.tribe.service
 
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.app.PendingIntent
 import android.app.Service
+import android.content.Context
 import android.content.Intent
 import android.media.MediaPlayer
 import android.net.Uri
 import android.os.Build
 import android.os.IBinder
 import android.os.SystemClock
+import android.support.v4.app.NotificationCompat
+import com.zaze.tribe.MainActivity
+import com.zaze.tribe.R
 import com.zaze.tribe.data.dto.MusicInfo
 import com.zaze.tribe.util.MediaPlayerManager
 import com.zaze.utils.JsonUtil
@@ -60,12 +67,14 @@ class PlayerService : Service() {
 
     override fun onCreate() {
         super.onCreate()
+        updateNotification(null)
         looperExecutor.execute(runnable)
     }
 
     override fun onDestroy() {
         super.onDestroy()
         looperExecutor.remove(runnable)
+        stopForeground(true)
     }
 
     override fun onBind(intent: Intent?): IBinder? {
@@ -163,4 +172,28 @@ class PlayerService : Service() {
         }
     }
     // --------------------------------------------------
+
+    private fun updateNotification(musicInfo: MusicInfo?) {
+        val cannelId = "zaze"
+
+        val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val notificationChannel = NotificationChannel(cannelId, cannelId, NotificationManager.IMPORTANCE_LOW)
+            notificationManager.createNotificationChannel(notificationChannel)
+        }
+        val builder = NotificationCompat.Builder(this, cannelId)
+        val targetIntent = PendingIntent.getActivity(this, 0,
+                Intent(this, MainActivity::class.java), PendingIntent.FLAG_UPDATE_CURRENT)
+        builder.setContentIntent(targetIntent)
+        //设置小图标
+        builder.setSmallIcon(R.mipmap.ic_music_note_white_24dp)
+        //设置通知标题
+        builder.setContentTitle("通知标题")
+        //设置通知内容
+        builder.setContentText("通知内容")
+        builder.setTicker("Test Ticker")
+        val notification = builder.build()
+        startForeground(1, notification)
+//        notificationManager.notify(0, )
+    }
 }

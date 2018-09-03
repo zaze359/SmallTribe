@@ -4,6 +4,7 @@ import android.content.Intent
 import android.databinding.ObservableBoolean
 import android.databinding.ObservableField
 import android.databinding.ObservableInt
+import android.support.v4.content.ContextCompat
 import com.zaze.tribe.App
 import com.zaze.tribe.data.dto.MusicInfo
 import com.zaze.tribe.service.PlayerService
@@ -67,7 +68,13 @@ object MediaPlayerManager {
         musicInfo?.let {
             intent.putExtra(PlayerService.MUSIC, JsonUtil.objToJson(musicInfo))
         }
-        App.INSTANCE.startService(intent)
+        ContextCompat.startForegroundService(App.INSTANCE, intent)
+    }
+
+    @JvmStatic
+    fun stopService(action: String) {
+        val intent = Intent(App.INSTANCE, PlayerService::class.java)
+        App.INSTANCE.stopService(intent)
     }
 
 

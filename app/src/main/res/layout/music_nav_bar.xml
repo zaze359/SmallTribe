@@ -63,7 +63,7 @@
                     android:layout_toStartOf="@id/music_nav_list_iv"
                     android:contentDescription="@null"
                     android:onClick="@{()->MediaPlayerManager.start(music)}"
-                    android:src="@{MediaPlayerManager.isPaused()?@drawable/ic_play_circle_outline_black_24dp:@drawable/ic_pause_circle_outline_black_24dp}" />
+                    android:src="@{MediaPlayerManager.isPaused?@drawable/ic_play_circle_outline_black_24dp:@drawable/ic_pause_circle_outline_black_24dp}" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
