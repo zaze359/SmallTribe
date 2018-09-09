@@ -19,7 +19,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center_vertical"
-        android:onClick="@{()->viewModel.startPlaying(music)}"
+        android:onClick="@{()->viewModel.start(music)}"
         android:orientation="horizontal">
 
         <ImageView
@@ -50,7 +50,7 @@
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
                     android:contentDescription="@null"
-                    android:onClick="@{()->viewModel.showMore(music)}"
+                    android:onClick="@{()-> viewModel.showMore(music)}"
                     android:scaleType="center"
                     android:src="@drawable/ic_more_vert" />
 

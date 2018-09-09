@@ -20,6 +20,7 @@ class MusicFragment : Fragment() {
 
     private lateinit var viewDataBinding: MusicFragBinding
     private lateinit var musicAdapter: MusicAdapter
+    private lateinit var viewModel: MusicViewModel
 
     companion object {
         fun newInstance(): MusicFragment {
@@ -30,19 +31,20 @@ class MusicFragment : Fragment() {
         }
     }
 
+    fun setViewModel(viewModel : MusicViewModel) {
+        this.viewModel = viewModel
+    }
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        viewDataBinding = MusicFragBinding.inflate(inflater, container, false).apply {
-            viewModel = obtainViewModel(MusicViewModel::class.java).apply {
-                loadMusics()
-            }
-        }
+        viewDataBinding = MusicFragBinding.inflate(inflater, container, false)
+        viewDataBinding.viewModel = viewModel
+        viewModel.loadMusics()
         return viewDataBinding.root
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        val viewModel = viewDataBinding.viewModel
-        viewModel?.let {
+        viewModel.let {
             music_recycler_view.layoutManager = LinearLayoutManager(activity)
             musicAdapter = MusicAdapter(activity, ArrayList(0), viewModel)
             music_recycler_view.adapter = musicAdapter

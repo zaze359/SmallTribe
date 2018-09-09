@@ -4,7 +4,9 @@
 
     <data>
 
-        <import type="com.zaze.tribe.util.MediaPlayerManager" />
+        <variable
+            name="musicViewModel"
+            type="com.zaze.tribe.music.MusicViewModel"/>
 
     </data>
 
@@ -35,7 +37,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_above="@id/main_navigation_bar"
-                app:music="@{MediaPlayerManager.curMusicData}" />
+                app:musicViewModel="@{musicViewModel}"
+                app:music="@{musicViewModel.curMusicData}" />
 
 
             <android.support.design.widget.CoordinatorLayout

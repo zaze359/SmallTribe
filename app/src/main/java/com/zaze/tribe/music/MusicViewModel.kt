@@ -2,14 +2,17 @@ package com.zaze.tribe.music
 
 import android.app.Application
 import android.arch.lifecycle.AndroidViewModel
-import android.databinding.ObservableArrayList
-import android.databinding.ObservableBoolean
-import android.databinding.ObservableList
+import android.content.ComponentName
+import android.content.ServiceConnection
+import android.databinding.*
 import android.media.MediaMetadataRetriever
+import android.media.MediaPlayer
+import android.os.IBinder
 import android.text.TextUtils
 import com.zaze.tribe.data.dto.MusicInfo
 import com.zaze.tribe.data.source.repository.MusicRepository
-import com.zaze.tribe.util.MediaPlayerManager
+import com.zaze.tribe.service.IPlayer
+import com.zaze.tribe.service.PlayerService
 import com.zaze.tribe.util.Utils
 import com.zaze.utils.FileUtil
 import com.zaze.utils.ZTipUtil
@@ -18,6 +21,7 @@ import com.zaze.utils.log.ZTag
 import org.reactivestreams.Subscriber
 import org.reactivestreams.Subscription
 import java.io.File
+import java.util.*
 
 /**
  * Description :
@@ -28,8 +32,84 @@ class MusicViewModel(
         private val context: Application,
         private val musicRepository: MusicRepository
 ) : AndroidViewModel(context) {
-    val dataLoading = ObservableBoolean(false)
     val musicList: ObservableList<MusicInfo> = ObservableArrayList()
+
+    /**
+     * 是否加载中
+     */
+    val dataLoading = ObservableBoolean(false)
+
+    /**
+     * 播放列表
+     */
+    val playerList = ArrayList<MusicInfo>()
+
+    /**
+     * 当前播放的页面
+     */
+    val curMusicData = ObservableField<MusicInfo>()
+
+    val progress = ObservableInt(0)
+    /**
+     * 仅用于UI的显示，不负责逻辑判断
+     */
+    val isPaused = ObservableBoolean(true)
+    /**
+     * 循环模式 LoopMode
+     */
+    val loopMode = ObservableInt(LoopMode.LIST)
+
+    // ------------------------------------------------------
+    var mBinder: PlayerService.ServiceBinder? = null
+
+    val playerCallback =  object : PlayerService.PlayerCallback {
+
+        override fun preStart(musicInfo: MusicInfo) {
+            curMusicData.set(musicInfo)
+        }
+
+        override fun onStart(musicInfo: MusicInfo) {
+            ZLog.i(ZTag.TAG_DEBUG, "start : $musicInfo")
+            isPaused.set(false)
+        }
+
+        override fun onPause() {
+            isPaused.set(true)
+        }
+
+        override fun onProgress(musicInfo: MusicInfo, progress: Int) {
+//            curMusicData.get()?: curMusicData.set(musicInfo)
+            this@MusicViewModel.progress.set(progress)
+        }
+
+        override fun onStop() {
+            isPaused.set(true)
+            progress.set(0)
+        }
+
+        override fun onCompletion(mp: MediaPlayer) {
+            doNext()
+        }
+
+        override fun onError(mp: MediaPlayer, what: Int, extra: Int) {
+            doNext()
+        }
+    }
+
+    val serviceConnection = object : ServiceConnection {
+        override fun onServiceDisconnected(name: ComponentName?) {
+            mBinder = null
+        }
+
+        override fun onServiceConnected(name: ComponentName?, service: IBinder?) {
+            mBinder = service as PlayerService.ServiceBinder
+            mBinder?.setPlayerCallback(playerCallback)
+        }
+
+    }
+
+
+    // ------------------------------------------------------
 
     fun loadMusics() {
         dataLoading.set(true)
@@ -128,13 +208,6 @@ class MusicViewModel(
         return arrayList
     }
 
-    /**
-     * 开始播放
-     * [music] music
-     */
-    fun startPlaying(music: MusicInfo) {
-        MediaPlayerManager.start(music)
-    }
 
     /**
      * 显示更多
@@ -142,5 +215,103 @@ class MusicViewModel(
      */
     fun showMore(music: MusicInfo) {
         ZTipUtil.toast(context, music.localPath)
+    }
+
+    /**
+     * 开始播放
+     * [musicInfo] music
+     */
+    fun start(musicInfo: MusicInfo?) {
+        musicInfo?.let {
+            mBinder?.start(musicInfo)
+        }
+    }
+
+    fun pause() {
+        mBinder?.pause()
+    }
+
+    fun stop() {
+        mBinder?.stop()
+    }
+
+    fun seekTo(musicInfo: MusicInfo, seekTimeMillis: Long) {
+        mBinder?.seekTo(musicInfo, seekTimeMillis)
+    }
+
+    fun doNext() {
+        ZLog.i(ZTag.TAG_DEBUG, "doNext")
+        when (loopMode.get()) {
+            LoopMode.LIST_LOOP -> {
+                getNext(true)?.let {
+                    start(it)
+                }
+            }
+            LoopMode.LIST -> {
+                getNext(false)?.let {
+                    start(it)
+                }
+            }
+            LoopMode.SINGLE_LOOP -> {
+            }
+            else -> {
+            }
+        }
+    }
+
+    private fun getNext(looper: Boolean): MusicInfo? {
+        val curMusic = curMusicData.get()
+        if (!playerList.isEmpty()) {
+            if (curMusic != null) {
+                var limit = 0
+                for (music in playerList) {
+                    if (music.localPath == curMusic.localPath) {
+                        break
+                    }
+                    limit++
+                }
+                // 定位到下一首
+                limit++
+                if (limit >= playerList.size) {
+                    limit = 0
+                }
+                return playerList[limit]
+            }
+        }
+        return if (looper) {
+            curMusic
+        } else {
+            null
+        }
+    }
+
+    fun addToPlayerlist(musicInfo: MusicInfo?) {
+        musicInfo?.let {
+            addToPlayerlist(Arrays.asList(musicInfo))
+        }
+    }
+
+    fun addToPlayerlist(musicList: List<MusicInfo>) {
+        musicList.let {
+            val set = HashSet<String>()
+            playerList.forEach {
+                set.add(it.localPath)
+            }
+            musicList.forEach {
+                if (!set.contains(it.localPath)) {
+                    playerList.add(it)
+                }
+            }
+        }
+    }
+
+    // --------------------------------------------------
+    // --------------------------------------------------
+
+    object LoopMode {
+        const val LIST_LOOP = 0
+        const val SINGLE_LOOP = 1
+        const val SINGLE = 2
+        const val LIST = 3
     }
 }

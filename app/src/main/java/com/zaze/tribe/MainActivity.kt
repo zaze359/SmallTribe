@@ -1,6 +1,7 @@
 package com.zaze.tribe
 
 import android.Manifest
+import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.databinding.DataBindingUtil
@@ -16,6 +17,9 @@ import com.ashokvarma.bottomnavigation.BottomNavigationItem
 import com.zaze.common.base.BaseActivity
 import com.zaze.tribe.databinding.ActivityMainBinding
 import com.zaze.tribe.music.MusicFragment
+import com.zaze.tribe.music.MusicViewModel
+import com.zaze.tribe.service.PlayerService
+import com.zaze.tribe.util.obtainViewModel
 import com.zaze.tribe.util.replaceFragmentInActivity
 import com.zaze.tribe.util.setImmersion
 import com.zaze.tribe.util.setupActionBar
@@ -31,11 +35,13 @@ class MainActivity : BaseActivity() {
 
     private lateinit var drawerToggle: ActionBarDrawerToggle
     private lateinit var viewDataBinding: ActivityMainBinding
+    private lateinit var musicViewModel: MusicViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         viewDataBinding = DataBindingUtil.setContentView(this, R.layout.activity_main)
-
+        musicViewModel = obtainViewModel(MusicViewModel::class.java)
+        viewDataBinding.musicViewModel = musicViewModel
         setupPermission()
         setImmersion()
         setupActionBar(R.id.main_toolbar) {
@@ -45,6 +51,7 @@ class MainActivity : BaseActivity() {
 //            setHomeAsUpIndicator(R.drawable.ic_menu)
         }
         initNavigationBar()
+        // --------------------------------------------------
         // --------------------------------------------------
         drawerToggle = ActionBarDrawerToggle(
                 this, main_drawer_layout, main_toolbar, R.string.app_name, R.string.app_name
@@ -65,6 +72,12 @@ class MainActivity : BaseActivity() {
             }
         }
         // --------------------------------------------------
+        bindService(Intent(this, PlayerService::class.java), musicViewModel.serviceConnection, Context.BIND_AUTO_CREATE)
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        unbindService(musicViewModel.serviceConnection)
     }
 
     private fun setupPermission() {
@@ -78,7 +91,6 @@ class MainActivity : BaseActivity() {
             finish()
         }
     }
-
 
     private fun initNavigationBar() {
         main_navigation_bar.run {
@@ -114,7 +126,7 @@ class MainActivity : BaseActivity() {
                     ?: when (position) {
                         0 -> TestFragment.newInstance("$position")
                         1 -> TestFragment.newInstance("$position")
-                        2 -> MusicFragment.newInstance()
+                        2 -> MusicFragment.newInstance().apply { setViewModel(musicViewModel) }
                         3 -> TestFragment.newInstance("$position")
                         4 -> TestFragment.newInstance("$position")
                         else -> TestFragment.newInstance("$position")
