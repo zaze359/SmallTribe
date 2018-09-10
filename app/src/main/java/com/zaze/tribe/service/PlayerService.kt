@@ -18,6 +18,7 @@ import com.zaze.tribe.App
 import com.zaze.tribe.MainActivity
 import com.zaze.tribe.R
 import com.zaze.tribe.data.dto.MusicInfo
+import com.zaze.tribe.util.IconCache
 import com.zaze.utils.JsonUtil
 import com.zaze.utils.log.ZLog
 import com.zaze.utils.log.ZTag
@@ -62,6 +63,7 @@ class PlayerService : Service(), IPlayer {
             try {
                 mediaPlayer?.let {
                     if (it.isPlaying) {
+                        updateNotification()
                         callback?.onProgress(curMusic, (10000 * (1.0f * it.currentPosition / it.duration)).toInt())
                     }
                 }
@@ -73,7 +75,6 @@ class PlayerService : Service(), IPlayer {
     }
 
     override fun onBind(intent: Intent?): IBinder? {
-        updateNotification(null)
         looperExecutor.execute(runnable)
         return mBinder
     }
@@ -174,18 +175,18 @@ class PlayerService : Service(), IPlayer {
     }
     // --------------------------------------------------
 
-    private fun updateNotification(musicInfo: MusicInfo?) {
-        val cannelId = "zaze"
-
+    private fun updateNotification() {
+        val channelId = "zaze"
         val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val notificationChannel = NotificationChannel(cannelId, cannelId, NotificationManager.IMPORTANCE_LOW)
+            val notificationChannel = NotificationChannel(channelId, channelId, NotificationManager.IMPORTANCE_LOW)
             notificationManager.createNotificationChannel(notificationChannel)
         }
         val targetIntent = PendingIntent.getActivity(this, 0,
                 Intent(this, MainActivity::class.java), PendingIntent.FLAG_UPDATE_CURRENT)
         val remoteViews = RemoteViews(App.INSTANCE.packageName, R.layout.music_notification_layout)
-        val builder = NotificationCompat.Builder(this, cannelId).apply {
+        remoteViews.setImageViewBitmap(R.id.music_notification_icon_iv, IconCache.getMediaIcon(curMusic.localPath))
+        val builder = NotificationCompat.Builder(this, channelId).apply {
             setContent(remoteViews)
             setContentIntent(targetIntent)
             //设置小图标

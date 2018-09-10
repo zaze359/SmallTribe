@@ -148,7 +148,8 @@ class MainActivity : BaseActivity() {
         if (main_drawer_layout.isDrawerOpen(main_left_nav)) {
             main_drawer_layout.closeDrawer(main_left_nav)
         } else {
-            super.onBackPressed()
+            moveTaskToBack(false)
+//            super.onBackPressed()
         }
     }
 
