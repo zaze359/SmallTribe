@@ -1,31 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="horizontal">
+    android:layout_height="match_parent">
 
     <ImageView
         android:id="@+id/music_notification_icon_iv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:minHeight="@dimen/dp_100"
-        android:minWidth="@dimen/dp_100"
-        android:scaleType="center" />
+        android:layout_centerVertical="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:scaleType="fitStart"
+        tools:src="@mipmap/ic_launcher" />
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@id/music_notification_icon_iv"
+        android:layout_alignTop="@id/music_notification_icon_iv"
+        android:layout_toEndOf="@id/music_notification_icon_iv"
+        android:layout_toRightOf="@id/music_notification_icon_iv"
         android:gravity="center_vertical"
         android:orientation="vertical">
 
         <TextView
+            android:id="@+id/music_notification_name_iv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/dp_4"
             tools:text="权御天下" />
 
         <TextView
+            android:id="@+id/music_notification_auth_iv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/dp_4"
@@ -33,4 +40,4 @@
 
     </LinearLayout>
 
-</LinearLayout>
+</RelativeLayout>

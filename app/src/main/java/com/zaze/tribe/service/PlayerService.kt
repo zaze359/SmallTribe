@@ -192,10 +192,10 @@ class PlayerService : Service(), IPlayer {
             //设置小图标
             setSmallIcon(R.mipmap.ic_music_note_white_24dp)
             //设置通知标题
-            setContentTitle("通知标题")
+//            setContentTitle("通知标题")
             //设置通知内容
-            setContentText("通知内容")
-            setTicker("Test Ticker")
+//            setContentText("通知内容")
+//            setTicker("Test Ticker")
         }
 
         val notification = builder.build()
