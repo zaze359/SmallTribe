@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
 
     <data>
 
         <variable
             name="musicViewModel"
-            type="com.zaze.tribe.music.MusicViewModel"/>
+            type="com.zaze.tribe.music.MusicViewModel" />
 
         <variable
             name="music"
@@ -47,7 +47,6 @@
                     android:layout_height="@dimen/dp_32"
                     android:layout_alignParentEnd="true"
                     android:layout_alignParentRight="true"
-                    android:layout_centerHorizontal="true"
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="@dimen/dp_4"
                     android:layout_marginRight="@dimen/dp_4"
@@ -65,7 +64,8 @@
                     android:layout_toStartOf="@id/music_nav_list_iv"
                     android:contentDescription="@null"
                     android:onClick="@{()-> musicViewModel.start(music)}"
-                    android:src="@{musicViewModel.isPaused?@drawable/ic_play_circle_outline_black_24dp:@drawable/ic_pause_circle_outline_black_24dp}" />
+                    android:src="@{musicViewModel.isPaused?@drawable/ic_play_circle_outline_black_24dp:@drawable/ic_pause_circle_outline_black_24dp}"
+                    tools:src="@drawable/ic_play_circle_outline_black_24dp" />
 
                 <LinearLayout
                     android:layout_width="match_parent"

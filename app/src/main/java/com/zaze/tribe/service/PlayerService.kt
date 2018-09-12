@@ -186,8 +186,10 @@ class PlayerService : Service(), IPlayer {
                 Intent(this, MainActivity::class.java), PendingIntent.FLAG_UPDATE_CURRENT)
         val remoteViews = RemoteViews(App.INSTANCE.packageName, R.layout.music_notification_layout)
         remoteViews.setImageViewBitmap(R.id.music_notification_icon_iv, IconCache.getMediaIcon(curMusic.localPath))
+        remoteViews.setTextViewText(R.id.music_notification_name_iv, curMusic.name)
+        remoteViews.setTextViewText(R.id.music_notification_auth_iv, curMusic.artist)
         val builder = NotificationCompat.Builder(this, channelId).apply {
-            setContent(remoteViews)
+            setCustomContentView(remoteViews)
             setContentIntent(targetIntent)
             //设置小图标
             setSmallIcon(R.mipmap.ic_music_note_white_24dp)

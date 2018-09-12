@@ -19,11 +19,11 @@ import java.lang.ref.SoftReference
  */
 object IconCache {
 
-    private const val BMP_SIZE = 48
+    private const val BMP_SIZE = 64
 
-    private val mediaMetadataRetriever by lazy(LazyThreadSafetyMode.SYNCHRONIZED, {
+    private val mediaMetadataRetriever by lazy(LazyThreadSafetyMode.SYNCHRONIZED) {
         MediaMetadataRetriever()
-    })
+    }
 
     private val BITMAP_CACHE = LruCache<String, Bitmap>(100)
 
