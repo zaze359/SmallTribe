@@ -10,6 +10,7 @@ import android.support.v7.app.AppCompatActivity;
  * @author : ZAZE
  * @version : 2018-08-23 - 22:01
  */
+@Deprecated
 public class TempActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {

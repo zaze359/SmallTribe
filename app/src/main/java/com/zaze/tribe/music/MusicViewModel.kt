@@ -61,8 +61,12 @@ class MusicViewModel(
 
     // ------------------------------------------------------
     var mBinder: PlayerService.ServiceBinder? = null
+        set(value) {
+            field = value
+            field?.setPlayerCallback(playerCallback)
+        }
 
-    val playerCallback =  object : PlayerService.PlayerCallback {
+    private val playerCallback = object : PlayerService.PlayerCallback {
 
         override fun preStart(musicInfo: MusicInfo) {
             curMusicData.set(musicInfo)
@@ -87,7 +91,7 @@ class MusicViewModel(
             progress.set(0)
         }
 
-        override fun onCompletion(mp: MediaPlayer) {
+        override fun onCompletion() {
             doNext()
         }
 
@@ -95,19 +99,6 @@ class MusicViewModel(
             doNext()
         }
     }
-
-    val serviceConnection = object : ServiceConnection {
-        override fun onServiceDisconnected(name: ComponentName?) {
-            mBinder = null
-        }
-
-        override fun onServiceConnected(name: ComponentName?, service: IBinder?) {
-            mBinder = service as PlayerService.ServiceBinder
-            mBinder?.setPlayerCallback(playerCallback)
-        }
-
-    }
-
 
     // ------------------------------------------------------
 
@@ -224,6 +215,7 @@ class MusicViewModel(
     fun start(musicInfo: MusicInfo?) {
         musicInfo?.let {
             mBinder?.start(musicInfo)
+            addToPlayerlist(it)
         }
     }
 

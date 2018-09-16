@@ -1,12 +1,15 @@
 package com.zaze.tribe
 
 import android.Manifest
+import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
+import android.content.ServiceConnection
 import android.content.pm.PackageManager
 import android.databinding.DataBindingUtil
 import android.net.Uri
 import android.os.Bundle
+import android.os.IBinder
 import android.support.v4.app.Fragment
 import android.support.v4.view.GravityCompat
 import android.support.v7.app.ActionBarDrawerToggle
@@ -24,6 +27,8 @@ import com.zaze.tribe.util.replaceFragmentInActivity
 import com.zaze.tribe.util.setImmersion
 import com.zaze.tribe.util.setupActionBar
 import com.zaze.utils.FileUtil
+import com.zaze.utils.log.ZLog
+import com.zaze.utils.log.ZTag
 import com.zaze.utils.permission.PermissionUtil
 import kotlinx.android.synthetic.main.activity_main.*
 
@@ -36,6 +41,18 @@ class MainActivity : BaseActivity() {
     private lateinit var drawerToggle: ActionBarDrawerToggle
     private lateinit var viewDataBinding: ActivityMainBinding
     private lateinit var musicViewModel: MusicViewModel
+
+    private val serviceConnection = object : ServiceConnection {
+        override fun onServiceDisconnected(name: ComponentName?) {
+            ZLog.e(ZTag.TAG_DEBUG, "onServiceDisconnected : $name")
+            musicViewModel.mBinder = null
+        }
+
+        override fun onServiceConnected(name: ComponentName?, service: IBinder?) {
+            ZLog.i(ZTag.TAG_DEBUG, "onServiceConnected : $name")
+            musicViewModel.mBinder = service as PlayerService.ServiceBinder
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -72,12 +89,12 @@ class MainActivity : BaseActivity() {
             }
         }
         // --------------------------------------------------
-        bindService(Intent(this, PlayerService::class.java), musicViewModel.serviceConnection, Context.BIND_AUTO_CREATE)
+       bindService(Intent(this, PlayerService::class.java), serviceConnection, Context.BIND_AUTO_CREATE)
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        unbindService(musicViewModel.serviceConnection)
+        unbindService(serviceConnection)
     }
 
     private fun setupPermission() {

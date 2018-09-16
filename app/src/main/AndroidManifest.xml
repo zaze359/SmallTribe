@@ -23,7 +23,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".music.MusicPlayerActivity"
+            android:name=".music.MusicDetailActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme" />
 
