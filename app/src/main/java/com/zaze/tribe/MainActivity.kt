@@ -46,6 +46,7 @@ class MainActivity : BaseActivity() {
         override fun onServiceDisconnected(name: ComponentName?) {
             ZLog.e(ZTag.TAG_DEBUG, "onServiceDisconnected : $name")
             musicViewModel.mBinder = null
+            finish()
         }
 
         override fun onServiceConnected(name: ComponentName?, service: IBinder?) {

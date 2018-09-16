@@ -2,16 +2,12 @@ package com.zaze.tribe.music
 
 import android.app.Application
 import android.arch.lifecycle.AndroidViewModel
-import android.content.ComponentName
-import android.content.ServiceConnection
 import android.databinding.*
 import android.media.MediaMetadataRetriever
 import android.media.MediaPlayer
-import android.os.IBinder
 import android.text.TextUtils
 import com.zaze.tribe.data.dto.MusicInfo
 import com.zaze.tribe.data.source.repository.MusicRepository
-import com.zaze.tribe.service.IPlayer
 import com.zaze.tribe.service.PlayerService
 import com.zaze.tribe.util.Utils
 import com.zaze.utils.FileUtil
@@ -215,7 +211,8 @@ class MusicViewModel(
     fun start(musicInfo: MusicInfo?) {
         musicInfo?.let {
             mBinder?.start(musicInfo)
-            addToPlayerlist(it)
+            addToPlayerList(it)
+
         }
     }
 
@@ -277,21 +274,21 @@ class MusicViewModel(
         }
     }
 
-    fun addToPlayerlist(musicInfo: MusicInfo?) {
+    private fun addToPlayerList(musicInfo: MusicInfo?) {
         musicInfo?.let {
-            addToPlayerlist(Arrays.asList(musicInfo))
+            addToPlayerList(Arrays.asList(musicInfo))
         }
     }
 
-    fun addToPlayerlist(musicList: List<MusicInfo>) {
+    private fun addToPlayerList(musicList: List<MusicInfo>) {
         musicList.let {
             val set = HashSet<String>()
-            playerList.forEach {
-                set.add(it.localPath)
+            for(old in playerList) {
+                set.add(old.localPath)
             }
-            musicList.forEach {
-                if (!set.contains(it.localPath)) {
-                    playerList.add(it)
+            for(new in it) {
+                if (!set.contains(new.localPath)) {
+                    playerList.add(new)
                 }
             }
         }
