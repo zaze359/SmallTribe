@@ -28,7 +28,7 @@ fun ImageView.setBitmap(music: MusicInfo?) {
         it.albumIcon?.apply {
             setImageBitmap(it.albumIcon)
         } ?: ThreadManager.getInstance().runInSingleThread({
-            IconCache.getMediaIcon(it.localPath).apply {
+            IconCache.getSmallMediaIcon(it.localPath).apply {
                 ThreadManager.getInstance().runInUIThread {
                     it.albumIcon = this
                     setImageBitmap(this)

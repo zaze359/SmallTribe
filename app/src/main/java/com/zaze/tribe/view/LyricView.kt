@@ -8,6 +8,8 @@ import android.support.v7.widget.AppCompatTextView
 import android.util.AttributeSet
 import android.view.MotionEvent
 import com.zaze.utils.ZDisplayUtil
+import com.zaze.utils.log.ZLog
+import com.zaze.utils.log.ZTag
 
 /**
  * Description :
@@ -27,9 +29,18 @@ class LyricView : AppCompatTextView {
     private var baseY = 0f
     private var offsetCount = 0
 
+    /**
+     * 当前触摸的 y
+     */
     private var touchY = 0F
 
     private val DEFAULT_ALPHA = 230
+
+    /**
+     * 是否处于拖拽状态
+     */
+    private var isDraging = false
+
 
     constructor(context: Context) : super(context)
 
@@ -106,31 +117,48 @@ class LyricView : AppCompatTextView {
         when (event.action) {
             MotionEvent.ACTION_DOWN -> {
                 touchY = event.y
+                isDraging = true
             }
             MotionEvent.ACTION_MOVE -> {
                 mOffset = event.y - touchY
-                if (mOffset >= interval) {
-                    // 下移
-                    touchY = event.y
-                    mOffset = 0F
-                    index = Math.max(0, index - 1)
-                } else if (mOffset <= -interval) {
-                    // 上移
-                    touchY = event.y
-                    mOffset = 0F
-                    index = Math.min(values?.size ?: 0, index + 1)
+                when {
+                    mOffset >= interval -> {
+                        // 下移
+                        touchY = event.y
+                        moveDown()
+                    }
+                    mOffset <= -interval -> {
+                        // 上移
+                        touchY = event.y
+                        moveUp()
+                    }
+                    else -> invalidate()
                 }
-                invalidate()
             }
             else -> {
+                isDraging = false
             }
         }
         return true
     }
 
+    private fun moveUp() {
+        mOffset = 0F
+        index = Math.min(values?.size?.let { it - 1 } ?: 0, index + 1)
+        invalidate()
+    }
+
+    private fun moveDown() {
+        mOffset = 0F
+        index = Math.max(0, index - 1)
+        invalidate()
+    }
+
+
     // --------------------------------------------------
     fun next() {
-        index++
-        invalidate()
+        if (!isDraging) {
+            moveUp()
+        }
     }
 }

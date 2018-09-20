@@ -5,16 +5,16 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <!--<com.zaze.tribe.view.LyricView-->
-        <!--android:id="@+id/test_lyric_view"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="match_parent" />-->
-
     <TextView
         android:id="@+id/test_content_tv"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:visibility="gone"
+        android:layout_height="wrap_content"
         tools:text="aaaa" />
+
+    <com.zaze.tribe.view.LyricView
+        android:id="@+id/test_lyric_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
 
 </LinearLayout>

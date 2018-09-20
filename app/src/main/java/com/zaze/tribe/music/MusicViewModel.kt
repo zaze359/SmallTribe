@@ -66,15 +66,17 @@ class MusicViewModel(
 
         override fun preStart(musicInfo: MusicInfo) {
             curMusicData.set(musicInfo)
+            ZLog.i(ZTag.TAG_DEBUG, "preStart")
         }
 
         override fun onStart(musicInfo: MusicInfo) {
-            ZLog.i(ZTag.TAG_DEBUG, "start : $musicInfo")
             isPaused.set(false)
+            ZLog.i(ZTag.TAG_DEBUG, "onStart : $musicInfo")
         }
 
         override fun onPause() {
             isPaused.set(true)
+            ZLog.i(ZTag.TAG_DEBUG, "onPause")
         }
 
         override fun onProgress(musicInfo: MusicInfo, progress: Int) {
@@ -85,14 +87,17 @@ class MusicViewModel(
         override fun onStop() {
             isPaused.set(true)
             progress.set(0)
+            ZLog.i(ZTag.TAG_DEBUG, "onStop")
         }
 
         override fun onCompletion() {
             doNext()
+            ZLog.i(ZTag.TAG_DEBUG, "onCompletion")
         }
 
         override fun onError(mp: MediaPlayer, what: Int, extra: Int) {
             doNext()
+            ZLog.i(ZTag.TAG_DEBUG, "onError")
         }
     }
 

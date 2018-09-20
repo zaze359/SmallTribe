@@ -6,7 +6,6 @@ import android.app.PendingIntent
 import android.app.Service
 import android.content.Context
 import android.content.Intent
-import android.media.AudioAttributes
 import android.media.MediaPlayer
 import android.net.Uri
 import android.os.*
@@ -20,10 +19,6 @@ import com.zaze.tribe.util.IconCache
 import com.zaze.utils.JsonUtil
 import com.zaze.utils.log.ZLog
 import com.zaze.utils.log.ZTag
-import java.util.concurrent.LinkedBlockingQueue
-import java.util.concurrent.ThreadFactory
-import java.util.concurrent.ThreadPoolExecutor
-import java.util.concurrent.TimeUnit
 
 /**
  * Description :
@@ -49,17 +44,21 @@ class PlayerService : Service(), IPlayer {
         const val MUSIC = "music"
     }
 
-    private val looperExecutor = ThreadPoolExecutor(1, 1, 0, TimeUnit.MILLISECONDS,
-            LinkedBlockingQueue(), ThreadFactory {
-        val thread = Thread(it, "MEDIA_PLAYER_SERVICE")
-        if (thread.isDaemon) {
-            thread.isDaemon = false
-        }
-        thread
-    })
+    private val handlerThread = HandlerThread("MEDIA_PLAYER_SERVICE").apply {
+        start()
+    }
+    private val playerHandler = Handler(handlerThread.looper)
+//    private val looperExecutor = ThreadPoolExecutor(1, 1, 0, TimeUnit.MILLISECONDS,
+//            LinkedBlockingQueue(), ThreadFactory {
+//        val thread = Thread(it, "MEDIA_PLAYER_SERVICE")
+//        if (thread.isDaemon) {
+//            thread.isDaemon = false
+//        }
+//        thread
+//    })
 
-    private val runnable = Runnable {
-        while (true) {
+    private val progressRunnable = object : Runnable {
+        override fun run() {
             try {
                 mediaPlayer?.let {
                     if (it.isPlaying) {
@@ -69,19 +68,20 @@ class PlayerService : Service(), IPlayer {
             } catch (e: Exception) {
                 e.printStackTrace()
             }
-            SystemClock.sleep(16L)
+            playerHandler.postDelayed(this, 16L)
         }
     }
 
+
     override fun onBind(intent: Intent?): IBinder? {
-        looperExecutor.remove(runnable)
-        looperExecutor.execute(runnable)
+        playerHandler.removeCallbacks(progressRunnable)
+        playerHandler.post(progressRunnable)
         return mBinder
     }
 
     override fun onUnbind(intent: Intent?): Boolean {
         stop()
-        looperExecutor.remove(runnable)
+        playerHandler.removeCallbacks(progressRunnable)
         stopForeground(true)
         return super.onUnbind(intent)
     }
@@ -183,47 +183,49 @@ class PlayerService : Service(), IPlayer {
     }
     // --------------------------------------------------
 
-    private fun updateNotification(isPlayering: Boolean) {
-        val channelId = "zaze"
-        val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val notificationChannel = NotificationChannel(channelId, channelId, NotificationManager.IMPORTANCE_LOW)
-            notificationManager.createNotificationChannel(notificationChannel)
+    private fun updateNotification(isPlaying: Boolean) {
+        playerHandler.post {
+            val channelId = "zaze"
+            val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                val notificationChannel = NotificationChannel(channelId, channelId, NotificationManager.IMPORTANCE_LOW)
+                notificationManager.createNotificationChannel(notificationChannel)
+            }
+            val targetIntent = PendingIntent.getActivity(this, 0,
+                    Intent(this, MainActivity::class.java), PendingIntent.FLAG_UPDATE_CURRENT)
+            val remoteViews = RemoteViews(App.INSTANCE.packageName, R.layout.music_notification_layout)
+            remoteViews.setImageViewBitmap(R.id.music_notification_icon_iv, IconCache.getSmallMediaIcon(curMusic.localPath))
+            remoteViews.setTextViewText(R.id.music_notification_name_iv, curMusic.name)
+            remoteViews.setTextViewText(R.id.music_notification_auth_iv, curMusic.artist)
+            remoteViews.setImageViewResource(R.id.music_notification_play_iv,
+                    if (isPlaying) R.drawable.ic_pause_circle_outline_black_24dp else R.drawable.ic_play_circle_outline_black_24dp)
+            remoteViews.setOnClickPendingIntent(R.id.music_notification_play_iv, PendingIntent.getService(this, 0,
+                    Intent(this, PlayerService::class.java).apply {
+                        action = PLAY
+                        putExtra(MUSIC, JsonUtil.objToJson(curMusic))
+                    }, PendingIntent.FLAG_UPDATE_CURRENT))
+
+            remoteViews.setOnClickPendingIntent(R.id.music_notification_next_iv, PendingIntent.getService(this, 0,
+                    Intent(this, PlayerService::class.java).apply {
+                        action = NEXT
+                        putExtra(MUSIC, JsonUtil.objToJson(curMusic))
+                    }, PendingIntent.FLAG_UPDATE_CURRENT))
+            remoteViews.setOnClickPendingIntent(R.id.music_notification_close_iv, PendingIntent.getService(this, 0,
+                    Intent(this, PlayerService::class.java).apply {
+                        action = CLOSE
+                        putExtra(MUSIC, JsonUtil.objToJson(curMusic))
+                    }, PendingIntent.FLAG_UPDATE_CURRENT))
+
+            val builder = NotificationCompat.Builder(this, channelId).apply {
+                setCustomContentView(remoteViews)
+                setContentIntent(targetIntent)
+                //设置小图标
+                setSmallIcon(R.mipmap.ic_music_note_white_24dp)
+            }
+
+            val notification = builder.build()
+            startForeground(1, notification)
         }
-        val targetIntent = PendingIntent.getActivity(this, 0,
-                Intent(this, MainActivity::class.java), PendingIntent.FLAG_UPDATE_CURRENT)
-        val remoteViews = RemoteViews(App.INSTANCE.packageName, R.layout.music_notification_layout)
-        remoteViews.setImageViewBitmap(R.id.music_notification_icon_iv, IconCache.getMediaIcon(curMusic.localPath))
-        remoteViews.setTextViewText(R.id.music_notification_name_iv, curMusic.name)
-        remoteViews.setTextViewText(R.id.music_notification_auth_iv, curMusic.artist)
-        remoteViews.setImageViewResource(R.id.music_notification_play_iv,
-                if (isPlayering) R.drawable.ic_pause_circle_outline_black_24dp else R.drawable.ic_play_circle_outline_black_24dp)
-        remoteViews.setOnClickPendingIntent(R.id.music_notification_play_iv, PendingIntent.getService(this, 0,
-                Intent(this, PlayerService::class.java).apply {
-                    action = PLAY
-                    putExtra(MUSIC, JsonUtil.objToJson(curMusic))
-                }, PendingIntent.FLAG_UPDATE_CURRENT))
-
-        remoteViews.setOnClickPendingIntent(R.id.music_notification_next_iv, PendingIntent.getService(this, 0,
-                Intent(this, PlayerService::class.java).apply {
-                    action = NEXT
-                    putExtra(MUSIC, JsonUtil.objToJson(curMusic))
-                }, PendingIntent.FLAG_UPDATE_CURRENT))
-        remoteViews.setOnClickPendingIntent(R.id.music_notification_close_iv, PendingIntent.getService(this, 0,
-                Intent(this, PlayerService::class.java).apply {
-                    action = CLOSE
-                    putExtra(MUSIC, JsonUtil.objToJson(curMusic))
-                }, PendingIntent.FLAG_UPDATE_CURRENT))
-
-        val builder = NotificationCompat.Builder(this, channelId).apply {
-            setCustomContentView(remoteViews)
-            setContentIntent(targetIntent)
-            //设置小图标
-            setSmallIcon(R.mipmap.ic_music_note_white_24dp)
-        }
-
-        val notification = builder.build()
-        startForeground(1, notification)
     }
 
     inner class ServiceBinder : Binder(), IPlayer {
