@@ -7,9 +7,10 @@
             name="musicViewModel"
             type="com.zaze.tribe.music.MusicViewModel" />
 
-        <variable
-            name="music"
-            type="com.zaze.tribe.data.dto.MusicInfo" />
+        <!--<variable-->
+            <!--name="music"-->
+            <!--type="com.zaze.tribe.data.dto.MusicInfo" />-->
+
     </data>
 
     <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
@@ -32,7 +33,7 @@
                 android:layout_marginTop="@dimen/dp_4"
                 android:contentDescription="@null"
                 android:scaleType="fitCenter"
-                app:bmp="@{music}"
+                app:bmp="@{musicViewModel.curMusicData}"
                 tools:src="@mipmap/ic_launcher" />
 
 
@@ -42,7 +43,7 @@
                 android:layout_gravity="center">
 
                 <LinearLayout
-                    android:id="@+id/music_nav_menu_ll"
+                    android:id="@+id/mini_player_menu_ll"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"
@@ -51,18 +52,18 @@
                     android:orientation="horizontal">
 
                     <ImageView
-                        android:id="@+id/music_nav_status_iv"
+                        android:id="@+id/mini_player_status_iv"
                         android:layout_width="@dimen/dp_32"
                         android:layout_height="@dimen/dp_32"
                         android:layout_marginEnd="@dimen/dp_4"
                         android:layout_marginRight="@dimen/dp_4"
                         android:contentDescription="@null"
-                        android:onClick="@{()-> musicViewModel.start(music)}"
+                        android:onClick="@{()-> musicViewModel.play()}"
                         android:src="@{musicViewModel.isPaused?@drawable/ic_play_circle_outline_black_24dp:@drawable/ic_pause_circle_outline_black_24dp}"
                         tools:src="@drawable/ic_play_circle_outline_black_24dp" />
 
                     <ImageView
-                        android:id="@+id/music_nav_list_iv"
+                        android:id="@+id/mini_player_list_iv"
                         android:layout_width="@dimen/dp_32"
                         android:layout_height="@dimen/dp_32"
                         android:layout_marginLeft="@dimen/dp_4"
@@ -77,29 +78,30 @@
                     android:layout_alignParentLeft="true"
                     android:layout_alignParentStart="true"
                     android:layout_centerInParent="true"
-                    android:layout_toLeftOf="@id/music_nav_menu_ll"
-                    android:layout_toStartOf="@id/music_nav_menu_ll"
+                    android:layout_toLeftOf="@id/mini_player_menu_ll"
+                    android:layout_toStartOf="@id/mini_player_menu_ll"
                     android:orientation="vertical">
 
                     <TextView
-                        android:id="@+id/music_item_title_tv"
+                        android:id="@+id/mini_player_title_tv"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:ellipsize="end"
+                        android:maxLength="14"
                         android:maxLines="1"
-                        android:text="@{music.name}"
+                        android:text="@{musicViewModel.curMusicData.name}"
                         android:textColor="#333333"
                         android:textSize="@dimen/sp_16"
                         tools:text="极乐净土极乐净土极乐净土极乐净土极乐净土" />
 
                     <TextView
-                        android:id="@+id/music_item_artist_tv"
+                        android:id="@+id/mini_player_artist_tv"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/dp_4"
                         android:ellipsize="end"
                         android:maxLines="1"
-                        android:text="@{music.artist}"
+                        android:text="@{musicViewModel.curMusicData.artist}"
                         android:textSize="@dimen/sp_14"
                         tools:text="MARIA" />
 

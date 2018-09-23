@@ -6,7 +6,7 @@
 
         <variable
             name="musicViewModel"
-            type="com.zaze.tribe.music.MusicViewModel"/>
+            type="com.zaze.tribe.music.MusicViewModel" />
 
     </data>
 
@@ -31,20 +31,16 @@
                 android:layout_alignParentBottom="true"
                 tools:background="@color/grey" />
 
-            <include
-                android:id="@+id/music_navigation_bar"
-                layout="@layout/music_nav_bar"
+            <FrameLayout
+                android:id="@+id/music_mini_player_fl"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_above="@id/main_navigation_bar"
-                app:musicViewModel="@{musicViewModel}"
-                app:music="@{musicViewModel.curMusicData}" />
-
+                android:layout_above="@id/main_navigation_bar" />
 
             <android.support.design.widget.CoordinatorLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_above="@id/music_navigation_bar"
+                android:layout_above="@id/music_mini_player_fl"
                 android:layout_alignParentTop="true">
 
                 <android.support.design.widget.AppBarLayout

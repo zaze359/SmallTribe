@@ -209,6 +209,14 @@ class MusicViewModel(
         ZTipUtil.toast(context, music.localPath)
     }
 
+
+    /**
+     * 开始播放
+     */
+    fun play() {
+        start(curMusicData.get())
+    }
+
     /**
      * 开始播放
      * [musicInfo] music

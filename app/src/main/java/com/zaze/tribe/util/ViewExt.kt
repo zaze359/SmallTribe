@@ -27,14 +27,14 @@ fun ImageView.setBitmap(music: MusicInfo?) {
     music?.let {
         it.albumIcon?.apply {
             setImageBitmap(it.albumIcon)
-        } ?: ThreadManager.getInstance().runInSingleThread({
+        } ?: ThreadManager.getInstance().runInSingleThread {
             IconCache.getSmallMediaIcon(it.localPath).apply {
                 ThreadManager.getInstance().runInUIThread {
                     it.albumIcon = this
                     setImageBitmap(this)
                 }
             }
-        })
+        }
 
     }
 }

@@ -19,6 +19,7 @@ import com.ashokvarma.bottomnavigation.BottomNavigationBar
 import com.ashokvarma.bottomnavigation.BottomNavigationItem
 import com.zaze.common.base.BaseActivity
 import com.zaze.tribe.databinding.ActivityMainBinding
+import com.zaze.tribe.music.MiniPlayerFragment
 import com.zaze.tribe.music.MusicFragment
 import com.zaze.tribe.music.MusicViewModel
 import com.zaze.tribe.service.PlayerService
@@ -89,8 +90,11 @@ class MainActivity : BaseActivity() {
                 true
             }
         }
+        // ------------------------------------------------------
+        // 迷你播放栏
+        replaceFragmentInActivity(MiniPlayerFragment().apply { setViewModel(musicViewModel) }, R.id.music_mini_player_fl)
         // --------------------------------------------------
-       bindService(Intent(this, PlayerService::class.java), serviceConnection, Context.BIND_AUTO_CREATE)
+        bindService(Intent(this, PlayerService::class.java), serviceConnection, Context.BIND_AUTO_CREATE)
     }
 
     override fun onDestroy() {
