@@ -14,11 +14,6 @@ import com.zaze.tribe.databinding.MusicDetailActBinding
  */
 class MusicDetailActivity : BaseActivity() {
     private lateinit var viewDataBinding: MusicDetailActBinding
-    private lateinit var viewModel: MusicViewModel
-
-    fun setViewModel(viewModel : MusicViewModel) {
-        this.viewModel = viewModel
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

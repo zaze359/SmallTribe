@@ -43,19 +43,6 @@ class MainActivity : BaseActivity() {
     private lateinit var viewDataBinding: ActivityMainBinding
     private lateinit var musicViewModel: MusicViewModel
 
-    private val serviceConnection = object : ServiceConnection {
-        override fun onServiceDisconnected(name: ComponentName?) {
-            ZLog.e(ZTag.TAG_DEBUG, "onServiceDisconnected : $name")
-            musicViewModel.mBinder = null
-            finish()
-        }
-
-        override fun onServiceConnected(name: ComponentName?, service: IBinder?) {
-            ZLog.i(ZTag.TAG_DEBUG, "onServiceConnected : $name")
-            musicViewModel.mBinder = service as PlayerService.ServiceBinder
-        }
-    }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         viewDataBinding = DataBindingUtil.setContentView(this, R.layout.activity_main)
@@ -94,12 +81,12 @@ class MainActivity : BaseActivity() {
         // 迷你播放栏
         replaceFragmentInActivity(MiniPlayerFragment().apply { setViewModel(musicViewModel) }, R.id.music_mini_player_fl)
         // --------------------------------------------------
-        bindService(Intent(this, PlayerService::class.java), serviceConnection, Context.BIND_AUTO_CREATE)
+        musicViewModel.bindService()
     }
 
     override fun onDestroy() {
+        musicViewModel.unbindService()
         super.onDestroy()
-        unbindService(serviceConnection)
     }
 
     private fun setupPermission() {
