@@ -16,7 +16,6 @@
                 android:layout_height="match_parent"
                 android:background="@color/black">
 
-
             </FrameLayout>
 
         </com.zaze.tribe.view.WidthFitSquareLayout>

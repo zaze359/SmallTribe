@@ -34,6 +34,12 @@ import com.zaze.utils.log.ZTag
 import com.zaze.utils.permission.PermissionUtil
 import kotlinx.android.synthetic.main.activity_main.*
 
+/**
+ * Description :
+ *
+ * @author : ZAZE
+ * @version : 2018-09-30 - 0:37
+ */
 class MainActivity : BaseActivity() {
 
     override fun isNeedHead(): Boolean {

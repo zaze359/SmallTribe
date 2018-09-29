@@ -93,7 +93,7 @@ class PlayerService : Service(), IPlayer {
                     PLAY -> start(JsonUtil.parseJson(getStringExtra(MUSIC), MusicInfo::class.java))
                     PAUSE -> pause()
                     STOP -> stop()
-                    NEXT -> callback?.onCompletion()
+                    NEXT -> callback?.toNext()
                     CLOSE -> {
                         stop()
                         stopForeground(true)
@@ -280,6 +280,10 @@ class PlayerService : Service(), IPlayer {
          * 停止
          */
         fun onStop()
+        /**
+         * 下一首
+         */
+        fun toNext()
 
         /**
          * 播放完成

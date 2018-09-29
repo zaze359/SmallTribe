@@ -10,7 +10,7 @@ import com.zaze.tribe.music.MusicPlayerRemote;
  * Description :
  *
  * @author : ZAZE
- * @version : 2018-08-23 - 22:01
+ * @version : 2018-09-30 - 0:34
  */
 @Deprecated
 public class TempActivity extends AppCompatActivity {

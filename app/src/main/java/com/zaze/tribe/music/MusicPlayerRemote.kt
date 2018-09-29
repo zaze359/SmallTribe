@@ -79,6 +79,13 @@ object MusicPlayerRemote {
             ZLog.i(ZTag.TAG_DEBUG, "onStop")
         }
 
+        override fun toNext() {
+            getNext(true)?.let {
+                stop()
+                start(it)
+            }
+        }
+
         override fun onCompletion() {
             doNext()
             ZLog.i(ZTag.TAG_DEBUG, "onCompletion")

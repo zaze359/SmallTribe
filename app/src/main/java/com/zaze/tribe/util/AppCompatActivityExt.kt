@@ -16,7 +16,6 @@ import android.view.WindowManager
  * @author : ZAZE
  * @version : 2018-07-04 - 21:45
  */
-
 fun AppCompatActivity.replaceFragmentInActivity(fragment: Fragment, frameId: Int) {
     supportFragmentManager.transact {
         replace(frameId, fragment)

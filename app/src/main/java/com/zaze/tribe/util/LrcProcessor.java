@@ -12,6 +12,12 @@ import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/**
+ * Description :
+ *
+ * @author : ZAZE
+ * @version : 2018-09-30 - 0:38
+ */
 public class LrcProcessor {
     /**
      * 处理歌词文件

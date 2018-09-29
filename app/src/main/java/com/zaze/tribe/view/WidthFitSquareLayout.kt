@@ -4,6 +4,12 @@ import android.content.Context
 import android.util.AttributeSet
 import android.widget.FrameLayout
 
+/**
+ * Description :
+ *
+ * @author : ZAZE
+ * @version : 2018-09-30 - 0:37
+ */
 class WidthFitSquareLayout @JvmOverloads constructor(
         context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
 ) : FrameLayout(context, attrs, defStyleAttr) {
