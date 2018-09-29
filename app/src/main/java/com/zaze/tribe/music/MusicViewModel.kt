@@ -35,12 +35,6 @@ class MusicViewModel(
      */
     val dataLoading = ObservableBoolean(false)
 
-    val progress = ObservableInt(0)
-    /**
-     * 仅用于UI的显示，不负责逻辑判断
-     */
-    val isPaused = ObservableBoolean(true)
-
     private val serviceConnection = object : ServiceConnection {
         override fun onServiceDisconnected(name: ComponentName?) {
             ZLog.e(ZTag.TAG_DEBUG, "onServiceDisconnected : $name")
@@ -100,26 +94,6 @@ class MusicViewModel(
      */
     fun showMore(music: MusicInfo) {
         ZTipUtil.toast(context, music.localPath)
-    }
-
-    /**
-     * 开始播放
-     * [musicInfo] music
-     */
-    fun start(musicInfo: MusicInfo? = null) {
-        MusicPlayerRemote.start(musicInfo)
-    }
-
-    fun pause() {
-        MusicPlayerRemote.pause()
-    }
-
-    fun stop() {
-        MusicPlayerRemote.stop()
-    }
-
-    fun seekTo(musicInfo: MusicInfo, seekTimeMillis: Long) {
-        MusicPlayerRemote.seekTo(musicInfo, seekTimeMillis)
     }
 
     fun bindService() {

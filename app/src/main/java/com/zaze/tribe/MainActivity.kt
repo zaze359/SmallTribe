@@ -21,6 +21,7 @@ import com.zaze.common.base.BaseActivity
 import com.zaze.tribe.databinding.ActivityMainBinding
 import com.zaze.tribe.music.MiniPlayerFragment
 import com.zaze.tribe.music.MusicFragment
+import com.zaze.tribe.music.MusicPlayerRemote
 import com.zaze.tribe.music.MusicViewModel
 import com.zaze.tribe.service.PlayerService
 import com.zaze.tribe.util.obtainViewModel

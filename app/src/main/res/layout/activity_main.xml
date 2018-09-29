@@ -77,7 +77,6 @@
 
         </RelativeLayout>
 
-
         <!-- Navigation Drawer -->
         <android.support.design.widget.NavigationView
             android:id="@+id/main_left_nav"

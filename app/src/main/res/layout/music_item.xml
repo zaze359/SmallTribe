@@ -1,25 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout >
+<layout>
 
     <data>
+
+        <import type="com.zaze.tribe.music.MusicPlayerRemote" />
 
         <variable
             name="music"
             type="com.zaze.tribe.data.dto.MusicInfo" />
+
         <variable
             name="viewModel"
             type="com.zaze.tribe.music.MusicViewModel" />
 
     </data>
 
-    <LinearLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center_vertical"
-        android:onClick="@{()->viewModel.start(music)}"
+        android:onClick="@{()->MusicPlayerRemote.start(music)}"
         android:orientation="horizontal">
 
         <ImageView

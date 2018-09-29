@@ -35,6 +35,5 @@ fun ImageView.setBitmap(music: MusicInfo?) {
                 }
             }
         }
-
     }
 }

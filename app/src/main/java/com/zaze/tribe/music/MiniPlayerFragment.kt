@@ -18,7 +18,6 @@ class MiniPlayerFragment : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         viewDataBinding = MiniPlayerFragBinding.inflate(inflater, container, false)
-        viewDataBinding.musicViewModel = viewModel
         return viewDataBinding.root
     }
 

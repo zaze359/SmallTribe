@@ -29,12 +29,15 @@ object MusicPlayerRemote {
     /**
      * 当前播放的页面
      */
-    val curMusicData = ObservableField<MusicInfo>()
+    @JvmStatic
+    val curMusicData = ObservableField<MusicInfo>(MusicInfo())
 
+    @JvmStatic
     val progress = ObservableInt(0)
     /**
      * 仅用于UI的显示，不负责逻辑判断
      */
+    @JvmStatic
     val isPaused = ObservableBoolean(true)
     /**
      * 循环模式 LoopMode
@@ -151,6 +154,8 @@ object MusicPlayerRemote {
      * 开始播放
      * [musicInfo] music
      */
+    @JvmStatic
+    @JvmOverloads
     fun start(musicInfo: MusicInfo? = curMusicData.get()) {
         musicInfo?.let {
             mBinder?.start(musicInfo)
@@ -158,6 +163,7 @@ object MusicPlayerRemote {
         }
     }
 
+    @JvmStatic
     fun pause() {
         mBinder?.pause()
     }
@@ -175,11 +181,13 @@ object MusicPlayerRemote {
         when (loopMode.get()) {
             LoopMode.LIST_LOOP -> {
                 getNext(true)?.let {
+                    stop()
                     start(it)
                 }
             }
             LoopMode.LIST -> {
                 getNext(false)?.let {
+                    stop()
                     start(it)
                 }
             }

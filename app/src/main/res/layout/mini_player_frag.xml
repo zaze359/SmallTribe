@@ -3,13 +3,7 @@
 
     <data>
 
-        <variable
-            name="musicViewModel"
-            type="com.zaze.tribe.music.MusicViewModel" />
-
-        <!--<variable-->
-            <!--name="music"-->
-            <!--type="com.zaze.tribe.data.dto.MusicInfo" />-->
+        <import type="com.zaze.tribe.music.MusicPlayerRemote" />
 
     </data>
 
@@ -33,7 +27,7 @@
                 android:layout_marginTop="@dimen/dp_4"
                 android:contentDescription="@null"
                 android:scaleType="fitCenter"
-                app:bmp="@{musicViewModel.curMusicData}"
+                app:bmp="@{MusicPlayerRemote.curMusicData}"
                 tools:src="@mipmap/ic_launcher" />
 
 
@@ -58,8 +52,8 @@
                         android:layout_marginEnd="@dimen/dp_4"
                         android:layout_marginRight="@dimen/dp_4"
                         android:contentDescription="@null"
-                        android:onClick="@{()-> musicViewModel.play()}"
-                        android:src="@{musicViewModel.isPaused?@drawable/ic_play_circle_outline_black_24dp:@drawable/ic_pause_circle_outline_black_24dp}"
+                        android:onClick="@{()-> MusicPlayerRemote.start()}"
+                        android:src="@{MusicPlayerRemote.isPaused?@drawable/ic_play_circle_outline_black_24dp:@drawable/ic_pause_circle_outline_black_24dp}"
                         tools:src="@drawable/ic_play_circle_outline_black_24dp" />
 
                     <ImageView
@@ -89,7 +83,7 @@
                         android:ellipsize="end"
                         android:maxLength="14"
                         android:maxLines="1"
-                        android:text="@{musicViewModel.curMusicData.name}"
+                        android:text="@{MusicPlayerRemote.curMusicData.name}"
                         android:textColor="#333333"
                         android:textSize="@dimen/sp_16"
                         tools:text="极乐净土极乐净土极乐净土极乐净土极乐净土" />
@@ -101,7 +95,7 @@
                         android:layout_marginTop="@dimen/dp_4"
                         android:ellipsize="end"
                         android:maxLines="1"
-                        android:text="@{musicViewModel.curMusicData.artist}"
+                        android:text="@{MusicPlayerRemote.curMusicData.artist}"
                         android:textSize="@dimen/sp_14"
                         tools:text="MARIA" />
 
@@ -115,7 +109,7 @@
             android:layout_width="match_parent"
             android:layout_height="@dimen/dp_4"
             android:max="10000"
-            android:progress="@{musicViewModel.progress}"
+            android:progress="@{MusicPlayerRemote.progress}"
             android:progressDrawable="@drawable/progress_horizontal" />
 
         <View
@@ -126,4 +120,3 @@
             android:background="@color/main_split_line" />
     </FrameLayout>
 </layout>
-

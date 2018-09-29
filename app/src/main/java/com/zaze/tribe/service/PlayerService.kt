@@ -108,6 +108,9 @@ class PlayerService : Service(), IPlayer {
 
     @Synchronized
     override fun start(musicInfo: MusicInfo) {
+        if (musicInfo.id <= 0) {
+            return
+        }
         musicInfo.apply {
             mediaPlayer
                     ?: MediaPlayer.create(this@PlayerService, Uri.parse("file://$localPath")).let { it ->

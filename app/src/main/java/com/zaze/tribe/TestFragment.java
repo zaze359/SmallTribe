@@ -81,7 +81,6 @@ public class TestFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
         View view = inflater.inflate(R.layout.test_frag, container, false);
-        getLifecycle().addObserver();
         textView = view.findViewById(R.id.test_content_tv);
         test_lyric_view = view.findViewById(R.id.test_lyric_view);
         mLiveData.observe(this, new Observer<String>() {
