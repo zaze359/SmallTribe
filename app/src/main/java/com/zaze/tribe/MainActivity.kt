@@ -19,18 +19,13 @@ import com.ashokvarma.bottomnavigation.BottomNavigationBar
 import com.ashokvarma.bottomnavigation.BottomNavigationItem
 import com.zaze.common.base.BaseActivity
 import com.zaze.tribe.databinding.ActivityMainBinding
-import com.zaze.tribe.music.MiniPlayerFragment
 import com.zaze.tribe.music.MusicFragment
-import com.zaze.tribe.music.MusicPlayerRemote
 import com.zaze.tribe.music.MusicViewModel
-import com.zaze.tribe.service.PlayerService
 import com.zaze.tribe.util.obtainViewModel
 import com.zaze.tribe.util.replaceFragmentInActivity
 import com.zaze.tribe.util.setImmersion
 import com.zaze.tribe.util.setupActionBar
 import com.zaze.utils.FileUtil
-import com.zaze.utils.log.ZLog
-import com.zaze.utils.log.ZTag
 import com.zaze.utils.permission.PermissionUtil
 import kotlinx.android.synthetic.main.activity_main.*
 
@@ -85,9 +80,6 @@ class MainActivity : BaseActivity() {
             }
         }
         // ------------------------------------------------------
-        // 迷你播放栏
-        replaceFragmentInActivity(MiniPlayerFragment().apply { setViewModel(musicViewModel) }, R.id.music_mini_player_fl)
-        // --------------------------------------------------
         musicViewModel.bindService()
     }
 

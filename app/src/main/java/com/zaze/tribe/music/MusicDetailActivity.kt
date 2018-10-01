@@ -4,8 +4,8 @@ import android.databinding.DataBindingUtil
 import android.os.Bundle
 import com.zaze.common.base.BaseActivity
 import com.zaze.tribe.R
-import com.zaze.tribe.databinding.ActivityMainBinding
 import com.zaze.tribe.databinding.MusicDetailActBinding
+import com.zaze.tribe.util.replaceFragmentInActivity
 
 /**
  * Description :
@@ -14,6 +14,9 @@ import com.zaze.tribe.databinding.MusicDetailActBinding
  */
 class MusicDetailActivity : BaseActivity() {
     private lateinit var viewDataBinding: MusicDetailActBinding
+    override fun isNeedHead(): Boolean {
+        return false
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

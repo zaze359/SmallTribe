@@ -5,6 +5,7 @@ import android.arch.persistence.room.Entity
 import android.arch.persistence.room.Ignore
 import android.arch.persistence.room.PrimaryKey
 import android.graphics.Bitmap
+import java.io.Serializable
 
 /**
  * Description :
@@ -12,7 +13,8 @@ import android.graphics.Bitmap
  * @version : 2018-07-05 - 21:48
  */
 @Entity(tableName = "Music")
-data class MusicInfo (
+data class MusicInfo(
+
         /**
          * id
          */
@@ -65,4 +67,4 @@ data class MusicInfo (
          * 变更时间
          */
         var modified: Long = System.currentTimeMillis()
-)
+) : Serializable

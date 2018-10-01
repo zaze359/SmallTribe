@@ -31,8 +31,9 @@
                 android:layout_alignParentBottom="true"
                 tools:background="@color/grey" />
 
-            <FrameLayout
+            <fragment
                 android:id="@+id/music_mini_player_fl"
+                android:name="com.zaze.tribe.music.MiniPlayerFragment"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_above="@id/main_navigation_bar" />

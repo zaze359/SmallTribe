@@ -24,7 +24,8 @@ object MusicPlayerRemote {
     /**
      * 播放列表
      */
-    val playerList = ArrayList<MusicInfo>()
+    @JvmStatic
+    val playerList = ObservableArrayList<MusicInfo>()
 
     /**
      * 当前播放的页面
@@ -148,7 +149,7 @@ object MusicPlayerRemote {
                         }
                     }
                 }
-            } catch (e: Exception) {
+            } catch (e: Throwable) {
                 e.printStackTrace()
             }
 
@@ -240,10 +241,10 @@ object MusicPlayerRemote {
     private fun addToPlayerList(musicList: List<MusicInfo>) {
         musicList.let {
             val set = HashSet<String>()
-            for(old in playerList) {
+            for (old in playerList) {
                 set.add(old.localPath)
             }
-            for(new in it) {
+            for (new in it) {
                 if (!set.contains(new.localPath)) {
                     playerList.add(new)
                 }

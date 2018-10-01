@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.zaze.tribe.databinding.MiniPlayerFragBinding
+import com.zaze.utils.ZActivityUtil
 
 /**
  * Description :
@@ -16,14 +17,12 @@ import com.zaze.tribe.databinding.MiniPlayerFragBinding
 class MiniPlayerFragment : Fragment() {
 
     private lateinit var viewDataBinding: MiniPlayerFragBinding
-    private lateinit var viewModel: MusicViewModel
-
-    fun setViewModel(viewModel: MusicViewModel) {
-        this.viewModel = viewModel
-    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         viewDataBinding = MiniPlayerFragBinding.inflate(inflater, container, false)
+        viewDataBinding.root.setOnClickListener {
+            ZActivityUtil.startActivity(this, MusicDetailActivity::class.java)
+        }
         return viewDataBinding.root
     }
 

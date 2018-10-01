@@ -66,6 +66,7 @@ public class TestFragment extends Fragment {
         Bundle args = new Bundle();
         args.putString(KEY_CONTENT, content);
         TestFragment fragment = new TestFragment();
+//        fragment.setUserVisibleHint(true);
         fragment.setArguments(args);
         return fragment;
     }

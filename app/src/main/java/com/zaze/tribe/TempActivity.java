@@ -14,6 +14,7 @@ import com.zaze.tribe.music.MusicPlayerRemote;
  */
 @Deprecated
 public class TempActivity extends AppCompatActivity {
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

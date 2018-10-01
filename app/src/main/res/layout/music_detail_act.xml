@@ -11,12 +11,11 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <FrameLayout
+            <fragment
+                android:id="@+id/music_detail_album_cover_fragment"
+                android:name="com.zaze.tribe.music.MusicAlbumCoverFragment"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@color/black">
-
-            </FrameLayout>
+                android:layout_height="match_parent" />
 
         </com.zaze.tribe.view.WidthFitSquareLayout>
 
