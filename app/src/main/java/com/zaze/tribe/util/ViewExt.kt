@@ -8,7 +8,6 @@ import android.widget.ImageView
 import com.zaze.common.adapter.BaseRecyclerAdapter
 import com.zaze.tribe.base.CustomFragmentPagerAdapter
 import com.zaze.tribe.data.dto.MusicInfo
-import com.zaze.tribe.music.AlbumCoverPagerAdapter
 import com.zaze.tribe.music.MusicViewModel
 import com.zaze.utils.ThreadManager
 
@@ -55,12 +54,9 @@ fun <V> ViewPager.setData(items: Collection<V>?) {
 @BindingAdapter("app:bmp")
 fun ImageView.setBitmap(music: MusicInfo?) {
     music?.let {
-        it.albumIcon?.apply {
-            setImageBitmap(it.albumIcon)
-        } ?: ThreadManager.getInstance().runInSingleThread {
-            IconCache.getSmallMediaIcon(it.localPath).apply {
+        ThreadManager.getInstance().runInSingleThread {
+            IconCache.getSmallMediaIcon(it.data).apply {
                 ThreadManager.getInstance().runInUIThread {
-                    it.albumIcon = this
                     setImageBitmap(this)
                 }
             }

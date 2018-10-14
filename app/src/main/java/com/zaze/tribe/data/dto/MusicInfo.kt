@@ -5,6 +5,8 @@ import android.arch.persistence.room.Entity
 import android.arch.persistence.room.Ignore
 import android.arch.persistence.room.PrimaryKey
 import android.graphics.Bitmap
+import android.os.Parcel
+import android.os.Parcelable
 import java.io.Serializable
 
 /**
@@ -12,59 +14,105 @@ import java.io.Serializable
  * @author : ZAZE
  * @version : 2018-07-05 - 21:48
  */
-@Entity(tableName = "Music")
+@Entity(tableName = "music")
 data class MusicInfo(
-
         /**
-         * id
+         * MediaStore 中的id
          */
-        @PrimaryKey(autoGenerate = true)
-        @ColumnInfo(name = "music_id")
-        var id: Int = 0,
+        @PrimaryKey
+        @ColumnInfo(name = "id")
+        val id: Int,
         /**
          * 歌名
          */
-        var name: String = "",
+        @ColumnInfo(name = "title")
+        val title: String,
         /**
-         * 歌手
+         * 轨道
          */
-        var artist: String = "",
-
-        @ColumnInfo(name = "artist_id")
-        var artistId: Long = 0L,
-
-        /**
-         * 专辑
-         */
-        var album: String = "",
-
-        @ColumnInfo(name = "album_id")
-        var albumId: Long = 0L,
-
-        @Ignore
-        var albumIcon: Bitmap? = null,
-        /**
-         * 下载地址
-         */
-        @ColumnInfo(name = "down_url")
-        var downUrl: String = "",
-        /**
-         * 本地路径
-         */
-        @ColumnInfo(name = "local_path")
-        var localPath: String = "",
-
+        @ColumnInfo(name = "track")
+        val track: Int,
         /**
          *
          */
-        var year: Int = 0,
+        @ColumnInfo(name = "year")
+        val year: Int,
         /**
          * 持续时间
          */
-        var duration: Long = 0L,
+        @ColumnInfo(name = "duration")
+        val duration: Long,
 
         /**
-         * 变更时间
+         * 本地路径
          */
-        var modified: Long = System.currentTimeMillis()
-) : Serializable
+        @ColumnInfo(name = "data")
+        val data: String,
+        /**
+         *
+         */
+        @ColumnInfo(name = "date_modified")
+        val dateModified: Long,
+        /**
+         *
+         */
+        @ColumnInfo(name = "album_id")
+        val albumId: Int,
+        /**
+         * 专辑
+         */
+        @ColumnInfo(name = "album")
+        var albumName: String = "",
+        /**
+         *
+         */
+        @ColumnInfo(name = "artist_id")
+        val artistId: Int,
+        /**
+         * 歌手
+         */
+        @ColumnInfo(name = "artist")
+        val artistName: String
+) : Parcelable {
+    constructor(parcel: Parcel) : this(
+            parcel.readInt(),
+            parcel.readString(),
+            parcel.readInt(),
+            parcel.readInt(),
+            parcel.readLong(),
+            parcel.readString(),
+            parcel.readLong(),
+            parcel.readInt(),
+            parcel.readString(),
+            parcel.readInt(),
+            parcel.readString()) {
+    }
+
+    override fun writeToParcel(parcel: Parcel, flags: Int) {
+        parcel.writeInt(id)
+        parcel.writeString(title)
+        parcel.writeInt(track)
+        parcel.writeInt(year)
+        parcel.writeLong(duration)
+        parcel.writeString(data)
+        parcel.writeLong(dateModified)
+        parcel.writeInt(albumId)
+        parcel.writeString(albumName)
+        parcel.writeInt(artistId)
+        parcel.writeString(artistName)
+    }
+
+    override fun describeContents(): Int {
+        return 0
+    }
+
+    companion object CREATOR : Parcelable.Creator<MusicInfo> {
+        override fun createFromParcel(parcel: Parcel): MusicInfo {
+            return MusicInfo(parcel)
+        }
+
+        override fun newArray(size: Int): Array<MusicInfo?> {
+            return arrayOfNulls(size)
+        }
+    }
+}

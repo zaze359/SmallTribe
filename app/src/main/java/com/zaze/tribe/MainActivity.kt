@@ -1,15 +1,11 @@
 package com.zaze.tribe
 
 import android.Manifest
-import android.content.ComponentName
-import android.content.Context
 import android.content.Intent
-import android.content.ServiceConnection
 import android.content.pm.PackageManager
 import android.databinding.DataBindingUtil
 import android.net.Uri
 import android.os.Bundle
-import android.os.IBinder
 import android.support.v4.app.Fragment
 import android.support.v4.view.GravityCompat
 import android.support.v7.app.ActionBarDrawerToggle
@@ -19,7 +15,7 @@ import com.ashokvarma.bottomnavigation.BottomNavigationBar
 import com.ashokvarma.bottomnavigation.BottomNavigationItem
 import com.zaze.common.base.BaseActivity
 import com.zaze.tribe.databinding.ActivityMainBinding
-import com.zaze.tribe.music.MusicFragment
+import com.zaze.tribe.music.MusicListFragment
 import com.zaze.tribe.music.MusicViewModel
 import com.zaze.tribe.util.obtainViewModel
 import com.zaze.tribe.util.replaceFragmentInActivity
@@ -134,11 +130,14 @@ class MainActivity : BaseActivity() {
                     ?: when (position) {
                         0 -> TestFragment.newInstance("$position")
                         1 -> TestFragment.newInstance("$position")
-                        2 -> MusicFragment.newInstance().apply { setViewModel(musicViewModel) }
+                        2 -> MusicListFragment.newInstance()
                         3 -> TestFragment.newInstance("$position")
                         4 -> TestFragment.newInstance("$position")
                         else -> TestFragment.newInstance("$position")
                     }.also {
+                        if (it is MusicListFragment) {
+                            it.setViewModel(musicViewModel)
+                        }
                         replaceFragmentInActivity(it as Fragment, R.id.main_content_fl)
                     }
 

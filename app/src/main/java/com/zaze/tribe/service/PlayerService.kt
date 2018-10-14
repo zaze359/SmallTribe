@@ -113,7 +113,7 @@ class PlayerService : Service(), IPlayer {
         }
         musicInfo.apply {
             mediaPlayer
-                    ?: MediaPlayer.create(this@PlayerService, Uri.parse("file://$localPath")).let { it ->
+                    ?: MediaPlayer.create(this@PlayerService, Uri.parse("file://$data")).let { it ->
                         mediaPlayer = it
                         it.setOnErrorListener { mp, what, extra ->
                             callback?.onError(mp, what, extra)
@@ -125,7 +125,7 @@ class PlayerService : Service(), IPlayer {
                     }
             mediaPlayer?.apply {
                 if (isPlaying) {
-                    if (localPath == curMusic.localPath) {
+                    if (data == curMusic.data) {
                         this@PlayerService.pause()
                     } else {
                         this@PlayerService.stop()
@@ -197,9 +197,9 @@ class PlayerService : Service(), IPlayer {
             val targetIntent = PendingIntent.getActivity(this, 0,
                     Intent(this, MainActivity::class.java), PendingIntent.FLAG_UPDATE_CURRENT)
             val remoteViews = RemoteViews(App.INSTANCE.packageName, R.layout.music_notification_layout)
-            remoteViews.setImageViewBitmap(R.id.music_notification_icon_iv, IconCache.getSmallMediaIcon(curMusic.localPath))
-            remoteViews.setTextViewText(R.id.music_notification_name_iv, curMusic.name)
-            remoteViews.setTextViewText(R.id.music_notification_auth_iv, curMusic.artist)
+            remoteViews.setImageViewBitmap(R.id.music_notification_icon_iv, IconCache.getSmallMediaIcon(curMusic.data))
+            remoteViews.setTextViewText(R.id.music_notification_name_iv, curMusic.title)
+            remoteViews.setTextViewText(R.id.music_notification_auth_iv, curMusic.artistName)
             remoteViews.setImageViewResource(R.id.music_notification_play_iv,
                     if (isPlaying) R.drawable.ic_pause_circle_outline_black_24dp else R.drawable.ic_play_circle_outline_black_24dp)
             remoteViews.setOnClickPendingIntent(R.id.music_notification_play_iv, PendingIntent.getService(this, 0,
@@ -225,9 +225,7 @@ class PlayerService : Service(), IPlayer {
                 //设置小图标
                 setSmallIcon(R.mipmap.ic_music_note_white_24dp)
             }
-
-            val notification = builder.build()
-            startForeground(1, notification)
+            startForeground(1, builder.build())
         }
     }
 

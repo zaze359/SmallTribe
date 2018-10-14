@@ -37,8 +37,8 @@ interface MusicDataSource {
     fun getMusicInfo(localPath: String?): Flowable<MusicInfo>
 
     /**
+     * 获取歌曲列表
      * @return List<MusicInfo>
      */
     fun getMusicInfoList(): Flowable<List<MusicInfo>>
-
 }

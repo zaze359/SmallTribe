@@ -1,6 +1,6 @@
 package com.zaze.tribe.data.source
 
-import com.zaze.tribe.data.dto.LrcInfo
+import com.zaze.tribe.data.dto.Lyric
 
 /**
  * Description :
@@ -12,10 +12,10 @@ interface LrcDataSource {
     /**
      * 保存歌词信息
      */
-    fun saveLrcInfo(lrcInfo: LrcInfo?)
+    fun saveLrcInfo(lyric: Lyric?)
 
     /**
      * 获取歌词信息
      */
-    fun getLrcInfo(lrcId: Int): LrcInfo?
+    fun getLrcInfo(lrcId: Int): Lyric?
 }

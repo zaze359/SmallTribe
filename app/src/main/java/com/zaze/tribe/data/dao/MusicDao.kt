@@ -15,18 +15,33 @@ import io.reactivex.Flowable
 @Dao
 interface MusicDao {
 
+    /**
+     * 保存歌曲信息
+     */
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertMusicInfo(musicInfo: MusicInfo)
 
+    /**
+     * 批量保存歌曲信息
+     */
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertMusicInfos(musicInfos: List<MusicInfo>)
 
-    @Query("SELECT * FROM Music WHERE music_id = :musicId")
+    /**
+     * 根据 music_id 获取歌曲信息
+     */
+    @Query("SELECT * FROM music WHERE id = :musicId")
     fun getMusicInfo(musicId: Int): Flowable<MusicInfo>
 
-    @Query("SELECT * FROM Music WHERE local_path = :localPath")
+    /**
+     * 根据 local_path 获取歌曲信息
+     */
+    @Query("SELECT * FROM music WHERE data = :localPath")
     fun getMusicByPath(localPath: String): Flowable<MusicInfo>
 
-    @Query("SELECT * FROM Music")
+    /**
+     * 获取歌曲列表
+     */
+    @Query("SELECT * FROM music")
     fun getMusicInfoList(): Flowable<List<MusicInfo>>
 }

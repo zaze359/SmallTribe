@@ -12,8 +12,8 @@ import com.zaze.tribe.data.dto.MusicInfo
  * @version : 2018-10-01 - 22:31
  */
 class AlbumCoverPagerAdapter(fm: FragmentManager, list: Collection<MusicInfo>) : CustomFragmentPagerAdapter<MusicInfo>(fm, list) {
-    override fun getItem(position: Int): Fragment {
-        return AlbumCoverFragment.newInstance(dataList.get(position))
-    }
 
+    override fun getItem(position: Int): Fragment {
+        return AlbumCoverFragment.newInstance(dataList[position])
+    }
 }

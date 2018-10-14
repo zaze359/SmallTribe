@@ -1,10 +1,7 @@
 package com.zaze.tribe.base
 
-import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentPagerAdapter
-import android.view.View
-import com.zaze.tribe.music.AlbumCoverFragment
 import java.util.ArrayList
 
 /**
@@ -15,15 +12,19 @@ import java.util.ArrayList
  */
 abstract class CustomFragmentPagerAdapter<V>(fm: FragmentManager, list: Collection<V>) : FragmentPagerAdapter(fm) {
     val dataList = ArrayList<V>()
-    fun setDataList(list: Collection<V>?) {
+
+    init {
+        setDataList(list, false)
+    }
+
+    fun setDataList(list: Collection<V>?, notify: Boolean = true) {
         dataList.clear()
         list?.let {
             dataList.addAll(it)
         }
-    }
-
-    init {
-        setDataList(list)
+        if (notify) {
+            notifyDataSetChanged()
+        }
     }
 
     override fun getCount(): Int {

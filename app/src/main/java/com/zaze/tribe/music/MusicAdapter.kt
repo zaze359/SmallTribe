@@ -40,7 +40,7 @@ class MusicAdapter(
 
     override fun onBindView(viewHolder: MusicViewHolder, music: MusicInfo, p2: Int) {
         val binding = DataBindingUtil.getBinding<MusicItemBinding>(viewHolder.itemView)
-        ZLog.i(ZTag.TAG_DEBUG, "${music.name}:${music.localPath}")
+        ZLog.i(ZTag.TAG_DEBUG, "${music.title}:${music.data}")
         binding.music = music
     }
 

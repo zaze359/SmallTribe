@@ -6,9 +6,9 @@ import android.arch.persistence.room.Room
 import android.arch.persistence.room.RoomDatabase
 import android.arch.persistence.room.migration.Migration
 import com.zaze.tribe.App
-import com.zaze.tribe.data.dao.LrcDao
+import com.zaze.tribe.data.dao.LyricDao
 import com.zaze.tribe.data.dao.MusicDao
-import com.zaze.tribe.data.dto.LrcInfo
+import com.zaze.tribe.data.dto.Lyric
 import com.zaze.tribe.data.dto.MusicInfo
 import com.zaze.utils.log.ZLog
 import com.zaze.utils.log.ZTag
@@ -19,7 +19,7 @@ import com.zaze.utils.log.ZTag
  * @version : 2018-07-05 - 22:58
  */
 
-@Database(entities = arrayOf(MusicInfo::class, LrcInfo::class), version = 2)
+@Database(entities = arrayOf(MusicInfo::class, Lyric::class), version = 2)
 abstract class LocalDatabase : RoomDatabase() {
     companion object {
         /**
@@ -40,7 +40,6 @@ abstract class LocalDatabase : RoomDatabase() {
     }
 
     abstract fun getMusicDao(): MusicDao
-    abstract fun getLrcDao(): LrcDao
-
+    abstract fun getLrcDao(): LyricDao
 
 }

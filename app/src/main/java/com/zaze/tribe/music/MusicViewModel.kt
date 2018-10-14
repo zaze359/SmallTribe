@@ -10,6 +10,7 @@ import android.databinding.*
 import android.media.MediaPlayer
 import android.os.IBinder
 import com.zaze.tribe.data.dto.MusicInfo
+import com.zaze.tribe.data.loaders.MusicLoader
 import com.zaze.tribe.data.source.repository.MusicRepository
 import com.zaze.tribe.service.PlayerService
 import com.zaze.utils.ZTipUtil
@@ -52,12 +53,12 @@ class MusicViewModel(
 
     fun loadMusics() {
         dataLoading.set(true)
-        var subscription: Subscription? = null
         musicRepository.getMusicInfoList()
                 .map {
                     if (it.isEmpty()) {
-                        //  TODO 先简单的扫描一遍
-                        MusicPlayerRemote.scanMusicFromSd()
+                        val list = MusicLoader.getAllMusics(context)
+                        musicRepository.saveMusicInfos(list)
+                        list
                     } else {
                         it
                     }
@@ -73,8 +74,7 @@ class MusicViewModel(
                     }
 
                     override fun onSubscribe(s: Subscription?) {
-                        subscription = s
-                        subscription?.request(1)
+                        s?.request(1)
                     }
 
                     override fun onNext(t: ObservableList<MusicInfo>?) {
@@ -93,7 +93,7 @@ class MusicViewModel(
      * [music] music
      */
     fun showMore(music: MusicInfo) {
-        ZTipUtil.toast(context, music.localPath)
+        ZTipUtil.toast(context, music.data)
     }
 
     fun bindService() {

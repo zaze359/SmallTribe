@@ -31,7 +31,7 @@ object MusicPlayerRemote {
      * 当前播放的页面
      */
     @JvmStatic
-    val curMusicData = ObservableField<MusicInfo>(MusicInfo())
+    val curMusicData = ObservableField<MusicInfo>()
 
     @JvmStatic
     val progress = ObservableInt(0)
@@ -108,20 +108,20 @@ object MusicPlayerRemote {
             try {
                 mediaMetadataRetriever.setDataSource(file.absolutePath)
                 mediaMetadataRetriever.let {
-                    MusicInfo().apply {
-                        artist = it.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ARTIST) ?: ""
-                        if (!TextUtils.isEmpty(artist)) {
-                            localPath = file.absolutePath
-                            name = it.extractMetadata(MediaMetadataRetriever.METADATA_KEY_TITLE) ?: file.name
-                            album = it.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ALBUM) ?: ""
-                            year = it.extractMetadata(MediaMetadataRetriever.METADATA_KEY_YEAR)?.toInt() ?: 0
-                            ZLog.i(ZTag.TAG_DEBUG, "-----------------------------------------------------------------")
-                            ZLog.i(ZTag.TAG_DEBUG, "localPath : $localPath")
-                            ZLog.i(ZTag.TAG_DEBUG, "标题 : $name")
-                            ZLog.i(ZTag.TAG_DEBUG, "专辑标题 : $album")
-                            ZLog.i(ZTag.TAG_DEBUG, "数据源艺术家 : $artist")
-                            ZLog.i(ZTag.TAG_DEBUG, "创建或修改数据源的一年 : $year")
-
+//                    MusicInfo().apply {
+//                        artist = it.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ARTIST) ?: ""
+//                        if (!TextUtils.isEmpty(artist)) {
+//                            localPath = file.absolutePath
+//                            name = it.extractMetadata(MediaMetadataRetriever.METADATA_KEY_TITLE) ?: file.name
+//                            album = it.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ALBUM) ?: ""
+//                            year = it.extractMetadata(MediaMetadataRetriever.METADATA_KEY_YEAR)?.toInt() ?: 0
+//                            ZLog.i(ZTag.TAG_DEBUG, "-----------------------------------------------------------------")
+//                            ZLog.i(ZTag.TAG_DEBUG, "localPath : $localPath")
+//                            ZLog.i(ZTag.TAG_DEBUG, "标题 : $name")
+//                            ZLog.i(ZTag.TAG_DEBUG, "专辑标题 : $album")
+//                            ZLog.i(ZTag.TAG_DEBUG, "数据源艺术家 : $artist")
+//                            ZLog.i(ZTag.TAG_DEBUG, "创建或修改数据源的一年 : $year")
+//
 //                            ZLog.i(ZTag.TAG_DEBUG, "相关联的艺术家 : ${it.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ALBUMARTIST)}")
 //                            ZLog.i(ZTag.TAG_DEBUG, "数据源作者的信息 : ${it.extractMetadata(MediaMetadataRetriever.METADATA_KEY_AUTHOR)}")
 //                            ZLog.i(ZTag.TAG_DEBUG, "METADATA_KEY_WRITER : ${it.extractMetadata(MediaMetadataRetriever.METADATA_KEY_WRITER)}")
@@ -144,10 +144,10 @@ object MusicPlayerRemote {
 //                            ZLog.i(ZTag.TAG_DEBUG, "METADATA_KEY_VIDEO_HEIGHT : ${it.extractMetadata(MediaMetadataRetriever.METADATA_KEY_VIDEO_HEIGHT)}")
 //                            ZLog.i(ZTag.TAG_DEBUG, "METADATA_KEY_VIDEO_ROTATION : ${it.extractMetadata(MediaMetadataRetriever.METADATA_KEY_VIDEO_ROTATION)}")
 //                            ZLog.i(ZTag.TAG_DEBUG, "METADATA_KEY_VIDEO_WIDTH : ${it.extractMetadata(MediaMetadataRetriever.METADATA_KEY_VIDEO_WIDTH)}")
-                            ZLog.i(ZTag.TAG_DEBUG, "----------------------------------------------------------------------------------")
-                            arrayList.add(this)
-                        }
-                    }
+//                            ZLog.i(ZTag.TAG_DEBUG, "----------------------------------------------------------------------------------")
+//                            arrayList.add(this)
+//                        }
+//                    }
                 }
             } catch (e: Throwable) {
                 e.printStackTrace()
@@ -212,7 +212,7 @@ object MusicPlayerRemote {
             if (curMusic != null) {
                 var limit = 0
                 for (music in playerList) {
-                    if (music.localPath == curMusic.localPath) {
+                    if (music.data == curMusic.data) {
                         break
                     }
                     limit++
@@ -242,10 +242,10 @@ object MusicPlayerRemote {
         musicList.let {
             val set = HashSet<String>()
             for (old in playerList) {
-                set.add(old.localPath)
+                set.add(old.data)
             }
             for (new in it) {
-                if (!set.contains(new.localPath)) {
+                if (!set.contains(new.data)) {
                     playerList.add(new)
                 }
             }

@@ -1,7 +1,7 @@
 package com.zaze.tribe.data.source.local
 
-import com.zaze.tribe.data.dao.LrcDao
-import com.zaze.tribe.data.dto.LrcInfo
+import com.zaze.tribe.data.dao.LyricDao
+import com.zaze.tribe.data.dto.Lyric
 import com.zaze.tribe.data.source.LrcDataSource
 
 /**
@@ -10,24 +10,24 @@ import com.zaze.tribe.data.source.LrcDataSource
  * @version : 2018-07-05 - 22:53
  */
 class LrcLocalDataSource private constructor(
-        private val lrcDao: LrcDao
+        private val lyricDao: LyricDao
 ) : LrcDataSource {
 
-    override fun saveLrcInfo(lrcInfo: LrcInfo?) {
-        lrcInfo?.let {
-            lrcDao.insertOrUpdateLrcInfo(lrcInfo)
+    override fun saveLrcInfo(lyric: Lyric?) {
+        lyric?.let {
+            lyricDao.insertOrUpdateLrcInfo(lyric)
         }
     }
 
-    override fun getLrcInfo(lrcId: Int) = lrcDao.getLrcInfo(lrcId)
+    override fun getLrcInfo(lrcId: Int) = lyricDao.getLrcInfo(lrcId)
 
     companion object {
         private var INSTANCE: LrcLocalDataSource? = null
         @JvmStatic
-        fun getInstance(lrcDao: LrcDao): LrcLocalDataSource {
+        fun getInstance(lyricDao: LyricDao): LrcLocalDataSource {
             if (INSTANCE == null) {
                 synchronized(LrcLocalDataSource::javaClass) {
-                    INSTANCE = LrcLocalDataSource(lrcDao)
+                    INSTANCE = LrcLocalDataSource(lyricDao)
                 }
             }
             return INSTANCE!!

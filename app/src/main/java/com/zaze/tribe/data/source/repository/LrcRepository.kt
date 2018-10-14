@@ -1,6 +1,6 @@
 package com.zaze.tribe.data.source.repository
 
-import com.zaze.tribe.data.dto.LrcInfo
+import com.zaze.tribe.data.dto.Lyric
 import com.zaze.tribe.data.source.LrcDataSource
 import com.zaze.tribe.data.source.local.LocalDatabase
 import com.zaze.tribe.data.source.local.LrcLocalDataSource
@@ -14,11 +14,11 @@ import com.zaze.tribe.data.source.local.LrcLocalDataSource
 class LrcRepository private constructor(
         private val localDataSource: LrcLocalDataSource
 ) : LrcDataSource {
-    override fun saveLrcInfo(lrcInfo: LrcInfo?) {
-        localDataSource.saveLrcInfo(lrcInfo)
+    override fun saveLrcInfo(lyric: Lyric?) {
+        localDataSource.saveLrcInfo(lyric)
     }
 
-    override fun getLrcInfo(lrcId: Int): LrcInfo? {
+    override fun getLrcInfo(lrcId: Int): Lyric? {
         return localDataSource.getLrcInfo(lrcId)
     }
 

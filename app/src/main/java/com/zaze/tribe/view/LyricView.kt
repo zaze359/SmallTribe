@@ -4,9 +4,11 @@ import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
+import android.support.v4.content.ContextCompat
 import android.support.v7.widget.AppCompatTextView
 import android.util.AttributeSet
 import android.view.MotionEvent
+import com.zaze.tribe.R
 import com.zaze.utils.ZDisplayUtil
 import com.zaze.utils.log.ZLog
 import com.zaze.utils.log.ZTag
@@ -50,12 +52,12 @@ class LyricView : AppCompatTextView {
     init {
         paintH = createPaint().also {
             it.textSize = ZDisplayUtil.pxFromDp(22f) * 1.0f
-            it.color = Color.BLUE
+            it.color = ContextCompat.getColor(context, R.color.colorPrimary)
             it.alpha = 255
         }
         paintL = createPaint().also {
             it.textSize = ZDisplayUtil.pxFromDp(18f) * 1.0f
-            it.color = Color.BLUE
+            it.color = ContextCompat.getColor(context, R.color.colorPrimary)
             it.alpha = DEFAULT_ALPHA
         }
     }

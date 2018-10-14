@@ -10,8 +10,8 @@ import android.arch.persistence.room.PrimaryKey
  * @author : ZAZE
  * @version : 2018-07-05 - 22:11
  */
-@Entity(tableName = "Lrc")
-data class LrcInfo(
+@Entity(tableName = "lyric")
+data class Lyric(
         /**
          * id
          */

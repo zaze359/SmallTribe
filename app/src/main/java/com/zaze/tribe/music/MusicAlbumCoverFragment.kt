@@ -20,26 +20,30 @@ import java.util.ArrayList
  */
 class MusicAlbumCoverFragment : Fragment() {
     private lateinit var dataBinding: MusicAlbumCoverFragBinding
-    private lateinit var pagerAdapter: AlbumCoverPagerAdapter
 
-    override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         dataBinding = DataBindingUtil.inflate(inflater, R.layout.music_album_cover_frag, container, false)
-        pagerAdapter = AlbumCoverPagerAdapter(fragmentManager, ArrayList(0))
         return dataBinding.root
     }
 
-    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        album_cover_view_pager.adapter = pagerAdapter
-        album_cover_view_pager.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
-            override fun onPageScrollStateChanged(state: Int) {
-            }
+        fragmentManager?.let {
+            music_album_cover_view_pager.apply {
+                adapter = AlbumCoverPagerAdapter(it, ArrayList(0))
+                clipToPadding = false
+                pageMargin = 12
+                addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
+                    override fun onPageScrollStateChanged(state: Int) {
+                    }
 
-            override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
-            }
+                    override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
+                    }
 
-            override fun onPageSelected(position: Int) {
+                    override fun onPageSelected(position: Int) {
+                    }
+                })
             }
-        })
+        }
     }
 }
