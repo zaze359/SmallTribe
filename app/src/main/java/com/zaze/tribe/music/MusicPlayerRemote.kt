@@ -3,7 +3,6 @@ package com.zaze.tribe.music
 import android.databinding.*
 import android.media.MediaMetadataRetriever
 import android.media.MediaPlayer
-import android.text.TextUtils
 import com.zaze.tribe.data.dto.MusicInfo
 import com.zaze.tribe.data.source.repository.MusicRepository
 import com.zaze.tribe.service.PlayerService
@@ -13,6 +12,7 @@ import com.zaze.utils.log.ZLog
 import com.zaze.utils.log.ZTag
 import java.io.File
 import java.util.*
+import kotlin.collections.ArrayList
 
 /**
  * Description :
@@ -108,7 +108,7 @@ object MusicPlayerRemote {
             try {
                 mediaMetadataRetriever.setDataSource(file.absolutePath)
                 mediaMetadataRetriever.let {
-//                    MusicInfo().apply {
+                    //                    MusicInfo().apply {
 //                        artist = it.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ARTIST) ?: ""
 //                        if (!TextUtils.isEmpty(artist)) {
 //                            localPath = file.absolutePath
@@ -167,7 +167,6 @@ object MusicPlayerRemote {
     fun start(musicInfo: MusicInfo? = curMusicData.get()) {
         musicInfo?.let {
             mBinder?.start(musicInfo)
-            addToPlayerList(it)
         }
     }
 
@@ -206,6 +205,7 @@ object MusicPlayerRemote {
         }
     }
 
+    @Synchronized
     private fun getNext(looper: Boolean): MusicInfo? {
         val curMusic = curMusicData.get()
         if (!playerList.isEmpty()) {
@@ -232,24 +232,22 @@ object MusicPlayerRemote {
         }
     }
 
-    private fun addToPlayerList(musicInfo: MusicInfo?) {
-        musicInfo?.let {
-            addToPlayerList(Arrays.asList(musicInfo))
+    @Synchronized
+    fun addToPlayerList(musicList: List<MusicInfo>): List<MusicInfo> {
+        val set = HashSet<Int>()
+        for (old in playerList) {
+            set.add(old.id)
         }
-    }
-
-    private fun addToPlayerList(musicList: List<MusicInfo>) {
-        musicList.let {
-            val set = HashSet<String>()
-            for (old in playerList) {
-                set.add(old.data)
-            }
-            for (new in it) {
-                if (!set.contains(new.data)) {
-                    playerList.add(new)
-                }
+        val newList = ArrayList<MusicInfo>()
+        for (new in musicList) {
+            if (!set.contains(new.id)) {
+                newList.add(new)
             }
         }
+        if (!newList.isEmpty()) {
+            playerList.addAll(newList)
+        }
+        return newList
     }
 
     // --------------------------------------------------

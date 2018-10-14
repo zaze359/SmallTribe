@@ -21,7 +21,6 @@ object MusicLoader {
                 arrayOf("1", ""), MediaStore.Audio.Media.DEFAULT_SORT_ORDER))
     }
 
-
     // ------------------------------------------------------
 
     private fun buildMusics(cursor: Cursor?): List<MusicInfo> {

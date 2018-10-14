@@ -48,14 +48,6 @@ class PlayerService : Service(), IPlayer {
         start()
     }
     private val playerHandler = Handler(handlerThread.looper)
-//    private val looperExecutor = ThreadPoolExecutor(1, 1, 0, TimeUnit.MILLISECONDS,
-//            LinkedBlockingQueue(), ThreadFactory {
-//        val thread = Thread(it, "MEDIA_PLAYER_SERVICE")
-//        if (thread.isDaemon) {
-//            thread.isDaemon = false
-//        }
-//        thread
-//    })
 
     private val progressRunnable = object : Runnable {
         override fun run() {
@@ -108,9 +100,6 @@ class PlayerService : Service(), IPlayer {
 
     @Synchronized
     override fun start(musicInfo: MusicInfo) {
-        if (musicInfo.id <= 0) {
-            return
-        }
         musicInfo.apply {
             mediaPlayer
                     ?: MediaPlayer.create(this@PlayerService, Uri.parse("file://$data")).let { it ->

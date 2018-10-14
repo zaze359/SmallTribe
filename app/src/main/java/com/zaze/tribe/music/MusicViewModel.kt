@@ -7,19 +7,18 @@ import android.content.Context
 import android.content.Intent
 import android.content.ServiceConnection
 import android.databinding.*
-import android.media.MediaPlayer
 import android.os.IBinder
 import com.zaze.tribe.data.dto.MusicInfo
 import com.zaze.tribe.data.loaders.MusicLoader
 import com.zaze.tribe.data.source.repository.MusicRepository
 import com.zaze.tribe.service.PlayerService
 import com.zaze.utils.ZTipUtil
-import com.zaze.utils.log.LogcatUtil
 import com.zaze.utils.log.ZLog
 import com.zaze.utils.log.ZTag
+import io.reactivex.Observable
+import io.reactivex.schedulers.Schedulers
 import org.reactivestreams.Subscriber
 import org.reactivestreams.Subscription
-import java.util.*
 
 /**
  * Description :
@@ -55,21 +54,17 @@ class MusicViewModel(
         dataLoading.set(true)
         musicRepository.getMusicInfoList()
                 .map {
-                    if (it.isEmpty()) {
-                        val list = MusicLoader.getAllMusics(context)
-                        musicRepository.saveMusicInfos(list)
-                        list
-                    } else {
-                        it
+                    if (!it.isEmpty()) {
+                        MusicPlayerRemote.addToPlayerList(it)
                     }
                 }.map {
-                    musicList.apply {
-                        clear()
-                        addAll(it)
+                    MusicLoader.getAllMusics(context).let { musics ->
+                        musicList.apply {
+                            clear()
+                            addAll(musics)
+                        }
                     }
-                }.doFinally {
-                    dataLoading.set(false)
-                }.subscribe(object : Subscriber<ObservableList<MusicInfo>> {
+                }.subscribe(object : Subscriber<List<MusicInfo>> {
                     override fun onComplete() {
                     }
 
@@ -77,7 +72,7 @@ class MusicViewModel(
                         s?.request(1)
                     }
 
-                    override fun onNext(t: ObservableList<MusicInfo>?) {
+                    override fun onNext(t: List<MusicInfo>?) {
                         dataLoading.set(false)
                     }
 
@@ -88,6 +83,21 @@ class MusicViewModel(
                 })
     }
 
+    fun start(music: MusicInfo) {
+        Observable.create<MusicInfo> { emitter ->
+            emitter.onNext(music)
+            emitter.onComplete()
+        }.subscribeOn(Schedulers.io()).map {
+            MusicPlayerRemote.addToPlayerList(listOf(it))
+        }.map {
+            if (!it.isEmpty()) {
+                musicRepository.saveMusicInfo(music)
+            }
+        }.map {
+            MusicPlayerRemote.start(music)
+        }.subscribe()
+    }
+    // ------------------------------------------------------
     /**
      * 显示更多
      * [music] music

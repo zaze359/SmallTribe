@@ -1,9 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <layout>
-
     <data>
-
         <variable
             name="musicViewModel"
             type="com.zaze.tribe.music.MusicViewModel" />

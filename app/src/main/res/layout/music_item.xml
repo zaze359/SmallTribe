@@ -3,8 +3,6 @@
 
     <data>
 
-        <import type="com.zaze.tribe.music.MusicPlayerRemote" />
-
         <variable
             name="music"
             type="com.zaze.tribe.data.dto.MusicInfo" />
@@ -24,7 +22,7 @@
         android:focusable="true"
         android:foreground="@drawable/rect_selector"
         android:gravity="center_vertical"
-        android:onClick="@{()->MusicPlayerRemote.start(music)}"
+        android:onClick="@{()-> viewModel.start(music)}"
         android:orientation="horizontal">
 
 
