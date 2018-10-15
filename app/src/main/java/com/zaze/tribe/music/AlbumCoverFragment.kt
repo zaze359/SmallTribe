@@ -1,11 +1,11 @@
 package com.zaze.tribe.music
 
 import android.os.Bundle
-import android.support.v4.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.zaze.tribe.R
+import com.zaze.tribe.base.BaseFragment
 import com.zaze.tribe.data.dto.MusicInfo
 import com.zaze.tribe.util.IconCache
 import kotlinx.android.synthetic.main.album_cover_frag.*
@@ -16,7 +16,7 @@ import kotlinx.android.synthetic.main.album_cover_frag.*
  * @author : ZAZE
  * @version : 2018-10-01 - 23:26
  */
-class AlbumCoverFragment : Fragment() {
+class AlbumCoverFragment : BaseFragment() {
     private var musicInfo: MusicInfo? = null
 
     companion object {
@@ -41,7 +41,8 @@ class AlbumCoverFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         musicInfo?.let {
-            album_cover_iv.setImageBitmap(IconCache.buildMediaIcon(it.data))
+            album_cover_iv.setImageBitmap(IconCache.buildMediaIcon(it.data)
+                    ?: IconCache.getDefaultMediaIcon())
         }
     }
 }

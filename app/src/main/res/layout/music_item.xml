@@ -9,7 +9,7 @@
 
         <variable
             name="viewModel"
-            type="com.zaze.tribe.music.MusicViewModel" />
+            type="com.zaze.tribe.music.MusicListViewModel" />
 
     </data>
 

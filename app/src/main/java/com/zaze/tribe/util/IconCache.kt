@@ -43,9 +43,9 @@ object IconCache {
         return if (FileUtil.exists(path)) {
             BITMAP_CACHE.get(path) ?: buildMediaIcon(path, BMP_SIZE, BMP_SIZE)?.apply {
                 saveSmallMediaIcon(path, this)
-            } ?: getDefaultMediaIcon(BMP_SIZE)
+            } ?: getDefaultMediaIcon()
         } else {
-            getDefaultMediaIcon(BMP_SIZE)
+            getDefaultMediaIcon()
         }
     }
 
@@ -79,13 +79,13 @@ object IconCache {
     }
 
     @JvmStatic
-    private fun getDefaultMediaIcon(size: Int): Bitmap {
+    fun getDefaultMediaIcon(): Bitmap {
         return defaultMediaIcon?.get()
-                ?: BmpUtil.drawable2Bitmap(getFullResIcon(R.mipmap.ic_launcher), size)
+                ?: BmpUtil.drawable2Bitmap(getFullResIcon(R.mipmap.ic_launcher))
                         ?.apply {
                             defaultMediaIcon = SoftReference(this)
                         }
-                ?: Bitmap.createBitmap(size, size, Bitmap.Config.ALPHA_8)
+                ?: Bitmap.createBitmap(BMP_SIZE, BMP_SIZE, Bitmap.Config.ALPHA_8)
     }
 
     @JvmStatic

@@ -13,10 +13,10 @@ import android.view.Menu
 import android.view.MenuItem
 import com.ashokvarma.bottomnavigation.BottomNavigationBar
 import com.ashokvarma.bottomnavigation.BottomNavigationItem
-import com.zaze.common.base.BaseActivity
+import com.zaze.tribe.base.BaseActivity
 import com.zaze.tribe.databinding.ActivityMainBinding
+import com.zaze.tribe.music.MainViewModel
 import com.zaze.tribe.music.MusicListFragment
-import com.zaze.tribe.music.MusicViewModel
 import com.zaze.tribe.util.obtainViewModel
 import com.zaze.tribe.util.replaceFragmentInActivity
 import com.zaze.tribe.util.setImmersion
@@ -33,19 +33,14 @@ import kotlinx.android.synthetic.main.activity_main.*
  */
 class MainActivity : BaseActivity() {
 
-    override fun isNeedHead(): Boolean {
-        return false
-    }
-
     private lateinit var drawerToggle: ActionBarDrawerToggle
     private lateinit var viewDataBinding: ActivityMainBinding
-    private lateinit var musicViewModel: MusicViewModel
+    private lateinit var viewModel: MainViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         viewDataBinding = DataBindingUtil.setContentView(this, R.layout.activity_main)
-        musicViewModel = obtainViewModel(MusicViewModel::class.java)
-        viewDataBinding.musicViewModel = musicViewModel
+        viewModel = obtainViewModel(MainViewModel::class.java)
         setupPermission()
         setImmersion()
         setupActionBar(R.id.main_toolbar) {
@@ -76,11 +71,11 @@ class MainActivity : BaseActivity() {
             }
         }
         // ------------------------------------------------------
-        musicViewModel.bindService()
+        viewModel.bindService()
     }
 
     override fun onDestroy() {
-        musicViewModel.unbindService()
+        viewModel.unbindService()
         super.onDestroy()
     }
 
@@ -135,9 +130,6 @@ class MainActivity : BaseActivity() {
                         4 -> TestFragment.newInstance("$position")
                         else -> TestFragment.newInstance("$position")
                     }.also {
-                        if (it is MusicListFragment) {
-                            it.setViewModel(musicViewModel)
-                        }
                         replaceFragmentInActivity(it as Fragment, R.id.main_content_fl)
                     }
 

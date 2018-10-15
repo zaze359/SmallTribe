@@ -2,19 +2,11 @@ package com.zaze.tribe.music
 
 import android.app.Application
 import android.arch.lifecycle.AndroidViewModel
-import android.content.ComponentName
-import android.content.Context
-import android.content.Intent
-import android.content.ServiceConnection
 import android.databinding.*
-import android.os.IBinder
 import com.zaze.tribe.data.dto.MusicInfo
 import com.zaze.tribe.data.loaders.MusicLoader
 import com.zaze.tribe.data.source.repository.MusicRepository
-import com.zaze.tribe.service.PlayerService
 import com.zaze.utils.ZTipUtil
-import com.zaze.utils.log.ZLog
-import com.zaze.utils.log.ZTag
 import io.reactivex.Observable
 import io.reactivex.schedulers.Schedulers
 import org.reactivestreams.Subscriber
@@ -25,7 +17,7 @@ import org.reactivestreams.Subscription
  * @author : ZAZE
  * @version : 2018-07-06 - 00:38
  */
-class MusicViewModel(
+class MusicListViewModel(
         private val context: Application,
         private val musicRepository: MusicRepository
 ) : AndroidViewModel(context) {
@@ -34,18 +26,6 @@ class MusicViewModel(
      * 是否加载中
      */
     val dataLoading = ObservableBoolean(false)
-
-    private val serviceConnection = object : ServiceConnection {
-        override fun onServiceDisconnected(name: ComponentName?) {
-            ZLog.e(ZTag.TAG_DEBUG, "onServiceDisconnected : $name")
-            MusicPlayerRemote.mBinder = null
-        }
-
-        override fun onServiceConnected(name: ComponentName?, service: IBinder?) {
-            ZLog.i(ZTag.TAG_DEBUG, "onServiceConnected : $name")
-            MusicPlayerRemote.mBinder = service as PlayerService.ServiceBinder
-        }
-    }
 
     // ------------------------------------------------------
     // ------------------------------------------------------
@@ -104,13 +84,5 @@ class MusicViewModel(
      */
     fun showMore(music: MusicInfo) {
         ZTipUtil.toast(context, music.data)
-    }
-
-    fun bindService() {
-        context.bindService(Intent(context, PlayerService::class.java), serviceConnection, Context.BIND_AUTO_CREATE)
-    }
-
-    fun unbindService() {
-        context.unbindService(serviceConnection)
     }
 }

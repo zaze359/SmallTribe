@@ -61,9 +61,7 @@ dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
     implementation 'com.ashokvarma.android:bottom-navigation-bar:2.0.4'
     implementation 'com.google.code.gson:gson:2.8.2'
-    implementation('com.zaze:zazecommon:1.2.3@aar'){
-        exclude group: 'com.android.support:design'
-    }
+//    implementation 'com.zaze:zazecommon:1.2.3@aar'
     implementation 'com.zaze:zazeutil:1.2.16'
     //
     //

@@ -162,11 +162,19 @@ object MusicPlayerRemote {
      * 开始播放
      * [musicInfo] music
      */
-    @JvmStatic
     @JvmOverloads
+    @JvmStatic
     fun start(musicInfo: MusicInfo? = curMusicData.get()) {
         musicInfo?.let {
             mBinder?.start(musicInfo)
+        }
+    }
+
+    @Synchronized
+    @JvmStatic
+    fun startAt(position : Int) {
+        if(position >=0 && position < playerList.size) {
+            start(playerList[position])
         }
     }
 
@@ -175,15 +183,17 @@ object MusicPlayerRemote {
         mBinder?.pause()
     }
 
+    @JvmStatic
     fun stop() {
         mBinder?.stop()
     }
 
+    @JvmStatic
     fun seekTo(musicInfo: MusicInfo, seekTimeMillis: Long) {
         mBinder?.seekTo(musicInfo, seekTimeMillis)
     }
 
-    fun doNext() {
+    private fun doNext() {
         ZLog.i(ZTag.TAG_DEBUG, "doNext")
         when (loopMode.get()) {
             LoopMode.LIST_LOOP -> {
@@ -248,6 +258,12 @@ object MusicPlayerRemote {
             playerList.addAll(newList)
         }
         return newList
+    }
+
+    @Synchronized
+    @JvmStatic
+    fun getCurPosition(): Int {
+        return playerList.indexOf(curMusicData.get())
     }
 
     // --------------------------------------------------

@@ -1,12 +1,13 @@
 package com.zaze.tribe.music
 
 import android.os.Bundle
-import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.zaze.tribe.base.BaseFragment
 import com.zaze.tribe.databinding.MusicListFragBinding
+import com.zaze.tribe.util.obtainViewModel
 import kotlinx.android.synthetic.main.music_list_frag.*
 import java.util.*
 
@@ -15,11 +16,10 @@ import java.util.*
  * @author : ZAZE
  * @version : 2018-07-06 - 00:30
  */
-class MusicListFragment : Fragment() {
+class MusicListFragment : BaseFragment() {
 
     private lateinit var viewDataBinding: MusicListFragBinding
     private lateinit var musicAdapter: MusicAdapter
-    private lateinit var viewModel: MusicViewModel
 
     companion object {
         fun newInstance(): MusicListFragment {
@@ -30,14 +30,12 @@ class MusicListFragment : Fragment() {
         }
     }
 
-    fun setViewModel(viewModel: MusicViewModel) {
-        this.viewModel = viewModel
-    }
-
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         viewDataBinding = MusicListFragBinding.inflate(inflater, container, false)
-        viewDataBinding.viewModel = viewModel
-        viewModel.loadMusics()
+        obtainViewModel(MusicListViewModel::class.java)?.let {
+            viewDataBinding.viewModel = it
+            it.loadMusics()
+        }
         return viewDataBinding.root
     }
 
@@ -45,8 +43,10 @@ class MusicListFragment : Fragment() {
         super.onActivityCreated(savedInstanceState)
         activity?.let {
             music_recycler_view.layoutManager = LinearLayoutManager(it)
-            musicAdapter = MusicAdapter(it, ArrayList(0), viewModel)
-            music_recycler_view.adapter = musicAdapter
+            viewDataBinding.viewModel?.apply {
+                musicAdapter = MusicAdapter(it, ArrayList(0), this)
+                music_recycler_view.adapter = musicAdapter
+            }
         }
     }
 }
