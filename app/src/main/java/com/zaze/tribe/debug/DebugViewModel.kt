@@ -1,7 +1,7 @@
 package com.zaze.tribe.debug
 
 import android.app.Application
-import android.arch.lifecycle.AndroidViewModel
+import androidx.lifecycle.AndroidViewModel
 
 /**
  * Description :

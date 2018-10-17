@@ -1,12 +1,12 @@
 package com.zaze.tribe.music
 
 import android.app.Application
-import android.arch.lifecycle.AndroidViewModel
 import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.content.ServiceConnection
 import android.os.IBinder
+import androidx.lifecycle.AndroidViewModel
 import com.zaze.tribe.service.PlayerService
 import com.zaze.utils.log.ZLog
 import com.zaze.utils.log.ZTag

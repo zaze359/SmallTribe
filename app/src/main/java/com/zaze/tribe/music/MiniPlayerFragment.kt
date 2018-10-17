@@ -6,7 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import com.zaze.tribe.base.BaseFragment
 import com.zaze.tribe.databinding.MiniPlayerFragBinding
-import com.zaze.utils.ZActivityUtil
+import com.zaze.tribe.util.ActivityUtil
 
 /**
  * Description :
@@ -21,7 +21,7 @@ class MiniPlayerFragment : BaseFragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         viewDataBinding = MiniPlayerFragBinding.inflate(inflater, container, false)
         viewDataBinding.root.setOnClickListener {
-            ZActivityUtil.startActivity(this, MusicDetailActivity::class.java)
+            ActivityUtil.startActivity(this, MusicDetailActivity::class.java)
         }
         return viewDataBinding.root
     }

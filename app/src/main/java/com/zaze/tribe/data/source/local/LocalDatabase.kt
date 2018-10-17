@@ -1,10 +1,10 @@
 package com.zaze.tribe.data.source.local
 
-import android.arch.persistence.db.SupportSQLiteDatabase
-import android.arch.persistence.room.Database
-import android.arch.persistence.room.Room
-import android.arch.persistence.room.RoomDatabase
-import android.arch.persistence.room.migration.Migration
+import androidx.room.Database
+import androidx.room.Room
+import androidx.room.RoomDatabase
+import androidx.room.migration.Migration
+import androidx.sqlite.db.SupportSQLiteDatabase
 import com.zaze.tribe.App
 import com.zaze.tribe.data.dao.LyricDao
 import com.zaze.tribe.data.dao.MusicDao
@@ -19,7 +19,7 @@ import com.zaze.utils.log.ZTag
  * @version : 2018-07-05 - 22:58
  */
 
-@Database(entities = arrayOf(MusicInfo::class, Lyric::class), version = 2)
+@Database(entities = [MusicInfo::class, Lyric::class], version = 2)
 abstract class LocalDatabase : RoomDatabase() {
     companion object {
         /**

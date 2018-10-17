@@ -1,8 +1,11 @@
 package com.zaze.tribe.music
 
-import android.databinding.*
 import android.media.MediaMetadataRetriever
 import android.media.MediaPlayer
+import androidx.databinding.ObservableArrayList
+import androidx.databinding.ObservableBoolean
+import androidx.databinding.ObservableField
+import androidx.databinding.ObservableInt
 import com.zaze.tribe.data.dto.MusicInfo
 import com.zaze.tribe.data.source.repository.MusicRepository
 import com.zaze.tribe.service.PlayerService

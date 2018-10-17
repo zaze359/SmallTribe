@@ -1,7 +1,7 @@
 package com.zaze.tribe.music
 
-import android.databinding.DataBindingUtil
 import android.os.Bundle
+import androidx.databinding.DataBindingUtil
 import com.zaze.tribe.R
 import com.zaze.tribe.base.BaseActivity
 import com.zaze.tribe.databinding.MusicDetailActBinding

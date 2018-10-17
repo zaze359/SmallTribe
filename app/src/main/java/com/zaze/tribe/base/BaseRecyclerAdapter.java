@@ -1,7 +1,6 @@
 package com.zaze.tribe.base;
 
 import android.content.Context;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,6 +8,9 @@ import android.view.ViewGroup;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
 
 /**
  * Description :
@@ -31,7 +33,7 @@ public abstract class BaseRecyclerAdapter<V, H extends RecyclerView.ViewHolder> 
         setDataList(data, true);
     }
 
-    protected void setDataList(Collection<V> data, boolean isNotify) {
+    private void setDataList(Collection<V> data, boolean isNotify) {
         dataList.clear();
         if (data != null && data.size() > 0) {
             dataList.addAll(data);
@@ -41,13 +43,14 @@ public abstract class BaseRecyclerAdapter<V, H extends RecyclerView.ViewHolder> 
         }
     }
 
+    @NonNull
     @Override
-    public H onCreateViewHolder(ViewGroup parent, int viewType) {
+    public H onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         return createViewHolder(LayoutInflater.from(parent.getContext()).inflate(getViewLayoutId(), parent, false));
     }
 
     @Override
-    public void onBindViewHolder(H holder, int position) {
+    public void onBindViewHolder(@NonNull H holder, int position) {
         onBindView(holder, getItem(position), position);
     }
 
@@ -61,7 +64,7 @@ public abstract class BaseRecyclerAdapter<V, H extends RecyclerView.ViewHolder> 
         return dataList.size();
     }
 
-    public V getItem(int position) {
+    private V getItem(int position) {
         if (position < 0 || position >= dataList.size()) {
             return null;
         } else {
@@ -71,10 +74,6 @@ public abstract class BaseRecyclerAdapter<V, H extends RecyclerView.ViewHolder> 
 
     public Context getContext() {
         return context;
-    }
-
-    public List<V> getDataList() {
-        return dataList;
     }
 
     // --------------------------------------------------
@@ -92,7 +91,7 @@ public abstract class BaseRecyclerAdapter<V, H extends RecyclerView.ViewHolder> 
      * @param convertView convertView
      * @return H
      */
-    public abstract H createViewHolder(View convertView);
+    public abstract H createViewHolder(@NonNull View convertView);
 
     /**
      * view赋值
@@ -101,5 +100,5 @@ public abstract class BaseRecyclerAdapter<V, H extends RecyclerView.ViewHolder> 
      * @param value    value
      * @param position position
      */
-    public abstract void onBindView(H holder, V value, int position);
+    public abstract void onBindView(@NonNull H holder, V value, int position);
 }

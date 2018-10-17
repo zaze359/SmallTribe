@@ -31,7 +31,7 @@
             android:layout_height="wrap_content"
             android:padding="@dimen/dp_4">
 
-            <android.support.v7.widget.CardView
+            <androidx.cardview.widget.CardView
                 android:id="@+id/mini_player_album_cv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -47,7 +47,7 @@
                     android:scaleType="fitCenter"
                     app:bmp="@{MusicPlayerRemote.curMusicData}"
                     tools:src="@mipmap/ic_launcher" />
-            </android.support.v7.widget.CardView>
+            </androidx.cardview.widget.CardView>
 
             <LinearLayout
                 android:id="@+id/mini_player_menu_ll"
@@ -58,24 +58,22 @@
                 android:layout_centerVertical="true"
                 android:orientation="horizontal">
 
-                <ImageView
+                <androidx.appcompat.widget.AppCompatImageView
                     android:id="@+id/mini_player_status_iv"
                     android:layout_width="@dimen/dp_28"
                     android:layout_height="@dimen/dp_28"
                     android:layout_marginEnd="@dimen/dp_4"
                     android:layout_marginRight="@dimen/dp_4"
-                    android:contentDescription="@null"
                     android:onClick="@{()-> MusicPlayerRemote.start()}"
                     android:src="@{MusicPlayerRemote.isPaused?@drawable/ic_play_circle_outline_black_24dp:@drawable/ic_pause_circle_outline_black_24dp}"
                     tools:src="@drawable/ic_play_circle_outline_black_24dp" />
 
-                <ImageView
+                <androidx.appcompat.widget.AppCompatImageView
                     android:id="@+id/mini_player_list_iv"
                     android:layout_width="@dimen/dp_28"
                     android:layout_height="@dimen/dp_28"
                     android:layout_marginLeft="@dimen/dp_4"
                     android:layout_marginRight="@dimen/dp_4"
-                    android:contentDescription="@null"
                     android:src="@drawable/ic_more_vert_black_24dp" />
             </LinearLayout>
 

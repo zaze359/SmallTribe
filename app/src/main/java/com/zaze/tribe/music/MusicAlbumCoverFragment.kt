@@ -1,10 +1,10 @@
 package com.zaze.tribe.music
 
 import android.os.Bundle
-import android.support.v4.view.ViewPager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.viewpager.widget.ViewPager
 import com.zaze.tribe.R
 import com.zaze.tribe.base.BaseFragment
 import kotlinx.android.synthetic.main.music_album_cover_frag.*

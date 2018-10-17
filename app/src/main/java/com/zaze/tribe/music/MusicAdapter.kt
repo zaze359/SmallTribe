@@ -1,11 +1,11 @@
 package com.zaze.tribe.music
 
 import android.content.Context
-import android.databinding.DataBindingUtil
-import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.databinding.DataBindingUtil
+import androidx.recyclerview.widget.RecyclerView
 import com.zaze.tribe.R
 import com.zaze.tribe.base.BaseRecyclerAdapter
 import com.zaze.tribe.data.dto.MusicInfo
@@ -28,20 +28,22 @@ class MusicAdapter(
         return R.layout.music_item
     }
 
-    override fun createViewHolder(p0: View): MusicViewHolder {
-        return MusicViewHolder(p0)
+    override fun createViewHolder(convertView: View): MusicViewHolder {
+        return MusicViewHolder(convertView)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MusicViewHolder {
         val binding = MusicItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         binding.viewModel = viewModel
-        return this.createViewHolder(binding.root)
+        return this.createViewHolder(binding.root.apply { tag = viewType.toString() })
     }
 
-    override fun onBindView(viewHolder: MusicViewHolder, music: MusicInfo, p2: Int) {
-        val binding = DataBindingUtil.getBinding<MusicItemBinding>(viewHolder.itemView)
-        ZLog.i(ZTag.TAG_DEBUG, "${music.title}:${music.data}")
-        binding.music = music
+    override fun onBindView(holder: MusicViewHolder, value: MusicInfo?, position: Int) {
+        value?.let {
+            ZLog.i(ZTag.TAG_DEBUG, "${value.title}:${value.data}")
+            val binding = DataBindingUtil.getBinding<MusicItemBinding>(holder.itemView)
+            binding?.music = value
+        }
     }
 
     class MusicViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)

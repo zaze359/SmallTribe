@@ -2,7 +2,7 @@
 
 <layout>
 
-    <android.support.v4.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    <androidx.drawerlayout.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
         android:id="@+id/main_drawer_layout"
@@ -16,26 +16,33 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <com.ashokvarma.bottomnavigation.BottomNavigationBar
-                android:id="@+id/main_navigation_bar"
+            <!--<com.ashokvarma.bottomnavigation.BottomNavigationBar-->
+            <!--android:id="@+id/main_navigation_bar"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_alignParentBottom="true" />-->
+            <com.google.android.material.bottomnavigation.BottomNavigationView
+                android:id="@+id/main_navigation_view"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true" />
+                android:layout_alignParentBottom="true"
+                app:labelVisibilityMode="labeled"
+                app:menu="@menu/main_nav_bottom" />
 
             <fragment
                 android:id="@+id/music_mini_player_fl"
                 android:name="com.zaze.tribe.music.MiniPlayerFragment"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_above="@id/main_navigation_bar" />
+                android:layout_above="@id/main_navigation_view" />
 
-            <android.support.design.widget.CoordinatorLayout
+            <androidx.coordinatorlayout.widget.CoordinatorLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_above="@id/music_mini_player_fl"
                 android:layout_alignParentTop="true">
 
-                <android.support.design.widget.AppBarLayout
+                <com.google.android.material.appbar.AppBarLayout
                     android:id="@+id/main_app_bar_layout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
@@ -46,7 +53,7 @@
                     <!--android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"-->
                     <!--app:layout_scrollFlags="scroll|exitUntilCollapsed">-->
 
-                    <android.support.v7.widget.Toolbar
+                    <androidx.appcompat.widget.Toolbar
                         android:id="@+id/main_toolbar"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -57,27 +64,26 @@
 
                     <!--</android.support.design.widget.CollapsingToolbarLayout>-->
 
-                </android.support.design.widget.AppBarLayout>
+                </com.google.android.material.appbar.AppBarLayout>
 
                 <FrameLayout
                     android:id="@+id/main_content_fl"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    app:layout_behavior="@string/appbar_scrolling_view_behavior"
-                    />
-            </android.support.design.widget.CoordinatorLayout>
+                    app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+            </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
         </RelativeLayout>
 
         <!-- Navigation Drawer -->
-        <android.support.design.widget.NavigationView
+        <com.google.android.material.navigation.NavigationView
             android:id="@+id/main_left_nav"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_gravity="start"
             app:headerLayout="@layout/drawer_header_layout"
             app:menu="@menu/drawer_actions" />
-    </android.support.v4.widget.DrawerLayout>
+    </androidx.drawerlayout.widget.DrawerLayout>
 
 </layout>
 

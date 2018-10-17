@@ -3,26 +3,20 @@ package com.zaze.tribe
 import android.Manifest
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.databinding.DataBindingUtil
 import android.net.Uri
 import android.os.Bundle
-import android.support.v4.app.Fragment
-import android.support.v4.view.GravityCompat
-import android.support.v7.app.ActionBarDrawerToggle
 import android.view.Menu
 import android.view.MenuItem
-import com.ashokvarma.bottomnavigation.BottomNavigationBar
-import com.ashokvarma.bottomnavigation.BottomNavigationItem
+import androidx.appcompat.app.ActionBarDrawerToggle
+import androidx.core.view.GravityCompat
+import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.Fragment
 import com.zaze.tribe.base.BaseActivity
 import com.zaze.tribe.databinding.ActivityMainBinding
 import com.zaze.tribe.music.MainViewModel
 import com.zaze.tribe.music.MusicListFragment
-import com.zaze.tribe.util.obtainViewModel
-import com.zaze.tribe.util.replaceFragmentInActivity
-import com.zaze.tribe.util.setImmersion
-import com.zaze.tribe.util.setupActionBar
+import com.zaze.tribe.util.*
 import com.zaze.utils.FileUtil
-import com.zaze.utils.permission.PermissionUtil
 import kotlinx.android.synthetic.main.activity_main.*
 
 /**
@@ -92,50 +86,55 @@ class MainActivity : BaseActivity() {
     }
 
     private fun initNavigationBar() {
-        main_navigation_bar.run {
-            setTabSelectedListener(object : BottomNavigationBar.OnTabSelectedListener {
-                override fun onTabReselected(position: Int) {
-                }
-
-                override fun onTabUnselected(position: Int) {
-                }
-
-                override fun onTabSelected(position: Int) {
-                    findOrCreateViewFragment(position)
-                }
-            })
-            //            setFab(fabHome)
-            clearAll()
-//            setMode(BottomNavigationBar.MODE_SHIFTING)
-//            setBarBackgroundColor(R.color.black)
-            setMode(BottomNavigationBar.MODE_FIXED)
-            setBackgroundStyle(BottomNavigationBar.BACKGROUND_STYLE_STATIC)
-            addItem(createItem(R.mipmap.ic_home_white_24dp, "主页", R.color.orange))
-            addItem(createItem(R.mipmap.ic_book_white_24dp, "阅读", R.color.teal))
-            addItem(createItem(R.mipmap.ic_music_note_white_24dp, "音乐", R.color.blue))
-            addItem(createItem(R.mipmap.ic_tv_white_24dp, "视频", R.color.brown))
-            addItem(createItem(R.mipmap.ic_videogame_asset_white_24dp, "游戏", R.color.grey_blue))
-            initialise()
-            selectTab(0)
+        main_navigation_view.run {
+            setOnNavigationItemSelectedListener { it ->
+                findOrCreateViewFragment(it)
+                true
+            }
         }
     }
 
-    private fun findOrCreateViewFragment(position: Int) =
-            supportFragmentManager.findFragmentByTag("$position")
-                    ?: when (position) {
-                        0 -> TestFragment.newInstance("$position")
-                        1 -> TestFragment.newInstance("$position")
-                        2 -> MusicListFragment.newInstance()
-                        3 -> TestFragment.newInstance("$position")
-                        4 -> TestFragment.newInstance("$position")
-                        else -> TestFragment.newInstance("$position")
+//    private fun initNavigationBar() {
+//        main_navigation_view.run {
+//            setTabSelectedListener(object : BottomNavigationBar.OnTabSelectedListener {
+//                override fun onTabReselected(position: Int) {
+//                }
+//
+//                override fun onTabUnselected(position: Int) {
+//                }
+//
+//                override fun onTabSelected(position: Int) {
+//                    findOrCreateViewFragment(position)
+//                }
+//            })
+//            //            setFab(fabHome)
+//            clearAll()
+////            setMode(BottomNavigationBar.MODE_SHIFTING)
+////            setBarBackgroundColor(R.color.black)
+//            setMode(BottomNavigationBar.MODE_FIXED)
+//            setBackgroundStyle(BottomNavigationBar.BACKGROUND_STYLE_STATIC)
+//            addItem(createItem(R.mipmap.ic_home_white_24dp, "主页", R.color.orange))
+//            addItem(createItem(R.mipmap.ic_book_white_24dp, "阅读", R.color.teal))
+//            addItem(createItem(R.mipmap.ic_music_note_white_24dp, "音乐", R.color.blue))
+//            addItem(createItem(R.mipmap.ic_tv_white_24dp, "视频", R.color.brown))
+//            addItem(createItem(R.mipmap.ic_videogame_asset_white_24dp, "游戏", R.color.grey_blue))
+//            initialise()
+//            selectTab(0)
+//        }
+//    }
+
+    private fun findOrCreateViewFragment(item: MenuItem) =
+            supportFragmentManager.findFragmentByTag("${item.itemId}")
+                    ?: when (item.itemId) {
+                        R.id.action_home -> TestFragment.newInstance("${item.title}")
+                        R.id.action_book -> TestFragment.newInstance("${item.title}")
+                        R.id.action_music -> MusicListFragment.newInstance()
+                        R.id.action_game -> TestFragment.newInstance("${item.title}")
+                        else -> TestFragment.newInstance("${item.title}")
                     }.also {
                         replaceFragmentInActivity(it as Fragment, R.id.main_content_fl)
                     }
 
-
-    private fun createItem(imgRes: Int, title: String, activeColor: Int) =
-            BottomNavigationItem(imgRes, title).setActiveColorResource(activeColor).setInActiveColorResource(R.color.grey)
     // --------------------------------------------------
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {

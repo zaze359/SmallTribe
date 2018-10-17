@@ -1,7 +1,7 @@
 package com.zaze.tribe.music
 
-import android.support.v4.app.Fragment
-import android.support.v4.app.FragmentManager
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
 import com.zaze.tribe.base.CustomFragmentPagerAdapter
 import com.zaze.tribe.data.dto.MusicInfo
 

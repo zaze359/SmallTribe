@@ -4,14 +4,12 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.drawable.Drawable
 import android.media.MediaMetadataRetriever
-import android.support.v4.content.res.ResourcesCompat
 import android.util.LruCache
+import androidx.core.content.res.ResourcesCompat
 import com.zaze.tribe.App
 import com.zaze.tribe.R
 import com.zaze.utils.BmpUtil
 import com.zaze.utils.FileUtil
-import com.zaze.utils.log.ZLog
-import com.zaze.utils.log.ZTag
 import java.lang.ref.SoftReference
 
 /**

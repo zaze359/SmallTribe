@@ -4,14 +4,12 @@ import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
-import android.support.v4.content.ContextCompat
-import android.support.v7.widget.AppCompatTextView
 import android.util.AttributeSet
 import android.view.MotionEvent
+import androidx.appcompat.widget.AppCompatTextView
+import androidx.core.content.ContextCompat
 import com.zaze.tribe.R
 import com.zaze.utils.ZDisplayUtil
-import com.zaze.utils.log.ZLog
-import com.zaze.utils.log.ZTag
 
 /**
  * Description :

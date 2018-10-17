@@ -1,13 +1,10 @@
 package com.zaze.tribe.data.dto
 
-import android.arch.persistence.room.ColumnInfo
-import android.arch.persistence.room.Entity
-import android.arch.persistence.room.Ignore
-import android.arch.persistence.room.PrimaryKey
-import android.graphics.Bitmap
 import android.os.Parcel
 import android.os.Parcelable
-import java.io.Serializable
+import androidx.room.ColumnInfo
+import androidx.room.Entity
+import androidx.room.PrimaryKey
 
 /**
  * Description :
@@ -62,7 +59,7 @@ data class MusicInfo(
          * 专辑
          */
         @ColumnInfo(name = "album")
-        var albumName: String = "",
+        val albumName: String,
         /**
          *
          */

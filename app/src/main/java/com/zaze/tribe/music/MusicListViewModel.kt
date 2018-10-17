@@ -1,8 +1,10 @@
 package com.zaze.tribe.music
 
 import android.app.Application
-import android.arch.lifecycle.AndroidViewModel
-import android.databinding.*
+import androidx.databinding.ObservableArrayList
+import androidx.databinding.ObservableBoolean
+import androidx.databinding.ObservableList
+import androidx.lifecycle.AndroidViewModel
 import com.zaze.tribe.data.dto.MusicInfo
 import com.zaze.tribe.data.loaders.MusicLoader
 import com.zaze.tribe.data.source.repository.MusicRepository

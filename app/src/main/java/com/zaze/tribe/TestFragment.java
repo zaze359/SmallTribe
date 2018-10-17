@@ -1,13 +1,7 @@
 package com.zaze.tribe;
 
-import android.arch.lifecycle.MutableLiveData;
-import android.arch.lifecycle.Observer;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.Message;
-import android.os.SystemClock;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,13 +11,16 @@ import com.zaze.tribe.data.entity.LrcLine;
 import com.zaze.tribe.util.LrcProcessor;
 import com.zaze.tribe.view.LyricView;
 import com.zaze.utils.date.ZDateUtil;
-import com.zaze.utils.log.ZLog;
-import com.zaze.utils.log.ZTag;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.TimeZone;
+
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.Observer;
 
 /**
  * Description :

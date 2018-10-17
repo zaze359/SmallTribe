@@ -1,10 +1,10 @@
 package com.zaze.tribe.music
 
 import android.os.Bundle
-import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.zaze.tribe.base.BaseFragment
 import com.zaze.tribe.databinding.MusicListFragBinding
 import com.zaze.tribe.util.obtainViewModel

@@ -1,11 +1,11 @@
 package com.zaze.tribe.util
 
 import android.app.Application
-import android.arch.lifecycle.ViewModel
-import android.arch.lifecycle.ViewModelProvider
-import android.arch.lifecycle.ViewModelProviders
-import android.support.v4.app.Fragment
-import android.support.v7.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelProviders
 import com.zaze.tribe.data.source.repository.MusicRepository
 import com.zaze.tribe.debug.DebugViewModel
 import com.zaze.tribe.music.MainViewModel

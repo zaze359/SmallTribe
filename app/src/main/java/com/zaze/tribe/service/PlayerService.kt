@@ -9,8 +9,8 @@ import android.content.Intent
 import android.media.MediaPlayer
 import android.net.Uri
 import android.os.*
-import android.support.v4.app.NotificationCompat
 import android.widget.RemoteViews
+import androidx.core.app.NotificationCompat
 import com.zaze.tribe.App
 import com.zaze.tribe.MainActivity
 import com.zaze.tribe.R
@@ -267,6 +267,7 @@ class PlayerService : Service(), IPlayer {
          * 停止
          */
         fun onStop()
+
         /**
          * 下一首
          */
