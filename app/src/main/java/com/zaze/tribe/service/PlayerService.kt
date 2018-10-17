@@ -47,33 +47,39 @@ class PlayerService : Service(), IPlayer {
     private val handlerThread = HandlerThread("MEDIA_PLAYER_SERVICE").apply {
         start()
     }
-    private val playerHandler = Handler(handlerThread.looper)
+    private val playerHandler = PlayerHandler(handlerThread.looper)
 
     private val progressRunnable = object : Runnable {
         override fun run() {
-            try {
-                mediaPlayer?.let {
-                    if (it.isPlaying) {
-                        callback?.onProgress(curMusic, (10000 * (1.0f * it.currentPosition / it.duration)).toInt())
+            synchronized(playerHandler) {
+                try {
+                    mediaPlayer?.let {
+                        if (it.isPlaying) {
+                            callback?.onProgress(curMusic, (10000 * (1.0f * it.currentPosition / it.duration)).toInt())
+                        }
                     }
+                } catch (e: Exception) {
+                    e.printStackTrace()
                 }
-            } catch (e: Exception) {
-                e.printStackTrace()
+                playerHandler.postDelayed(this, 16L)
             }
-            playerHandler.postDelayed(this, 16L)
         }
     }
 
 
     override fun onBind(intent: Intent?): IBinder? {
-        playerHandler.removeCallbacks(progressRunnable)
-        playerHandler.post(progressRunnable)
-        return mBinder
+        synchronized(playerHandler) {
+            playerHandler.removeCallbacks(progressRunnable)
+            playerHandler.post(progressRunnable)
+            return mBinder
+        }
     }
 
     override fun onUnbind(intent: Intent?): Boolean {
         stop()
-        playerHandler.removeCallbacks(progressRunnable)
+        synchronized(playerHandler) {
+            playerHandler.removeCallbacks(progressRunnable)
+        }
         stopForeground(true)
         return super.onUnbind(intent)
     }
@@ -240,6 +246,8 @@ class PlayerService : Service(), IPlayer {
             this@PlayerService.seekTo(musicInfo, seekTimeMillis)
         }
     }
+
+    inner class PlayerHandler(looper: Looper) : Handler(looper)
 
     interface PlayerCallback {
 

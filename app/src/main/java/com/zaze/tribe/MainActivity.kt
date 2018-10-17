@@ -88,10 +88,13 @@ class MainActivity : BaseActivity() {
     private fun initNavigationBar() {
         main_navigation_view.run {
             setOnNavigationItemSelectedListener { it ->
-                findOrCreateViewFragment(it)
+                PreferenceUtil.saveLatelyPage(it.itemId)
+                findOrCreateViewFragment(it.itemId)
                 true
             }
+            selectedItemId = PreferenceUtil.getLatelyPage()
         }
+//        findOrCreateViewFragment(PreferenceUtil.getLatelyPage())
     }
 
 //    private fun initNavigationBar() {
@@ -123,15 +126,15 @@ class MainActivity : BaseActivity() {
 //        }
 //    }
 
-    private fun findOrCreateViewFragment(item: MenuItem) =
-            supportFragmentManager.findFragmentByTag("${item.itemId}")
-                    ?: when (item.itemId) {
-                        R.id.action_home -> TestFragment.newInstance("${item.title}")
-                        R.id.action_book -> TestFragment.newInstance("${item.title}")
+    private fun findOrCreateViewFragment(itemId: Int) =
+            supportFragmentManager.findFragmentByTag("$itemId")
+                    ?: when (itemId) {
+                        R.id.action_home -> TestFragment.newInstance("$itemId")
+                        R.id.action_book -> TestFragment.newInstance("$itemId")
                         R.id.action_music -> MusicListFragment.newInstance()
-                        R.id.action_game -> TestFragment.newInstance("${item.title}")
-                        else -> TestFragment.newInstance("${item.title}")
-                    }.also {
+                        R.id.action_game -> TestFragment.newInstance("$itemId")
+                        else -> TestFragment.newInstance("$$itemId")
+                    }.also { it ->
                         replaceFragmentInActivity(it as Fragment, R.id.main_content_fl)
                     }
 
@@ -147,7 +150,7 @@ class MainActivity : BaseActivity() {
             main_drawer_layout.closeDrawer(main_left_nav)
         } else {
             moveTaskToBack(false)
-//            super.onBackPressed()
+            super.onBackPressed()
         }
     }
 

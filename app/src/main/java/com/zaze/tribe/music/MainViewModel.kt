@@ -34,9 +34,16 @@ class MainViewModel(
 
     fun bindService() {
         context.bindService(Intent(context, PlayerService::class.java), serviceConnection, Context.BIND_AUTO_CREATE)
+        restorePlayerQueue()
     }
 
     fun unbindService() {
         context.unbindService(serviceConnection)
     }
+
+    // ------------------------------------------------------
+    fun restorePlayerQueue() {
+
+    }
+
 }

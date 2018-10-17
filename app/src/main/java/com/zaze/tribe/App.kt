@@ -3,6 +3,7 @@ package com.zaze.tribe
 import android.app.Application
 import com.squareup.leakcanary.LeakCanary
 import com.zaze.utils.ZDisplayUtil
+import com.zaze.utils.ZSharedPrefUtil
 
 /**
  * Description :
@@ -15,12 +16,12 @@ class App : Application() {
         lateinit var INSTANCE: App
     }
 
-
     override fun onCreate() {
         super.onCreate()
-        LeakCanary.install(this);
+        LeakCanary.install(this)
         INSTANCE = this
         ZDisplayUtil.init(this)
+        ZSharedPrefUtil.initSharedPreferences(this)
     }
 
 }
