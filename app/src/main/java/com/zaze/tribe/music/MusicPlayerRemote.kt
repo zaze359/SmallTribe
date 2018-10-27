@@ -46,7 +46,7 @@ object MusicPlayerRemote {
     /**
      * 循环模式 LoopMode
      */
-    val loopMode = ObservableInt(LoopMode.LIST)
+    private val LOOP_MODE = ObservableInt(LoopMode.LIST_LOOP)
 
     // ------------------------------------------------------
     var mBinder: PlayerService.ServiceBinder? = null
@@ -73,7 +73,6 @@ object MusicPlayerRemote {
         }
 
         override fun onProgress(musicInfo: MusicInfo, progress: Int) {
-//            curMusicData.get()?: curMusicData.set(musicInfo)
             this@MusicPlayerRemote.progress.set(progress)
         }
 
@@ -84,8 +83,9 @@ object MusicPlayerRemote {
         }
 
         override fun toNext() {
+            // 下一首
+            stop()
             getNext(true)?.let {
-                stop()
                 start(it)
             }
         }
@@ -95,8 +95,11 @@ object MusicPlayerRemote {
             ZLog.i(ZTag.TAG_DEBUG, "onCompletion")
         }
 
-        override fun onError(mp: MediaPlayer, what: Int, extra: Int) {
-            doNext()
+        override fun onError(mp: MediaPlayer?, what: Int, extra: Int) {
+            stop()
+//            getNext(false)?.let {
+//                start(it)
+//            }
             ZLog.i(ZTag.TAG_DEBUG, "onError")
         }
     }
@@ -175,8 +178,8 @@ object MusicPlayerRemote {
 
     @Synchronized
     @JvmStatic
-    fun startAt(position : Int) {
-        if(position >=0 && position < playerList.size) {
+    fun startAt(position: Int) {
+        if (position >= 0 && position < playerList.size) {
             start(playerList[position])
         }
     }
@@ -198,7 +201,7 @@ object MusicPlayerRemote {
 
     private fun doNext() {
         ZLog.i(ZTag.TAG_DEBUG, "doNext")
-        when (loopMode.get()) {
+        when (LOOP_MODE.get()) {
             LoopMode.LIST_LOOP -> {
                 getNext(true)?.let {
                     stop()
@@ -225,17 +228,23 @@ object MusicPlayerRemote {
             if (curMusic != null) {
                 var limit = 0
                 for (music in playerList) {
-                    if (music.data == curMusic.data) {
+                    if (music.data != curMusic.data) {
+                        limit++
+                    } else {
                         break
                     }
-                    limit++
                 }
                 // 定位到下一首
                 limit++
                 if (limit >= playerList.size) {
-                    limit = 0
+                    return if (looper) {
+                        playerList[0]
+                    } else {
+                        return null
+                    }
+                } else {
+                    return playerList[limit]
                 }
-                return playerList[limit]
             }
         }
         return if (looper) {

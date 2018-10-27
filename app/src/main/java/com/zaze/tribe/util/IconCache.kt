@@ -10,6 +10,8 @@ import com.zaze.tribe.App
 import com.zaze.tribe.R
 import com.zaze.utils.BmpUtil
 import com.zaze.utils.FileUtil
+import com.zaze.utils.log.ZLog
+import com.zaze.utils.log.ZTag
 import java.lang.ref.SoftReference
 
 /**
@@ -49,30 +51,36 @@ object IconCache {
 
     @JvmStatic
     fun buildMediaIcon(path: String, width: Int = -1, height: Int = -1): Bitmap? {
-        return mediaMetadataRetriever.run {
-            setDataSource(path)
-            embeddedPicture?.run {
-                val option = BitmapFactory.Options()
-                BitmapFactory.decodeByteArray(this, 0, size, option.apply {
-                    inJustDecodeBounds = true
-                })
-                BitmapFactory.decodeByteArray(this, 0, size, option.apply {
-                    inJustDecodeBounds = false
-                    inPreferredConfig = Bitmap.Config.RGB_565
-                    if (width > 0 && height > 0) {
-                        if (outWidth == 0 || outHeight == 0) {
-                            outWidth = width
-                            outHeight = height
-                        } else {
-                            inSampleSize = if (outWidth >= outHeight) {
-                                outWidth / width
+        try {
+            return mediaMetadataRetriever.run {
+                setDataSource(path)
+                embeddedPicture?.run {
+                    val option = BitmapFactory.Options()
+                    BitmapFactory.decodeByteArray(this, 0, size, option.apply {
+                        inJustDecodeBounds = true
+                    })
+                    BitmapFactory.decodeByteArray(this, 0, size, option.apply {
+                        inJustDecodeBounds = false
+                        inPreferredConfig = Bitmap.Config.RGB_565
+                        if (width > 0 && height > 0) {
+                            if (outWidth == 0 || outHeight == 0) {
+                                outWidth = width
+                                outHeight = height
                             } else {
-                                outHeight / height
+                                inSampleSize = if (outWidth >= outHeight) {
+                                    outWidth / width
+                                } else {
+                                    outHeight / height
+                                }
                             }
                         }
-                    }
-                })
+                    })
+                }
             }
+        } catch (e: Throwable) {
+            ZLog.e(ZTag.TAG_DEBUG, "error media : $path")
+            e.printStackTrace()
+            return null
         }
     }
 

@@ -94,37 +94,7 @@ class MainActivity : BaseActivity() {
             }
             selectedItemId = PreferenceUtil.getLatelyPage()
         }
-//        findOrCreateViewFragment(PreferenceUtil.getLatelyPage())
     }
-
-//    private fun initNavigationBar() {
-//        main_navigation_view.run {
-//            setTabSelectedListener(object : BottomNavigationBar.OnTabSelectedListener {
-//                override fun onTabReselected(position: Int) {
-//                }
-//
-//                override fun onTabUnselected(position: Int) {
-//                }
-//
-//                override fun onTabSelected(position: Int) {
-//                    findOrCreateViewFragment(position)
-//                }
-//            })
-//            //            setFab(fabHome)
-//            clearAll()
-////            setMode(BottomNavigationBar.MODE_SHIFTING)
-////            setBarBackgroundColor(R.color.black)
-//            setMode(BottomNavigationBar.MODE_FIXED)
-//            setBackgroundStyle(BottomNavigationBar.BACKGROUND_STYLE_STATIC)
-//            addItem(createItem(R.mipmap.ic_home_white_24dp, "主页", R.color.orange))
-//            addItem(createItem(R.mipmap.ic_book_white_24dp, "阅读", R.color.teal))
-//            addItem(createItem(R.mipmap.ic_music_note_white_24dp, "音乐", R.color.blue))
-//            addItem(createItem(R.mipmap.ic_tv_white_24dp, "视频", R.color.brown))
-//            addItem(createItem(R.mipmap.ic_videogame_asset_white_24dp, "游戏", R.color.grey_blue))
-//            initialise()
-//            selectTab(0)
-//        }
-//    }
 
     private fun findOrCreateViewFragment(itemId: Int) =
             supportFragmentManager.findFragmentByTag("$itemId")

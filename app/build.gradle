@@ -48,29 +48,6 @@ dependencies {
     androidTestImplementation "androidx.test:runner:$rootProject.runnerVersionx"
     androidTestImplementation "androidx.test.espresso:espresso-core:$rootProject.espressoVersionx"
     // -----------------------
-
-//    implementation "com.android.support:design:$rootProject.supportLibraryVersion"
-//    implementation "com.android.support:support-v4:$rootProject.supportLibraryVersion"
-//    implementation "com.android.support:appcompat-v7:$rootProject.supportLibraryVersion"
-//    implementation "com.android.support:recyclerview-v7:$rootProject.supportLibraryVersion"
-//    implementation "com.android.support:cardview-v7:$rootProject.supportLibraryVersion"
-//    implementation "com.android.support:animated-vector-drawable:$rootProject.supportLibraryVersion"
-//    //
-//    implementation "android.arch.lifecycle:extensions:$rootProject.archLifecycleVersion"
-//    annotationProcessor "android.arch.lifecycle:compiler:$rootProject.archLifecycleVersion"
-    //
-//    implementation "android.arch.persistence.room:runtime:$rootProject.roomVersion"
-//    kapt "android.arch.persistence.room:compiler:$rootProject.roomVersion"
-//    implementation "android.arch.persistence.room:rxjava2:$rootProject.roomVersion"
-//    androidTestImplementation "android.arch.persistence.room:testing:$rootProject.roomVersion"
-    //
-//    androidTestImplementation "com.android.support.test:runner:$rootProject.runnerVersion"
-//    androidTestImplementation "com.android.support.test.espresso:espresso-core:$rootProject.espressoVersion"
-
-    // -----------------------
-//    implementation 'com.ashokvarma.android:bottom-navigation-bar:2.0.4'
-
-    // -----------------------
     testImplementation "junit:junit:$rootProject.junitVersion"
 
 //    kapt "com.android.databinding:compiler:$gradlePluginVersion"

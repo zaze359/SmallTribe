@@ -10,6 +10,7 @@ import com.zaze.tribe.data.loaders.MusicLoader
 import com.zaze.tribe.data.source.repository.MusicRepository
 import com.zaze.utils.ZTipUtil
 import io.reactivex.Observable
+import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import org.reactivestreams.Subscriber
 import org.reactivestreams.Subscription
@@ -28,6 +29,8 @@ class MusicListViewModel(
      * 是否加载中
      */
     val dataLoading = ObservableBoolean(false)
+
+    private val compositeDisposable = CompositeDisposable()
 
     // ------------------------------------------------------
     // ------------------------------------------------------
@@ -66,7 +69,7 @@ class MusicListViewModel(
     }
 
     fun start(music: MusicInfo) {
-        Observable.create<MusicInfo> { emitter ->
+        compositeDisposable.add(Observable.create<MusicInfo> { emitter ->
             emitter.onNext(music)
             emitter.onComplete()
         }.subscribeOn(Schedulers.io()).map {
@@ -77,7 +80,7 @@ class MusicListViewModel(
             }
         }.map {
             MusicPlayerRemote.start(music)
-        }.subscribe()
+        }.subscribe())
     }
     // ------------------------------------------------------
     /**
@@ -86,5 +89,10 @@ class MusicListViewModel(
      */
     fun showMore(music: MusicInfo) {
         ZTipUtil.toast(context, music.data)
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        compositeDisposable.dispose()
     }
 }

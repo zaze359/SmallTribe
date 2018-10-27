@@ -33,7 +33,7 @@ class PlayerService : Service(), IPlayer {
     private val mBinder = ServiceBinder()
     private var callback: PlayerCallback? = null
 
-    private lateinit var curMusic: MusicInfo
+    private var curMusic: MusicInfo? = null
 
     companion object {
         const val PLAY = "play"
@@ -54,8 +54,8 @@ class PlayerService : Service(), IPlayer {
             synchronized(playerHandler) {
                 try {
                     mediaPlayer?.let {
-                        if (it.isPlaying) {
-                            callback?.onProgress(curMusic, (10000 * (1.0f * it.currentPosition / it.duration)).toInt())
+                        if (curMusic != null && it.isPlaying) {
+                            callback?.onProgress(curMusic!!, (10000 * (1.0f * it.currentPosition / it.duration)).toInt())
                         }
                     }
                 } catch (e: Exception) {
@@ -107,8 +107,19 @@ class PlayerService : Service(), IPlayer {
     @Synchronized
     override fun start(musicInfo: MusicInfo) {
         musicInfo.apply {
+            if (data == curMusic?.data) {
+                mediaPlayer?.let { it ->
+                    if (it.isPlaying) {
+                        this@PlayerService.pause()
+                        return
+                    } else {
+                    }
+                }
+            } else {
+                this@PlayerService.stop()
+            }
             mediaPlayer
-                    ?: MediaPlayer.create(this@PlayerService, Uri.parse("file://$data")).let { it ->
+                    ?: MediaPlayer.create(this@PlayerService, Uri.parse("file://$data"))?.let { it ->
                         mediaPlayer = it
                         it.setOnErrorListener { mp, what, extra ->
                             callback?.onError(mp, what, extra)
@@ -117,23 +128,17 @@ class PlayerService : Service(), IPlayer {
                         it.setOnCompletionListener {
                             callback?.onCompletion()
                         }
+                    } ?: run {
+                        callback?.onError(null, -1, -1)
+                        null
                     }
-            mediaPlayer?.apply {
-                if (isPlaying) {
-                    if (data == curMusic.data) {
-                        this@PlayerService.pause()
-                    } else {
-                        this@PlayerService.stop()
-                        this@PlayerService.start(musicInfo)
-                    }
-                } else {
-                    curMusic = musicInfo
-                    callback?.preStart(musicInfo)
-                    start()
-                    updateNotification(true)
-                    callback?.onStart(musicInfo)
-                    startTimeMillis = System.currentTimeMillis()
-                }
+            mediaPlayer?.let { it ->
+                curMusic = musicInfo
+                callback?.preStart(musicInfo)
+                it.start()
+                updateNotification(true)
+                callback?.onStart(musicInfo)
+                startTimeMillis = System.currentTimeMillis()
             }
         }
     }
@@ -182,46 +187,49 @@ class PlayerService : Service(), IPlayer {
     // --------------------------------------------------
 
     private fun updateNotification(isPlaying: Boolean) {
-        playerHandler.post {
-            val channelId = "zaze"
-            val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                val notificationChannel = NotificationChannel(channelId, channelId, NotificationManager.IMPORTANCE_LOW)
-                notificationManager.createNotificationChannel(notificationChannel)
-            }
-            val targetIntent = PendingIntent.getActivity(this, 0,
-                    Intent(this, MainActivity::class.java), PendingIntent.FLAG_UPDATE_CURRENT)
-            val remoteViews = RemoteViews(App.INSTANCE.packageName, R.layout.music_notification_layout)
-            remoteViews.setImageViewBitmap(R.id.music_notification_icon_iv, IconCache.getSmallMediaIcon(curMusic.data))
-            remoteViews.setTextViewText(R.id.music_notification_name_iv, curMusic.title)
-            remoteViews.setTextViewText(R.id.music_notification_auth_iv, curMusic.artistName)
-            remoteViews.setImageViewResource(R.id.music_notification_play_iv,
-                    if (isPlaying) R.drawable.ic_pause_circle_outline_black_24dp else R.drawable.ic_play_circle_outline_black_24dp)
-            remoteViews.setOnClickPendingIntent(R.id.music_notification_play_iv, PendingIntent.getService(this, 0,
-                    Intent(this, PlayerService::class.java).apply {
-                        action = PLAY
-                        putExtra(MUSIC, JsonUtil.objToJson(curMusic))
-                    }, PendingIntent.FLAG_UPDATE_CURRENT))
+        curMusic?.let { it ->
+            playerHandler.post {
+                val channelId = "zaze"
+                val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    val notificationChannel = NotificationChannel(channelId, channelId, NotificationManager.IMPORTANCE_LOW)
+                    notificationManager.createNotificationChannel(notificationChannel)
+                }
+                val targetIntent = PendingIntent.getActivity(this, 0,
+                        Intent(this, MainActivity::class.java), PendingIntent.FLAG_UPDATE_CURRENT)
+                val remoteViews = RemoteViews(App.INSTANCE.packageName, R.layout.music_notification_layout)
+                remoteViews.setImageViewBitmap(R.id.music_notification_icon_iv, IconCache.getSmallMediaIcon(it.data))
+                remoteViews.setTextViewText(R.id.music_notification_name_iv, it.title)
+                remoteViews.setTextViewText(R.id.music_notification_auth_iv, it.artistName)
+                remoteViews.setImageViewResource(R.id.music_notification_play_iv,
+                        if (isPlaying) R.drawable.ic_pause_circle_outline_black_24dp else R.drawable.ic_play_circle_outline_black_24dp)
+                remoteViews.setOnClickPendingIntent(R.id.music_notification_play_iv, PendingIntent.getService(this, 0,
+                        Intent(this, PlayerService::class.java).apply {
+                            action = PLAY
+                            putExtra(MUSIC, JsonUtil.objToJson(curMusic))
+                        }, PendingIntent.FLAG_UPDATE_CURRENT))
 
-            remoteViews.setOnClickPendingIntent(R.id.music_notification_next_iv, PendingIntent.getService(this, 0,
-                    Intent(this, PlayerService::class.java).apply {
-                        action = NEXT
-                        putExtra(MUSIC, JsonUtil.objToJson(curMusic))
-                    }, PendingIntent.FLAG_UPDATE_CURRENT))
-            remoteViews.setOnClickPendingIntent(R.id.music_notification_close_iv, PendingIntent.getService(this, 0,
-                    Intent(this, PlayerService::class.java).apply {
-                        action = CLOSE
-                        putExtra(MUSIC, JsonUtil.objToJson(curMusic))
-                    }, PendingIntent.FLAG_UPDATE_CURRENT))
+                remoteViews.setOnClickPendingIntent(R.id.music_notification_next_iv, PendingIntent.getService(this, 0,
+                        Intent(this, PlayerService::class.java).apply {
+                            action = NEXT
+                            putExtra(MUSIC, JsonUtil.objToJson(curMusic))
+                        }, PendingIntent.FLAG_UPDATE_CURRENT))
+                remoteViews.setOnClickPendingIntent(R.id.music_notification_close_iv, PendingIntent.getService(this, 0,
+                        Intent(this, PlayerService::class.java).apply {
+                            action = CLOSE
+                            putExtra(MUSIC, JsonUtil.objToJson(curMusic))
+                        }, PendingIntent.FLAG_UPDATE_CURRENT))
 
-            val builder = NotificationCompat.Builder(this, channelId).apply {
-                setCustomContentView(remoteViews)
-                setContentIntent(targetIntent)
-                //设置小图标
-                setSmallIcon(R.mipmap.ic_music_note_white_24dp)
+                val builder = NotificationCompat.Builder(this, channelId).apply {
+                    setCustomContentView(remoteViews)
+                    setContentIntent(targetIntent)
+                    //设置小图标
+                    setSmallIcon(R.mipmap.ic_music_note_white_24dp)
+                }
+                startForeground(1, builder.build())
             }
-            startForeground(1, builder.build())
         }
+
     }
 
     inner class ServiceBinder : Binder(), IPlayer {
@@ -289,7 +297,7 @@ class PlayerService : Service(), IPlayer {
         /**
          * 出错
          */
-        fun onError(mp: MediaPlayer, what: Int, extra: Int)
+        fun onError(mp: MediaPlayer?, what: Int, extra: Int)
     }
 }
 
