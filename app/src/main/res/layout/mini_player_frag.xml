@@ -21,28 +21,28 @@
         <ProgressBar
             style="?android:attr/progressBarStyleHorizontal"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/dp_2"
-            android:max="10000"
+            android:layout_height="2dp"
+            android:max="@{MusicPlayerRemote.duration}"
             android:progress="@{MusicPlayerRemote.progress}"
             android:progressDrawable="@drawable/progress_horizontal" />
 
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="@dimen/dp_4">
+            android:padding="4dp">
 
             <androidx.cardview.widget.CardView
                 android:id="@+id/mini_player_album_cv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/dp_4"
-                android:layout_marginRight="@dimen/dp_4"
-                app:cardCornerRadius="@dimen/dp_4"
+                android:layout_marginLeft="4dp"
+                android:layout_marginRight="4dp"
+                app:cardCornerRadius="4dp"
                 app:cardElevation="0dp">
 
                 <ImageView
-                    android:layout_width="@dimen/dp_40"
-                    android:layout_height="@dimen/dp_40"
+                    android:layout_width="@dimen/album_cover_size_mini"
+                    android:layout_height="@dimen/album_cover_size_mini"
                     android:contentDescription="@null"
                     android:scaleType="fitCenter"
                     app:bmp="@{MusicPlayerRemote.curMusicData}"
@@ -60,20 +60,20 @@
 
                 <androidx.appcompat.widget.AppCompatImageView
                     android:id="@+id/mini_player_status_iv"
-                    android:layout_width="@dimen/dp_28"
-                    android:layout_height="@dimen/dp_28"
-                    android:layout_marginEnd="@dimen/dp_4"
-                    android:layout_marginRight="@dimen/dp_4"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="4dp"
+                    android:layout_marginRight="4dp"
                     android:onClick="@{()-> MusicPlayerRemote.start()}"
                     android:src="@{MusicPlayerRemote.isPaused?@drawable/ic_play_circle_outline_black_24dp:@drawable/ic_pause_circle_outline_black_24dp}"
                     tools:src="@drawable/ic_play_circle_outline_black_24dp" />
 
                 <androidx.appcompat.widget.AppCompatImageView
                     android:id="@+id/mini_player_list_iv"
-                    android:layout_width="@dimen/dp_28"
-                    android:layout_height="@dimen/dp_28"
-                    android:layout_marginLeft="@dimen/dp_4"
-                    android:layout_marginRight="@dimen/dp_4"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="4dp"
+                    android:layout_marginRight="4dp"
                     android:src="@drawable/ic_more_vert_black_24dp" />
             </LinearLayout>
 
@@ -96,18 +96,18 @@
                     android:maxLines="1"
                     android:text="@{MusicPlayerRemote.curMusicData.title}"
                     android:textColor="#333333"
-                    android:textSize="@dimen/sp_14"
+                    android:textSize="14sp"
                     tools:text="极乐净土极乐净土极乐净土极乐净土极乐净土" />
 
                 <TextView
                     android:id="@+id/mini_player_artist_tv"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/dp_4"
+                    android:layout_marginTop="4dp"
                     android:ellipsize="end"
                     android:maxLines="1"
                     android:text="@{MusicPlayerRemote.curMusicData.artistName}"
-                    android:textSize="@dimen/sp_12"
+                    android:textSize="12sp"
                     tools:text="MARIA" />
 
             </LinearLayout>

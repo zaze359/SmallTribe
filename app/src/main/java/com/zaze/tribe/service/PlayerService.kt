@@ -15,6 +15,7 @@ import com.zaze.tribe.App
 import com.zaze.tribe.MainActivity
 import com.zaze.tribe.R
 import com.zaze.tribe.data.dto.MusicInfo
+import com.zaze.tribe.music.MusicPlayerRemote
 import com.zaze.tribe.util.IconCache
 import com.zaze.utils.JsonUtil
 import com.zaze.utils.log.ZLog
@@ -55,7 +56,7 @@ class PlayerService : Service(), IPlayer {
                 try {
                     mediaPlayer?.let {
                         if (curMusic != null && it.isPlaying) {
-                            callback?.onProgress(curMusic!!, (10000 * (1.0f * it.currentPosition / it.duration)).toInt())
+                            callback?.onProgress(it.currentPosition, it.duration)
                         }
                     }
                 } catch (e: Exception) {
@@ -134,7 +135,7 @@ class PlayerService : Service(), IPlayer {
                     }
             mediaPlayer?.let { it ->
                 curMusic = musicInfo
-                callback?.preStart(musicInfo)
+                callback?.preStart(musicInfo, it.duration)
                 it.start()
                 updateNotification(true)
                 callback?.onStart(musicInfo)
@@ -262,7 +263,7 @@ class PlayerService : Service(), IPlayer {
         /**
          * 准备开始播放
          */
-        fun preStart(musicInfo: MusicInfo)
+        fun preStart(musicInfo: MusicInfo, duration: Int)
 
         /**
          * 开始播放
@@ -277,7 +278,7 @@ class PlayerService : Service(), IPlayer {
         /**
          * 进度回掉
          */
-        fun onProgress(musicInfo: MusicInfo, progress: Int)
+        fun onProgress(progress: Int, duration: Int)
 
         /**
          * 停止

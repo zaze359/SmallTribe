@@ -14,6 +14,7 @@ import com.zaze.utils.FileUtil
 import com.zaze.utils.log.ZLog
 import com.zaze.utils.log.ZTag
 import java.io.File
+import java.time.Duration
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -36,8 +37,18 @@ object MusicPlayerRemote {
     @JvmStatic
     val curMusicData = ObservableField<MusicInfo>()
 
+    /**
+     * 当前进度
+     */
     @JvmStatic
     val progress = ObservableInt(0)
+
+    /**
+     * 总进度
+     */
+    @JvmStatic
+    val duration = ObservableInt(0)
+
     /**
      * 仅用于UI的显示，不负责逻辑判断
      */
@@ -56,11 +67,12 @@ object MusicPlayerRemote {
         }
 
     private val playerCallback = object : PlayerService.PlayerCallback {
-
-        override fun preStart(musicInfo: MusicInfo) {
+        override fun preStart(musicInfo: MusicInfo, duration: Int) {
             curMusicData.set(musicInfo)
+            MusicPlayerRemote.duration.set(duration)
             ZLog.i(ZTag.TAG_DEBUG, "preStart")
         }
+
 
         override fun onStart(musicInfo: MusicInfo) {
             isPaused.set(false)
@@ -72,8 +84,8 @@ object MusicPlayerRemote {
             ZLog.i(ZTag.TAG_DEBUG, "onPause")
         }
 
-        override fun onProgress(musicInfo: MusicInfo, progress: Int) {
-            this@MusicPlayerRemote.progress.set(progress)
+        override fun onProgress(progress: Int, duration: Int) {
+            MusicPlayerRemote.progress.set(progress)
         }
 
         override fun onStop() {

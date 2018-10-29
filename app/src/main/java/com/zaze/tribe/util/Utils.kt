@@ -2,6 +2,7 @@ package com.zaze.tribe.util
 
 import com.zaze.utils.FileUtil
 import java.io.File
+import java.util.*
 
 /**
  * Description :
@@ -61,6 +62,17 @@ object Utils {
             }
         }
         return searchedFileList
+    }
+
+    @JvmStatic
+    fun getDurationString(duration: Long): String {
+        val minutes = (duration / 1000) / 60
+        val seconds = (duration / 1000) % 60
+        return if (minutes < 60) {
+            String.format(Locale.getDefault(), "%01d:%02d", minutes, seconds)
+        } else {
+            String.format(Locale.getDefault(), "%d:%02d:%02d", minutes / 60, minutes % 60, seconds)
+        }
     }
 
 }

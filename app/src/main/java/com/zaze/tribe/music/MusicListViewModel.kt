@@ -10,6 +10,7 @@ import com.zaze.tribe.data.loaders.MusicLoader
 import com.zaze.tribe.data.source.repository.MusicRepository
 import com.zaze.utils.ZTipUtil
 import io.reactivex.Observable
+import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import org.reactivestreams.Subscriber
