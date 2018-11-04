@@ -15,7 +15,6 @@ import com.zaze.tribe.App
 import com.zaze.tribe.MainActivity
 import com.zaze.tribe.R
 import com.zaze.tribe.data.dto.MusicInfo
-import com.zaze.tribe.music.MusicPlayerRemote
 import com.zaze.tribe.util.IconCache
 import com.zaze.utils.JsonUtil
 import com.zaze.utils.log.ZLog
@@ -199,23 +198,23 @@ class PlayerService : Service(), IPlayer {
                 val targetIntent = PendingIntent.getActivity(this, 0,
                         Intent(this, MainActivity::class.java), PendingIntent.FLAG_UPDATE_CURRENT)
                 val remoteViews = RemoteViews(App.INSTANCE.packageName, R.layout.music_notification_layout)
-                remoteViews.setImageViewBitmap(R.id.music_notification_icon_iv, IconCache.getSmallMediaIcon(it.data))
-                remoteViews.setTextViewText(R.id.music_notification_name_iv, it.title)
-                remoteViews.setTextViewText(R.id.music_notification_auth_iv, it.artistName)
-                remoteViews.setImageViewResource(R.id.music_notification_play_iv,
+                remoteViews.setImageViewBitmap(R.id.musicNotificationIcon, IconCache.getSmallMediaIcon(it.data))
+                remoteViews.setTextViewText(R.id.musicNotificationName, it.title)
+                remoteViews.setTextViewText(R.id.musicNotificationArtist, it.artistName)
+                remoteViews.setImageViewResource(R.id.musicNotificationStartBtn,
                         if (isPlaying) R.drawable.ic_pause_circle_outline_black_24dp else R.drawable.ic_play_circle_outline_black_24dp)
-                remoteViews.setOnClickPendingIntent(R.id.music_notification_play_iv, PendingIntent.getService(this, 0,
+                remoteViews.setOnClickPendingIntent(R.id.musicNotificationStartBtn, PendingIntent.getService(this, 0,
                         Intent(this, PlayerService::class.java).apply {
                             action = PLAY
                             putExtra(MUSIC, JsonUtil.objToJson(curMusic))
                         }, PendingIntent.FLAG_UPDATE_CURRENT))
 
-                remoteViews.setOnClickPendingIntent(R.id.music_notification_next_iv, PendingIntent.getService(this, 0,
+                remoteViews.setOnClickPendingIntent(R.id.musicNotificationNextBtn, PendingIntent.getService(this, 0,
                         Intent(this, PlayerService::class.java).apply {
                             action = NEXT
                             putExtra(MUSIC, JsonUtil.objToJson(curMusic))
                         }, PendingIntent.FLAG_UPDATE_CURRENT))
-                remoteViews.setOnClickPendingIntent(R.id.music_notification_close_iv, PendingIntent.getService(this, 0,
+                remoteViews.setOnClickPendingIntent(R.id.musicNotificationCloseBtn, PendingIntent.getService(this, 0,
                         Intent(this, PlayerService::class.java).apply {
                             action = CLOSE
                             putExtra(MUSIC, JsonUtil.objToJson(curMusic))

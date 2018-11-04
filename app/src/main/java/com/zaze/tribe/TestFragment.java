@@ -32,20 +32,20 @@ import androidx.lifecycle.Observer;
 public class TestFragment extends Fragment {
     private static final String KEY_CONTENT = "content";
     private String content = "";
-    TextView textView;
-    private LyricView test_lyric_view;
+    TextView testContentTv;
+    private LyricView testLyricView;
     private int index = 0;
     //
     private Handler handler = new Handler();
     private Runnable runnable = new Runnable() {
         @Override
         public void run() {
-            if (test_lyric_view.getValues() != null && index >= test_lyric_view.getValues().size()) {
+            if (testLyricView.getValues() != null && index >= testLyricView.getValues().size()) {
                 index = 0;
             } else {
                 index++;
             }
-            test_lyric_view.next();
+            testLyricView.next();
             StringBuilder builder = new StringBuilder();
             builder.append(TimeZone.getDefault().getDisplayName() + "\n");
             builder.append(TimeZone.getDefault().getDisplayName(false, TimeZone.SHORT) + "\n");
@@ -79,12 +79,12 @@ public class TestFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
         View view = inflater.inflate(R.layout.test_frag, container, false);
-        textView = view.findViewById(R.id.test_content_tv);
-        test_lyric_view = view.findViewById(R.id.test_lyric_view);
+        testContentTv = view.findViewById(R.id.test_content_tv);
+        testLyricView = view.findViewById(R.id.test_lyric_view);
         mLiveData.observe(this, new Observer<String>() {
             @Override
             public void onChanged(@Nullable String s) {
-                textView.setText(s);
+                testContentTv.setText(s);
             }
         });
         try {
@@ -93,7 +93,7 @@ public class TestFragment extends Fragment {
             for (LrcLine line : list) {
                 values.add(line.getContent());
             }
-            test_lyric_view.setValues(values);
+            testLyricView.setValues(values);
         } catch (IOException e) {
             e.printStackTrace();
         }

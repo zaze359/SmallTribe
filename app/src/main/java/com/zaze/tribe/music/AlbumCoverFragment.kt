@@ -41,7 +41,7 @@ class AlbumCoverFragment : BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         musicInfo?.let {
-            album_cover_iv.setImageBitmap(IconCache.buildMediaIcon(it.data)
+            albumCover.setImageBitmap(IconCache.buildMediaIcon(it.data)
                     ?: IconCache.getDefaultMediaIcon())
         }
     }

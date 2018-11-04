@@ -22,7 +22,7 @@
             <!--android:layout_height="wrap_content"-->
             <!--android:layout_alignParentBottom="true" />-->
             <com.google.android.material.bottomnavigation.BottomNavigationView
-                android:id="@+id/main_navigation_view"
+                android:id="@+id/mainBottomNav"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_alignParentBottom="true"
@@ -30,20 +30,20 @@
                 app:menu="@menu/main_nav_bottom" />
 
             <fragment
-                android:id="@+id/music_mini_player_fl"
+                android:id="@+id/mainMiniPlayerContainer"
                 android:name="com.zaze.tribe.music.MiniPlayerFragment"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_above="@id/main_navigation_view" />
+                android:layout_above="@id/mainBottomNav" />
 
             <androidx.coordinatorlayout.widget.CoordinatorLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_above="@id/music_mini_player_fl"
+                android:layout_above="@id/mainMiniPlayerContainer"
                 android:layout_alignParentTop="true">
 
                 <com.google.android.material.appbar.AppBarLayout
-                    android:id="@+id/main_app_bar_layout"
+                    android:id="@+id/mainAppBarLayout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
 
@@ -54,7 +54,7 @@
                     <!--app:layout_scrollFlags="scroll|exitUntilCollapsed">-->
 
                     <androidx.appcompat.widget.Toolbar
-                        android:id="@+id/main_toolbar"
+                        android:id="@+id/mainToolbar"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:background="?attr/colorPrimary"
@@ -67,7 +67,7 @@
                 </com.google.android.material.appbar.AppBarLayout>
 
                 <FrameLayout
-                    android:id="@+id/main_content_fl"
+                    android:id="@+id/mainContentFl"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     app:layout_behavior="@string/appbar_scrolling_view_behavior" />
@@ -77,7 +77,7 @@
 
         <!-- Navigation Drawer -->
         <com.google.android.material.navigation.NavigationView
-            android:id="@+id/main_left_nav"
+            android:id="@+id/mainLeftNav"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_gravity="start"

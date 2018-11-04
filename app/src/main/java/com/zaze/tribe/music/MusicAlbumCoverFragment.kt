@@ -24,7 +24,7 @@ class MusicAlbumCoverFragment : BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         fragmentManager?.let {
-            music_album_cover_view_pager.apply {
+            musicAlbumCoverPager.apply {
                 adapter = AlbumCoverPagerAdapter(it, MusicPlayerRemote.playerList)
                 clipToPadding = false
                 pageMargin = 12

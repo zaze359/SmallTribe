@@ -17,7 +17,7 @@
         app:refreshing="@{viewModel.dataLoading}">
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/music_recycler_view"
+            android:id="@+id/musicRecyclerView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:scrollbars="vertical"

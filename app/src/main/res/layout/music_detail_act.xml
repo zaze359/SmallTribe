@@ -13,7 +13,7 @@
             android:layout_height="wrap_content">
 
             <fragment
-                android:id="@+id/music_detail_album_cover_fragment"
+                android:id="@+id/musicDetailAlbumCoverContainer"
                 android:name="com.zaze.tribe.music.MusicAlbumCoverFragment"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -26,7 +26,7 @@
             android:layout_height="match_parent">
 
             <fragment
-                android:id="@+id/music_detail_control_fragment"
+                android:id="@+id/musicDetailControlContainer"
                 android:name="com.zaze.tribe.music.MusicControlFragment"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" />

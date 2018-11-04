@@ -37,7 +37,7 @@ class MainActivity : BaseActivity() {
         viewModel = obtainViewModel(MainViewModel::class.java)
         setupPermission()
         setImmersion()
-        setupActionBar(R.id.main_toolbar) {
+        setupActionBar(R.id.mainToolbar) {
             setTitle(R.string.app_name)
             setDisplayHomeAsUpEnabled(true)
             setHomeButtonEnabled(true)
@@ -47,7 +47,7 @@ class MainActivity : BaseActivity() {
         // --------------------------------------------------
         // --------------------------------------------------
         drawerToggle = ActionBarDrawerToggle(
-                this, main_drawer_layout, main_toolbar, R.string.app_name, R.string.app_name
+                this, main_drawer_layout, mainToolbar, R.string.app_name, R.string.app_name
         ).apply {
             syncState()
         }
@@ -55,7 +55,7 @@ class MainActivity : BaseActivity() {
             addDrawerListener(drawerToggle)
         }
         // --------------------------------------------------
-        main_left_nav.run {
+        mainLeftNav.run {
             setNavigationItemSelectedListener { menuItem ->
                 when (menuItem.itemId) {
                     R.id.drawer_clear_menu_item ->
@@ -86,7 +86,9 @@ class MainActivity : BaseActivity() {
     }
 
     private fun initNavigationBar() {
-        main_navigation_view.run {
+        mainBottomNav.run {
+            setOnNavigationItemReselectedListener {
+            }
             setOnNavigationItemSelectedListener { it ->
                 PreferenceUtil.saveLatelyPage(it.itemId)
                 findOrCreateViewFragment(it.itemId)
@@ -105,7 +107,7 @@ class MainActivity : BaseActivity() {
                         R.id.action_game -> TestFragment.newInstance("$itemId")
                         else -> TestFragment.newInstance("$$itemId")
                     }.also { it ->
-                        replaceFragmentInActivity(it as Fragment, R.id.main_content_fl)
+                        replaceFragmentInActivity(it as Fragment, R.id.mainContentFl)
                     }
 
     // --------------------------------------------------
@@ -116,8 +118,8 @@ class MainActivity : BaseActivity() {
     }
 
     override fun onBackPressed() {
-        if (main_drawer_layout.isDrawerOpen(main_left_nav)) {
-            main_drawer_layout.closeDrawer(main_left_nav)
+        if (main_drawer_layout.isDrawerOpen(mainLeftNav)) {
+            main_drawer_layout.closeDrawer(mainLeftNav)
         } else {
             moveTaskToBack(false)
             super.onBackPressed()

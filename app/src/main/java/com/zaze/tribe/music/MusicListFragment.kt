@@ -42,10 +42,10 @@ class MusicListFragment : BaseFragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         activity?.let {
-            music_recycler_view.layoutManager = LinearLayoutManager(it)
+            musicRecyclerView.layoutManager = LinearLayoutManager(it)
             viewDataBinding.viewModel?.apply {
                 musicAdapter = MusicAdapter(it, ArrayList(0), this)
-                music_recycler_view.adapter = musicAdapter
+                musicRecyclerView.adapter = musicAdapter
             }
         }
     }

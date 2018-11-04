@@ -5,7 +5,7 @@
     android:orientation="vertical">
 
     <androidx.viewpager.widget.ViewPager
-        android:id="@+id/music_album_cover_view_pager"
+        android:id="@+id/musicAlbumCoverPager"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
