@@ -207,8 +207,8 @@ object MusicPlayerRemote {
     }
 
     @JvmStatic
-    fun seekTo(musicInfo: MusicInfo, seekTimeMillis: Long) {
-        mBinder?.seekTo(musicInfo, seekTimeMillis)
+    fun seekTo(seekTimeMillis: Long) {
+        mBinder?.seekTo(seekTimeMillis)
     }
 
     private fun doNext() {

@@ -13,14 +13,6 @@ class LrcLocalDataSource private constructor(
         private val lyricDao: LyricDao
 ) : LrcDataSource {
 
-    override fun saveLrcInfo(lyric: Lyric?) {
-        lyric?.let {
-            lyricDao.insertOrUpdateLrcInfo(lyric)
-        }
-    }
-
-    override fun getLrcInfo(lrcId: Int) = lyricDao.getLrcInfo(lrcId)
-
     companion object {
         private var INSTANCE: LrcLocalDataSource? = null
         @JvmStatic
@@ -33,4 +25,14 @@ class LrcLocalDataSource private constructor(
             return INSTANCE!!
         }
     }
+
+    override fun saveLrcInfo(lyric: Lyric?) {
+        lyric?.let {
+            lyricDao.insertOrUpdateLrcInfo(lyric)
+        }
+    }
+
+    override fun getLrcInfo(lrcId: Int) = lyricDao.getLrcInfo(lrcId)
+
+
 }

@@ -30,6 +30,10 @@ class PlayerService : Service(), IPlayer {
     private var startTimeMillis = 0L
     private var pauseTimeMillis = 0L
 
+    private val minInterval = 16L
+
+    private val intervalPlaying = 800L
+
     private val mBinder = ServiceBinder()
     private var callback: PlayerCallback? = null
 
@@ -52,17 +56,20 @@ class PlayerService : Service(), IPlayer {
     private val progressRunnable = object : Runnable {
         override fun run() {
             synchronized(playerHandler) {
-                try {
-                    mediaPlayer?.let {
-                        if (curMusic != null && it.isPlaying) {
-                            callback?.onProgress(it.currentPosition, it.duration)
-                        }
-                    }
-                } catch (e: Exception) {
-                    e.printStackTrace()
+                if (mediaPlayer != null && mediaPlayer!!.isPlaying) {
+                    val currentPosition = mediaPlayer!!.currentPosition
+                    callback?.onProgress(currentPosition, mediaPlayer!!.duration)
+                    postDelayed(Math.max(minInterval, intervalPlaying - currentPosition % intervalPlaying))
+                    return
                 }
-                playerHandler.postDelayed(this, 16L)
+                postDelayed(intervalPlaying / 2)
             }
+        }
+
+        private fun postDelayed(delay: Long) {
+            ZLog.i(ZTag.TAG_DEBUG, "postDelayed")
+            playerHandler.removeCallbacks(this)
+            playerHandler.postDelayed(this, delay)
         }
     }
 
@@ -173,8 +180,7 @@ class PlayerService : Service(), IPlayer {
     }
 
     @Synchronized
-    override fun seekTo(musicInfo: MusicInfo, seekTimeMillis: Long) {
-        start(musicInfo)
+    override fun seekTo(seekTimeMillis: Long) {
         startTimeMillis = System.currentTimeMillis() - seekTimeMillis
         mediaPlayer?.let {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -250,8 +256,8 @@ class PlayerService : Service(), IPlayer {
             this@PlayerService.stop()
         }
 
-        override fun seekTo(musicInfo: MusicInfo, seekTimeMillis: Long) {
-            this@PlayerService.seekTo(musicInfo, seekTimeMillis)
+        override fun seekTo(seekTimeMillis: Long) {
+            this@PlayerService.seekTo(seekTimeMillis)
         }
     }
 
@@ -309,5 +315,5 @@ interface IPlayer {
 
     fun stop()
 
-    fun seekTo(musicInfo: MusicInfo, seekTimeMillis: Long)
+    fun seekTo(seekTimeMillis: Long)
 }

@@ -69,19 +69,23 @@ class MusicListViewModel(
                 })
     }
 
-    fun start(music: MusicInfo) {
-        compositeDisposable.add(Observable.create<MusicInfo> { emitter ->
-            emitter.onNext(music)
-            emitter.onComplete()
-        }.subscribeOn(Schedulers.io()).map {
-            MusicPlayerRemote.addToPlayerList(listOf(it))
-        }.map {
-            if (!it.isEmpty()) {
-                musicRepository.saveMusicInfo(music)
-            }
-        }.map {
-            MusicPlayerRemote.start(music)
-        }.subscribe())
+    fun start(music: MusicInfo?) {
+        music?.apply {
+            compositeDisposable.add(
+                    Observable.create<MusicInfo> { emitter ->
+                        emitter.onNext(this)
+                        emitter.onComplete()
+                    }.subscribeOn(Schedulers.io()).map { it ->
+                        MusicPlayerRemote.addToPlayerList(listOf(it))
+                    }.map {
+                        if (!it.isEmpty()) {
+                            musicRepository.saveMusicInfo(music)
+                        }
+                    }.map {
+                        MusicPlayerRemote.start(music)
+                    }.subscribe()
+            )
+        }
     }
     // ------------------------------------------------------
     /**

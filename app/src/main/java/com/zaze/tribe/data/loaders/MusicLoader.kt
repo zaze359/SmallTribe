@@ -14,6 +14,9 @@ import com.zaze.tribe.data.dto.MusicInfo
  */
 object MusicLoader {
 
+    /**
+     * 获取所有title 不为空的 music
+     */
     @JvmStatic
     fun getAllMusics(context: Context): List<MusicInfo> {
         return buildMusics(query(context,
