@@ -38,22 +38,11 @@ object MusicPlayerRemote {
     val curMusicData = ObservableField<MusicInfo>()
 
     /**
-     * 当前进度
-     */
-    @JvmStatic
-    val progress = ObservableInt(0)
-
-    /**
-     * 总进度
-     */
-    @JvmStatic
-    val duration = ObservableInt(0)
-
-    /**
      * 仅用于UI的显示，不负责逻辑判断
      */
     @JvmStatic
-    val isPaused = ObservableBoolean(true)
+    val isPlaying = ObservableBoolean(false)
+
     /**
      * 循环模式 LoopMode
      */
@@ -63,58 +52,50 @@ object MusicPlayerRemote {
     var mBinder: PlayerService.ServiceBinder? = null
         set(value) {
             field = value
-            field?.setPlayerCallback(playerCallback)
-        }
-
-    private val playerCallback = object : PlayerService.PlayerCallback {
-        override fun preStart(musicInfo: MusicInfo, duration: Int) {
-            curMusicData.set(musicInfo)
-            MusicPlayerRemote.duration.set(duration)
-            ZLog.i(ZTag.TAG_DEBUG, "preStart")
-        }
+            field?.setPlayerCallback(object : PlayerService.PlayerCallback {
+                override fun preStart(musicInfo: MusicInfo, duration: Int) {
+                    curMusicData.set(musicInfo)
+                    ZLog.i(ZTag.TAG_DEBUG, "preStart")
+                }
 
 
-        override fun onStart(musicInfo: MusicInfo) {
-            isPaused.set(false)
-            ZLog.i(ZTag.TAG_DEBUG, "onStart : $musicInfo")
-        }
+                override fun onStart(musicInfo: MusicInfo) {
+                    isPlaying.set(true)
+                    ZLog.i(ZTag.TAG_DEBUG, "onStart : $musicInfo")
+                }
 
-        override fun onPause() {
-            isPaused.set(true)
-            ZLog.i(ZTag.TAG_DEBUG, "onPause")
-        }
+                override fun onPause() {
+                    isPlaying.set(false)
+                    ZLog.i(ZTag.TAG_DEBUG, "onPause")
+                }
 
-        override fun onProgress(progress: Int, duration: Int) {
-            MusicPlayerRemote.progress.set(progress)
-        }
+                override fun onStop() {
+                    isPlaying.set(false)
+                    ZLog.i(ZTag.TAG_DEBUG, "onStop")
+                }
 
-        override fun onStop() {
-            isPaused.set(true)
-            progress.set(0)
-            ZLog.i(ZTag.TAG_DEBUG, "onStop")
-        }
+                override fun toNext() {
+                    // 下一首
+                    stop()
+                    getNext(true)?.let {
+                        start(it)
+                    }
+                }
 
-        override fun toNext() {
-            // 下一首
-            stop()
-            getNext(true)?.let {
-                start(it)
-            }
-        }
+                override fun onCompletion() {
+                    doNext()
+                    ZLog.i(ZTag.TAG_DEBUG, "onCompletion")
+                }
 
-        override fun onCompletion() {
-            doNext()
-            ZLog.i(ZTag.TAG_DEBUG, "onCompletion")
-        }
-
-        override fun onError(mp: MediaPlayer?, what: Int, extra: Int) {
-            stop()
+                override fun onError(mp: MediaPlayer?, what: Int, extra: Int) {
+                    stop()
 //            getNext(false)?.let {
 //                start(it)
 //            }
-            ZLog.i(ZTag.TAG_DEBUG, "onError")
+                    ZLog.i(ZTag.TAG_DEBUG, "onError")
+                }
+            })
         }
-    }
 
     // ------------------------------------------------------
 
@@ -288,6 +269,14 @@ object MusicPlayerRemote {
     @JvmStatic
     fun getCurPosition(): Int {
         return playerList.indexOf(curMusicData.get())
+    }
+
+    fun getProgress() : Int {
+        return mBinder?.getCurProgress() ?: 0
+    }
+
+    fun getDuration() : Int {
+        return mBinder?.getDuration() ?: 0
     }
 
     // --------------------------------------------------

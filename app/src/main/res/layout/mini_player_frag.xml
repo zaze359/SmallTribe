@@ -19,11 +19,10 @@
         android:visibility="@{MusicPlayerRemote.curMusicData == null ? View.GONE : View.VISIBLE}">
 
         <ProgressBar
+            android:id="@+id/miniPlayerProgressBar"
             style="?android:attr/progressBarStyleHorizontal"
             android:layout_width="match_parent"
             android:layout_height="2dp"
-            android:max="@{MusicPlayerRemote.duration}"
-            android:progress="@{MusicPlayerRemote.progress}"
             android:progressDrawable="@drawable/progress_horizontal" />
 
         <RelativeLayout
@@ -65,7 +64,7 @@
                     android:layout_marginEnd="4dp"
                     android:layout_marginRight="4dp"
                     android:onClick="@{()-> MusicPlayerRemote.start()}"
-                    android:src="@{MusicPlayerRemote.isPaused?@drawable/ic_play_circle_outline_black_24dp:@drawable/ic_pause_circle_outline_black_24dp}"
+                    android:src="@{MusicPlayerRemote.isPlaying?@drawable/ic_pause_circle_outline_black_24dp : @drawable/ic_play_circle_outline_black_24dp}"
                     tools:src="@drawable/ic_play_circle_outline_black_24dp" />
 
                 <androidx.appcompat.widget.AppCompatImageView

@@ -7,10 +7,9 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.animation.LinearInterpolator
 import android.widget.SeekBar
-import androidx.databinding.Observable
-import androidx.databinding.ObservableInt
 import com.zaze.tribe.base.BaseFragment
 import com.zaze.tribe.databinding.MusicControlFragBinding
+import com.zaze.tribe.util.Utils
 import kotlinx.android.synthetic.main.music_control_frag.*
 
 /**
@@ -19,18 +18,15 @@ import kotlinx.android.synthetic.main.music_control_frag.*
  * @author : ZAZE
  * @version : 2018-10-16 - 0:45
  */
-class MusicControlFragment : BaseFragment() {
-    lateinit var dataBinding: MusicControlFragBinding
+class MusicControlFragment : BaseFragment(), MusicProgressHandler.Callback {
 
-    private val onProgressChangedCallback = object : Observable.OnPropertyChangedCallback() {
-        override fun onPropertyChanged(sender: Observable?, propertyId: Int) {
-            if (sender is ObservableInt) {
-                val animator = ObjectAnimator.ofInt(musicControlSeekBar, "progress", sender.get())
-                animator.duration = 1000L
-                animator.interpolator = LinearInterpolator()
-                animator.start()
-            }
-        }
+    private lateinit var dataBinding: MusicControlFragBinding
+
+    private lateinit var progressHandler: MusicProgressHandler
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        progressHandler = MusicProgressHandler(this)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -44,6 +40,7 @@ class MusicControlFragment : BaseFragment() {
             override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
                 if (fromUser) {
                     MusicPlayerRemote.seekTo(progress.toLong())
+                    onProgress(MusicPlayerRemote.getProgress(), MusicPlayerRemote.getDuration())
                 }
             }
 
@@ -56,13 +53,23 @@ class MusicControlFragment : BaseFragment() {
         })
     }
 
+    override fun onProgress(progress: Int, total: Int) {
+        musicControlSeekBar.max = total
+        val animator = ObjectAnimator.ofInt(musicControlSeekBar, "progress", progress)
+        animator.duration = 1000L
+        animator.interpolator = LinearInterpolator()
+        animator.start()
+        musicControlCurTime.text = Utils.getDurationString(progress.toLong())
+        musicControlTotalTime.text = Utils.getDurationString(total.toLong())
+    }
+
     override fun onResume() {
         super.onResume()
-        MusicPlayerRemote.progress.addOnPropertyChangedCallback(onProgressChangedCallback)
+        progressHandler.start()
     }
 
     override fun onPause() {
         super.onPause()
-        MusicPlayerRemote.progress.removeOnPropertyChangedCallback(onProgressChangedCallback)
+        progressHandler.stop()
     }
 }
