@@ -1,4 +1,4 @@
-package com.zaze.tribe.music
+package com.zaze.tribe.music.vm
 
 import android.app.Application
 import android.content.ComponentName
@@ -7,7 +7,8 @@ import android.content.Intent
 import android.content.ServiceConnection
 import android.os.IBinder
 import androidx.lifecycle.AndroidViewModel
-import com.zaze.tribe.service.PlayerService
+import com.zaze.tribe.music.MusicPlayerRemote
+import com.zaze.tribe.service.MusicService
 import com.zaze.utils.log.ZLog
 import com.zaze.utils.log.ZTag
 
@@ -28,12 +29,12 @@ class MainViewModel(
 
         override fun onServiceConnected(name: ComponentName?, service: IBinder?) {
             ZLog.i(ZTag.TAG_DEBUG, "onServiceConnected : $name")
-            MusicPlayerRemote.mBinder = service as PlayerService.ServiceBinder
+            MusicPlayerRemote.mBinder = service as MusicService.ServiceBinder
         }
     }
 
     fun bindService() {
-        context.bindService(Intent(context, PlayerService::class.java), serviceConnection, Context.BIND_AUTO_CREATE)
+        context.bindService(Intent(context, MusicService::class.java), serviceConnection, Context.BIND_AUTO_CREATE)
         restorePlayerQueue()
     }
 

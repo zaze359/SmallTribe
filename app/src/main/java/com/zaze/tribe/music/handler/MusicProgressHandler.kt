@@ -1,9 +1,8 @@
-package com.zaze.tribe.music
+package com.zaze.tribe.music.handler
 
 import android.os.Handler
 import android.os.Message
-import com.zaze.utils.log.ZLog
-import com.zaze.utils.log.ZTag
+import com.zaze.tribe.music.MusicPlayerRemote
 
 /**
  * Description :
@@ -43,7 +42,7 @@ class MusicProgressHandler(private val progressCallback: Callback) : Handler() {
     }
 
     private fun nextMessage(delay: Long) {
-        ZLog.i(ZTag.TAG_DEBUG, "nextMessage : $delay")
+//        ZLog.i(ZTag.TAG_DEBUG, "nextMessage : $delay")
         removeMessages(CMD_UPDATE_PROGRESS)
         sendEmptyMessageDelayed(CMD_UPDATE_PROGRESS, delay)
     }

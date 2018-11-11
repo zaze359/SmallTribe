@@ -1,4 +1,4 @@
-package com.zaze.tribe.music
+package com.zaze.tribe.music.adapter
 
 import android.content.Context
 import android.view.LayoutInflater
@@ -10,6 +10,10 @@ import com.zaze.tribe.R
 import com.zaze.tribe.base.BaseRecyclerAdapter
 import com.zaze.tribe.data.dto.MusicInfo
 import com.zaze.tribe.databinding.MusicItemBinding
+import com.zaze.tribe.databinding.PlaylistItemBinding
+import com.zaze.tribe.music.MusicPlayerRemote
+import com.zaze.tribe.music.vm.MusicListViewModel
+import com.zaze.tribe.music.vm.PlaylistViewModel
 import com.zaze.utils.log.ZLog
 import com.zaze.utils.log.ZTag
 
@@ -19,13 +23,13 @@ import com.zaze.utils.log.ZTag
  * @author : ZAZE
  * @version : 2018-07-10 - 10:26
  */
-class MusicAdapter(
+class PlaylistAdapter(
         context: Context,
         data: Collection<MusicInfo>,
-        private val viewModel: MusicListViewModel
-) : BaseRecyclerAdapter<MusicInfo, MusicAdapter.MusicViewHolder>(context, data) {
+        private val viewModel: PlaylistViewModel
+) : BaseRecyclerAdapter<MusicInfo, PlaylistAdapter.MusicViewHolder>(context, data) {
     override fun getViewLayoutId(): Int {
-        return R.layout.music_item
+        return R.layout.playlist_item
     }
 
     override fun createViewHolder(convertView: View): MusicViewHolder {
@@ -33,16 +37,18 @@ class MusicAdapter(
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MusicViewHolder {
-        val binding = MusicItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        val binding = PlaylistItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         binding.viewModel = viewModel
         return this.createViewHolder(binding.root.apply { tag = viewType.toString() })
     }
 
     override fun onBindView(holder: MusicViewHolder, value: MusicInfo?, position: Int) {
         value?.let {
-            ZLog.i(ZTag.TAG_DEBUG, "${value.title}:${value.data}")
-            val binding = DataBindingUtil.getBinding<MusicItemBinding>(holder.itemView)
+            val binding = DataBindingUtil.getBinding<PlaylistItemBinding>(holder.itemView)
             binding?.music = value
+            binding?.root?.setOnClickListener {
+                MusicPlayerRemote.playAt(position)
+            }
         }
     }
 

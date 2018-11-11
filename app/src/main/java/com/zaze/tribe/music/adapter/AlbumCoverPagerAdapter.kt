@@ -1,9 +1,10 @@
-package com.zaze.tribe.music
+package com.zaze.tribe.music.adapter
 
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import com.zaze.tribe.base.CustomFragmentPagerAdapter
 import com.zaze.tribe.data.dto.MusicInfo
+import com.zaze.tribe.music.AlbumCoverFragment
 
 /**
  * Description :

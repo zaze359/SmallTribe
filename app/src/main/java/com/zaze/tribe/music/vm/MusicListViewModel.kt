@@ -1,4 +1,4 @@
-package com.zaze.tribe.music
+package com.zaze.tribe.music.vm
 
 import android.app.Application
 import androidx.databinding.ObservableArrayList
@@ -8,9 +8,9 @@ import androidx.lifecycle.AndroidViewModel
 import com.zaze.tribe.data.dto.MusicInfo
 import com.zaze.tribe.data.loaders.MusicLoader
 import com.zaze.tribe.data.source.repository.MusicRepository
+import com.zaze.tribe.music.MusicPlayerRemote
 import com.zaze.utils.ZTipUtil
 import io.reactivex.Observable
-import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import org.reactivestreams.Subscriber
@@ -76,13 +76,10 @@ class MusicListViewModel(
                         emitter.onNext(this)
                         emitter.onComplete()
                     }.subscribeOn(Schedulers.io()).map { it ->
-                        MusicPlayerRemote.addToPlayerList(listOf(it))
-                    }.map {
-                        if (!it.isEmpty()) {
-                            musicRepository.saveMusicInfo(music)
-                        }
-                    }.map {
-                        MusicPlayerRemote.start(music)
+                        musicRepository.saveMusicInfo(music)
+                        MusicPlayerRemote.addToPlayerList(it)
+                    }.map { position ->
+                        MusicPlayerRemote.playAt(position)
                     }.subscribe()
             )
         }

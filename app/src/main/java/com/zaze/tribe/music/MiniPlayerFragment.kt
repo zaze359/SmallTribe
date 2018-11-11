@@ -8,11 +8,11 @@ import android.view.ViewGroup
 import android.view.animation.LinearInterpolator
 import com.zaze.tribe.base.BaseFragment
 import com.zaze.tribe.databinding.MiniPlayerFragBinding
-import com.zaze.tribe.util.ActivityUtil
+import com.zaze.tribe.music.handler.MusicProgressHandler
 import kotlinx.android.synthetic.main.mini_player_frag.*
 
 /**
- * Description :
+ * Description : 迷你播放控制器
  *
  * @author : ZAZE
  * @version : 2018-09-30 - 0:37
@@ -30,9 +30,27 @@ class MiniPlayerFragment : BaseFragment(), MusicProgressHandler.Callback {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         viewDataBinding = MiniPlayerFragBinding.inflate(inflater, container, false)
         viewDataBinding.root.setOnClickListener {
-            ActivityUtil.startActivity(this, MusicDetailActivity::class.java)
+            activity?.let { activity ->
+                MusicDetailActivity.start(activity)
+            }
         }
         return viewDataBinding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        miniPlayerStatus.setOnClickListener {
+            if (MusicPlayerRemote.isPlaying.get()) {
+                MusicPlayerRemote.pause()
+            } else {
+                MusicPlayerRemote.resumePlaying()
+            }
+        }
+        miniPlayerList.setOnClickListener {
+            activity?.apply {
+                PlaylistActivity.start(this)
+            }
+        }
     }
 
     override fun onProgress(progress: Int, total: Int) {

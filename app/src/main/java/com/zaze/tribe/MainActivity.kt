@@ -13,7 +13,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import com.zaze.tribe.base.BaseActivity
 import com.zaze.tribe.databinding.ActivityMainBinding
-import com.zaze.tribe.music.MainViewModel
+import com.zaze.tribe.music.vm.MainViewModel
 import com.zaze.tribe.music.MusicListFragment
 import com.zaze.tribe.util.*
 import com.zaze.utils.FileUtil
@@ -37,7 +37,7 @@ class MainActivity : BaseActivity() {
         viewModel = obtainViewModel(MainViewModel::class.java)
         setupPermission()
         setImmersion()
-        setupActionBar(R.id.mainToolbar) {
+        setupActionBar(mainToolbar) {
             setTitle(R.string.app_name)
             setDisplayHomeAsUpEnabled(true)
             setHomeButtonEnabled(true)
@@ -47,11 +47,11 @@ class MainActivity : BaseActivity() {
         // --------------------------------------------------
         // --------------------------------------------------
         drawerToggle = ActionBarDrawerToggle(
-                this, main_drawer_layout, mainToolbar, R.string.app_name, R.string.app_name
+                this, mainDrawerLayout, mainToolbar, R.string.app_name, R.string.app_name
         ).apply {
             syncState()
         }
-        main_drawer_layout.run {
+        mainDrawerLayout.run {
             addDrawerListener(drawerToggle)
         }
         // --------------------------------------------------
@@ -90,11 +90,11 @@ class MainActivity : BaseActivity() {
             setOnNavigationItemReselectedListener {
             }
             setOnNavigationItemSelectedListener { it ->
-                PreferenceUtil.saveLatelyPage(it.itemId)
+                PreferenceUtil.saveLastPage(it.itemId)
                 findOrCreateViewFragment(it.itemId)
                 true
             }
-            selectedItemId = PreferenceUtil.getLatelyPage()
+            selectedItemId = PreferenceUtil.getLastPage()
         }
     }
 
@@ -118,8 +118,8 @@ class MainActivity : BaseActivity() {
     }
 
     override fun onBackPressed() {
-        if (main_drawer_layout.isDrawerOpen(mainLeftNav)) {
-            main_drawer_layout.closeDrawer(mainLeftNav)
+        if (mainDrawerLayout.isDrawerOpen(mainLeftNav)) {
+            mainDrawerLayout.closeDrawer(mainLeftNav)
         } else {
             moveTaskToBack(false)
             super.onBackPressed()
@@ -135,7 +135,7 @@ class MainActivity : BaseActivity() {
                 true
             }
             android.R.id.home -> {
-                main_drawer_layout.openDrawer(GravityCompat.START)
+                mainDrawerLayout.openDrawer(GravityCompat.START)
                 true
             }
             else -> super.onOptionsItemSelected(item)

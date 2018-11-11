@@ -112,4 +112,12 @@ data class MusicInfo(
             return arrayOfNulls(size)
         }
     }
+
+    override fun equals(other: Any?): Boolean {
+        return if (other is MusicInfo) {
+            other.id == this.id
+        } else {
+            super.equals(other)
+        }
+    }
 }

@@ -9,6 +9,7 @@ import android.view.animation.LinearInterpolator
 import android.widget.SeekBar
 import com.zaze.tribe.base.BaseFragment
 import com.zaze.tribe.databinding.MusicControlFragBinding
+import com.zaze.tribe.music.handler.MusicProgressHandler
 import com.zaze.tribe.util.Utils
 import kotlinx.android.synthetic.main.music_control_frag.*
 
@@ -56,7 +57,7 @@ class MusicControlFragment : BaseFragment(), MusicProgressHandler.Callback {
     override fun onProgress(progress: Int, total: Int) {
         musicControlSeekBar.max = total
         val animator = ObjectAnimator.ofInt(musicControlSeekBar, "progress", progress)
-        animator.duration = 1000L
+        animator.duration = 2000L
         animator.interpolator = LinearInterpolator()
         animator.start()
         musicControlCurTime.text = Utils.getDurationString(progress.toLong())

@@ -7,6 +7,8 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.zaze.tribe.base.BaseFragment
 import com.zaze.tribe.databinding.MusicListFragBinding
+import com.zaze.tribe.music.adapter.MusicListAdapter
+import com.zaze.tribe.music.vm.MusicListViewModel
 import com.zaze.tribe.util.obtainViewModel
 import kotlinx.android.synthetic.main.music_list_frag.*
 import java.util.*
@@ -19,7 +21,7 @@ import java.util.*
 class MusicListFragment : BaseFragment() {
 
     private lateinit var viewDataBinding: MusicListFragBinding
-    private lateinit var musicAdapter: MusicAdapter
+    private lateinit var musicListAdapter: MusicListAdapter
 
     companion object {
         fun newInstance(): MusicListFragment {
@@ -44,8 +46,8 @@ class MusicListFragment : BaseFragment() {
         activity?.let {
             musicRecyclerView.layoutManager = LinearLayoutManager(it)
             viewDataBinding.viewModel?.apply {
-                musicAdapter = MusicAdapter(it, ArrayList(0), this)
-                musicRecyclerView.adapter = musicAdapter
+                musicListAdapter = MusicListAdapter(it, ArrayList(0), this)
+                musicRecyclerView.adapter = musicListAdapter
             }
         }
     }

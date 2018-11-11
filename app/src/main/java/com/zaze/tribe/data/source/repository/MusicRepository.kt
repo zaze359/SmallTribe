@@ -14,9 +14,6 @@ import io.reactivex.Flowable
 class MusicRepository private constructor(
         private val localDataSource: MusicDataSource
 ) : MusicDataSource {
-    override fun saveMusicInfos(musicInfos: List<MusicInfo>?) {
-        localDataSource.saveMusicInfos(musicInfos)
-    }
 
     override fun getMusicInfo(localPath: String?): Flowable<MusicInfo> {
         return localDataSource.getMusicInfo(localPath)
@@ -27,6 +24,10 @@ class MusicRepository private constructor(
     }
 
     override fun getMusicInfo(musicId: Int) = localDataSource.getMusicInfo(musicId)
+
+    override fun saveMusicInfos(musicInfos: List<MusicInfo>?) {
+        localDataSource.saveMusicInfos(musicInfos)
+    }
 
     override fun getMusicInfoList(): Flowable<List<MusicInfo>> {
         return localDataSource.getMusicInfoList()

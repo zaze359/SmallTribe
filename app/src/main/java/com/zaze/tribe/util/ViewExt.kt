@@ -6,7 +6,7 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.zaze.tribe.base.BaseRecyclerAdapter
 import com.zaze.tribe.data.dto.MusicInfo
-import com.zaze.tribe.music.MusicListViewModel
+import com.zaze.tribe.music.vm.MusicListViewModel
 import com.zaze.utils.ThreadManager
 
 /**

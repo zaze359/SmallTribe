@@ -8,6 +8,9 @@
     <string name="music">音乐</string>
     <string name="game">游戏</string>
 
+
+    <string name="playlist">播放列表</string>
+
     <string name="tip_music_name">极乐净土</string>
     <string name="tip_music_artist">MARIA</string>
 </resources>

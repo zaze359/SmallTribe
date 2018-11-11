@@ -8,8 +8,9 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 import com.zaze.tribe.data.source.repository.MusicRepository
 import com.zaze.tribe.debug.DebugViewModel
-import com.zaze.tribe.music.MainViewModel
-import com.zaze.tribe.music.MusicListViewModel
+import com.zaze.tribe.music.vm.MainViewModel
+import com.zaze.tribe.music.vm.MusicListViewModel
+import com.zaze.tribe.music.vm.PlaylistViewModel
 
 
 fun <T : ViewModel> AppCompatActivity.obtainViewModel(viewModelClass: Class<T>) =
@@ -49,6 +50,8 @@ class ViewModelFactory private constructor(
                         MainViewModel(application)
                     isAssignableFrom(MusicListViewModel::class.java) ->
                         MusicListViewModel(application, MusicRepository.getInstance())
+                    isAssignableFrom(PlaylistViewModel::class.java) ->
+                        PlaylistViewModel(application)
                     else ->
                         throw IllegalArgumentException("Unknown ViewModel class: ${modelClass.name}")
                 }

@@ -18,11 +18,6 @@ interface MusicDataSource {
     fun saveMusicInfo(musicInfo: MusicInfo?)
 
     /**
-     * 保存歌曲列表
-     */
-    fun saveMusicInfos(musicInfos: List<MusicInfo>?)
-
-    /**
      * 获取歌曲信息
      * [musicId] musicId
      * @return  MusicInfo
@@ -35,6 +30,11 @@ interface MusicDataSource {
      * @return  MusicInfo
      */
     fun getMusicInfo(localPath: String?): Flowable<MusicInfo>
+
+    /**
+     * 保存歌曲列表
+     */
+    fun saveMusicInfos(musicInfos: List<MusicInfo>?)
 
     /**
      * 获取歌曲列表

@@ -27,12 +27,6 @@ class MusicLocalDataSource private constructor(
         }
     }
 
-    override fun saveMusicInfos(musicInfos: List<MusicInfo>?) {
-        musicInfos?.let {
-            musicDao.insertMusicInfos(it)
-        }
-    }
-
     override fun getMusicInfo(localPath: String?): Flowable<MusicInfo> {
         return musicDao.getMusicByPath(localPath ?: "")
     }
@@ -45,6 +39,11 @@ class MusicLocalDataSource private constructor(
 
     override fun getMusicInfo(musicId: Int) = musicDao.getMusicInfo(musicId)
 
+    override fun saveMusicInfos(musicInfos: List<MusicInfo>?) {
+        musicInfos?.let {
+            musicDao.insertMusicInfos(it)
+        }
+    }
 
     override fun getMusicInfoList(): Flowable<List<MusicInfo>> {
         return musicDao.getMusicInfoList()

@@ -21,7 +21,6 @@ class App : Application() {
         LeakCanary.install(this)
         INSTANCE = this
         ZDisplayUtil.init(this)
-        ZSharedPrefUtil.initSharedPreferences(this)
     }
 
 }
