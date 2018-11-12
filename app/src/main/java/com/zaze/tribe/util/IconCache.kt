@@ -12,6 +12,7 @@ import com.zaze.utils.BmpUtil
 import com.zaze.utils.FileUtil
 import com.zaze.utils.log.ZLog
 import com.zaze.utils.log.ZTag
+import io.reactivex.Observable
 import java.lang.ref.SoftReference
 
 /**
@@ -38,15 +39,22 @@ object IconCache {
         }
     }
 
+//    @JvmStatic
+//    fun getSmallMediaIcon(path: String): Bitmap {
+//        return if (FileUtil.exists(path)) {
+//            BITMAP_CACHE.get(path) ?: buildMediaIcon(path, BMP_SIZE, BMP_SIZE)?.apply {
+//                saveSmallMediaIcon(path, this)
+//            } ?: getDefaultMediaIcon()
+//        } else {
+//            getDefaultMediaIcon()
+//        }
+//    }
+
     @JvmStatic
     fun getSmallMediaIcon(path: String): Bitmap {
-        return if (FileUtil.exists(path)) {
-            BITMAP_CACHE.get(path) ?: buildMediaIcon(path, BMP_SIZE, BMP_SIZE)?.apply {
-                saveSmallMediaIcon(path, this)
-            } ?: getDefaultMediaIcon()
-        } else {
-            getDefaultMediaIcon()
-        }
+        return BITMAP_CACHE.get(path) ?: buildMediaIcon(path, BMP_SIZE, BMP_SIZE)?.apply {
+            saveSmallMediaIcon(path, this)
+        } ?: getDefaultMediaIcon()
     }
 
     @JvmStatic

@@ -5,7 +5,7 @@
 
         <variable
             name="music"
-            type="com.zaze.tribe.data.dto.MusicInfo" />
+            type="com.zaze.tribe.data.dto.Music" />
 
         <variable
             name="viewModel"
@@ -33,7 +33,6 @@
             app:cardElevation="0dp">
 
             <ImageView
-                android:id="@+id/musicItemAlbumCover"
                 android:layout_width="@dimen/album_cover_size_list"
                 android:layout_height="@dimen/album_cover_size_list"
                 android:contentDescription="@null"
@@ -54,7 +53,7 @@
                 android:paddingBottom="4dp">
 
                 <ImageView
-                    android:id="@+id/musicItemMore"
+                    android:id="@+id/playlistItemMore"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
                     android:layout_alignParentEnd="true"
@@ -70,12 +69,11 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_centerInParent="true"
-                    android:layout_toStartOf="@id/musicItemMore"
-                    android:layout_toLeftOf="@id/musicItemMore"
+                    android:layout_toStartOf="@id/playlistItemMore"
+                    android:layout_toLeftOf="@id/playlistItemMore"
                     android:orientation="vertical">
 
                     <TextView
-                        android:id="@+id/music_item_title"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:ellipsize="end"
@@ -86,7 +84,6 @@
                         tools:text="@string/tip_music_name" />
 
                     <TextView
-                        android:id="@+id/musicItemArtist"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="4dp"

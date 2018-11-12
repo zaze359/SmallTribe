@@ -6,7 +6,7 @@
 
         <variable
             name="viewModel"
-            type="com.zaze.tribe.music.vm.MusicListViewModel" />
+            type="com.zaze.tribe.music.vm.LocalMusicViewModel" />
     </data>
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"

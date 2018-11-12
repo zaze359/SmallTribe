@@ -5,12 +5,11 @@ import androidx.databinding.ObservableArrayList
 import androidx.databinding.ObservableBoolean
 import androidx.databinding.ObservableField
 import androidx.databinding.ObservableInt
-import com.zaze.tribe.data.dto.MusicInfo
+import com.zaze.tribe.data.dto.Music
 import com.zaze.tribe.service.MusicService
 import com.zaze.utils.log.ZLog
 import com.zaze.utils.log.ZTag
 import java.util.*
-import kotlin.collections.ArrayList
 
 /**
  * Description :
@@ -23,13 +22,13 @@ object MusicPlayerRemote {
      * 播放列表
      */
     @JvmStatic
-    val playerList = ObservableArrayList<MusicInfo>()
+    val playerList = ObservableArrayList<Music>()
 
     /**
      * 当前播放 Music Data
      */
     @JvmStatic
-    val curMusicData = ObservableField<MusicInfo>()
+    val curMusicData = ObservableField<Music>()
 
     /**
      * 是否在播放中
@@ -47,13 +46,10 @@ object MusicPlayerRemote {
         set(value) {
             field = value
             field?.setPlayerCallback(object : MusicService.PlayerCallback {
-                override fun preStart(musicInfo: MusicInfo, duration: Int) {
-                    ZLog.i(ZTag.TAG_DEBUG, "preStart")
-                    curMusicData.set(musicInfo)
-                }
 
-                override fun onStart(musicInfo: MusicInfo) {
-                    ZLog.i(ZTag.TAG_DEBUG, "onStart : $musicInfo")
+                override fun onStart(music: Music) {
+                    ZLog.i(ZTag.TAG_DEBUG, "onStart : $music")
+                    curMusicData.set(music)
                     isPlaying.set(true)
                 }
 
@@ -100,9 +96,9 @@ object MusicPlayerRemote {
 
     @JvmOverloads
     @JvmStatic
-    fun play(musicInfo: MusicInfo? = curMusicData.get()) {
-        musicInfo?.let {
-            mBinder?.play(musicInfo)
+    fun play(music: Music? = curMusicData.get()) {
+        music?.let {
+            mBinder?.play(music)
         }
     }
 
@@ -153,18 +149,18 @@ object MusicPlayerRemote {
     }
 
     @Synchronized
-    fun addToPlayerList(musicInfo: MusicInfo): Int {
-        val position = playerList.indexOf(musicInfo)
-        if (position < 0) {
-            playerList.add(musicInfo)
-            return playerList.size - 1
+    fun addToPlayerList(music: Music): Int {
+        val position = playerList.indexOf(music)
+        return if (position < 0) {
+            playerList.add(music)
+            playerList.size - 1
         } else {
-            return position
+            position
         }
     }
 
     @Synchronized
-    fun addToPlayerList(musicList: List<MusicInfo>): List<MusicInfo> {
+    fun addToPlayerList(musicList: List<Music>): List<Music> {
         musicList.forEach {
             addToPlayerList(it)
         }

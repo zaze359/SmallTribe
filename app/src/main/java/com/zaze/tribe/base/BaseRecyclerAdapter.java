@@ -51,7 +51,10 @@ public abstract class BaseRecyclerAdapter<V, H extends RecyclerView.ViewHolder> 
 
     @Override
     public void onBindViewHolder(@NonNull H holder, int position) {
-        onBindView(holder, getItem(position), position);
+        V v = getItem(position);
+        if (v != null) {
+            onBindView(holder, v, position);
+        }
     }
 
     @Override
@@ -100,5 +103,5 @@ public abstract class BaseRecyclerAdapter<V, H extends RecyclerView.ViewHolder> 
      * @param value    value
      * @param position position
      */
-    public abstract void onBindView(@NonNull H holder, V value, int position);
+    public abstract void onBindView(@NonNull H holder, @NonNull V value, int position);
 }

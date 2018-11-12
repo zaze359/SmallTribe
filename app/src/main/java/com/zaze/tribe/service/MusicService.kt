@@ -6,7 +6,6 @@ import android.app.PendingIntent
 import android.app.Service
 import android.content.Context
 import android.content.Intent
-import android.drm.DrmStore.Playback.STOP
 import android.media.MediaPlayer
 import android.net.Uri
 import android.os.*
@@ -16,7 +15,7 @@ import androidx.core.app.NotificationCompat
 import com.zaze.tribe.App
 import com.zaze.tribe.MainActivity
 import com.zaze.tribe.R
-import com.zaze.tribe.data.dto.MusicInfo
+import com.zaze.tribe.data.dto.Music
 import com.zaze.tribe.util.IconCache
 import com.zaze.utils.log.ZLog
 import com.zaze.utils.log.ZTag
@@ -35,8 +34,9 @@ class MusicService : Service(), IPlayer {
     private val mBinder = ServiceBinder()
     private var callback: PlayerCallback? = null
 
-    private var curMusic: MusicInfo? = null
+    private var curMusic: Music? = null
     private var mediaSession: MediaSessionCompat? = null
+
 
     companion object {
         const val TAG = "MusicService"
@@ -47,7 +47,6 @@ class MusicService : Service(), IPlayer {
         const val CLOSE = "close"
         const val MUSIC = "music"
     }
-
 
 
     override fun onBind(intent: Intent?): IBinder? {
@@ -93,8 +92,8 @@ class MusicService : Service(), IPlayer {
     }
 
     @Synchronized
-    override fun play(musicInfo: MusicInfo) {
-        musicInfo.apply {
+    override fun play(music: Music) {
+        music.apply {
             if (mediaPlayer != null && mediaPlayer!!.isPlaying) {
                 return
             }
@@ -121,11 +120,10 @@ class MusicService : Service(), IPlayer {
                         null
                     }
             mediaPlayer?.let { it ->
-                curMusic = musicInfo
-                callback?.preStart(musicInfo, it.duration)
+                curMusic = music
                 it.start()
                 updateNotification(true)
-                callback?.onStart(musicInfo)
+                callback?.onStart(music)
                 startTimeMillis = System.currentTimeMillis()
             }
         }
@@ -231,8 +229,8 @@ class MusicService : Service(), IPlayer {
             this@MusicService.callback = callback
         }
 
-        override fun play(musicInfo: MusicInfo) {
-            this@MusicService.play(musicInfo)
+        override fun play(music: Music) {
+            this@MusicService.play(music)
         }
 
         override fun pause() {
@@ -261,14 +259,9 @@ class MusicService : Service(), IPlayer {
     interface PlayerCallback {
 
         /**
-         * 准备开始播放
-         */
-        fun preStart(musicInfo: MusicInfo, duration: Int)
-
-        /**
          * 开始播放
          */
-        fun onStart(musicInfo: MusicInfo)
+        fun onStart(music: Music)
 
         /**
          * 暂停
@@ -302,7 +295,7 @@ interface IPlayer {
     /**
      * 开始播放
      */
-    fun play(musicInfo: MusicInfo)
+    fun play(music: Music)
 
     /**
      * 暂停

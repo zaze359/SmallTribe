@@ -6,7 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import com.zaze.tribe.R
 import com.zaze.tribe.base.BaseFragment
-import com.zaze.tribe.data.dto.MusicInfo
+import com.zaze.tribe.data.dto.Music
 import com.zaze.tribe.util.IconCache
 import kotlinx.android.synthetic.main.album_cover_frag.*
 
@@ -17,13 +17,13 @@ import kotlinx.android.synthetic.main.album_cover_frag.*
  * @version : 2018-10-01 - 23:26
  */
 class AlbumCoverFragment : BaseFragment() {
-    private var musicInfo: MusicInfo? = null
+    private var music: Music? = null
 
     companion object {
-        fun newInstance(musicInfo: MusicInfo): AlbumCoverFragment {
+        fun newInstance(music: Music): AlbumCoverFragment {
             val args = Bundle()
             val fragment = AlbumCoverFragment()
-            args.putParcelable("musicInfo", musicInfo)
+            args.putParcelable("music", music)
             fragment.arguments = args
             return fragment
         }
@@ -31,7 +31,7 @@ class AlbumCoverFragment : BaseFragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        musicInfo = arguments?.getParcelable("musicInfo")
+        music = arguments?.getParcelable("music")
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -40,7 +40,7 @@ class AlbumCoverFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        musicInfo?.let {
+        music?.let {
             albumCover.setImageBitmap(IconCache.buildMediaIcon(it.data)
                     ?: IconCache.getDefaultMediaIcon())
         }

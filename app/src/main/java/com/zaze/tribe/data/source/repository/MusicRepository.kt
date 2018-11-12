@@ -1,6 +1,6 @@
 package com.zaze.tribe.data.source.repository
 
-import com.zaze.tribe.data.dto.MusicInfo
+import com.zaze.tribe.data.dto.Music
 import com.zaze.tribe.data.source.MusicDataSource
 import com.zaze.tribe.data.source.local.LocalDatabase
 import com.zaze.tribe.data.source.local.MusicLocalDataSource
@@ -15,21 +15,21 @@ class MusicRepository private constructor(
         private val localDataSource: MusicDataSource
 ) : MusicDataSource {
 
-    override fun getMusicInfo(localPath: String?): Flowable<MusicInfo> {
+    override fun getMusicInfo(localPath: String?): Flowable<Music> {
         return localDataSource.getMusicInfo(localPath)
     }
 
-    override fun saveMusicInfo(musicInfo: MusicInfo?) {
-        localDataSource.saveMusicInfo(musicInfo)
+    override fun saveMusicInfo(music: Music?) {
+        localDataSource.saveMusicInfo(music)
     }
 
     override fun getMusicInfo(musicId: Int) = localDataSource.getMusicInfo(musicId)
 
-    override fun saveMusicInfos(musicInfos: List<MusicInfo>?) {
-        localDataSource.saveMusicInfos(musicInfos)
+    override fun saveMusicInfos(music: List<Music>?) {
+        localDataSource.saveMusicInfos(music)
     }
 
-    override fun getMusicInfoList(): Flowable<List<MusicInfo>> {
+    override fun getMusicInfoList(): Flowable<List<Music>> {
         return localDataSource.getMusicInfoList()
     }
 

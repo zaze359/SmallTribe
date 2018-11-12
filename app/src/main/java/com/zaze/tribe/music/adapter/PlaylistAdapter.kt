@@ -8,14 +8,10 @@ import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.zaze.tribe.R
 import com.zaze.tribe.base.BaseRecyclerAdapter
-import com.zaze.tribe.data.dto.MusicInfo
-import com.zaze.tribe.databinding.MusicItemBinding
+import com.zaze.tribe.data.dto.Music
 import com.zaze.tribe.databinding.PlaylistItemBinding
 import com.zaze.tribe.music.MusicPlayerRemote
-import com.zaze.tribe.music.vm.MusicListViewModel
 import com.zaze.tribe.music.vm.PlaylistViewModel
-import com.zaze.utils.log.ZLog
-import com.zaze.utils.log.ZTag
 
 
 /**
@@ -25,9 +21,9 @@ import com.zaze.utils.log.ZTag
  */
 class PlaylistAdapter(
         context: Context,
-        data: Collection<MusicInfo>,
+        data: Collection<Music>,
         private val viewModel: PlaylistViewModel
-) : BaseRecyclerAdapter<MusicInfo, PlaylistAdapter.MusicViewHolder>(context, data) {
+) : BaseRecyclerAdapter<Music, PlaylistAdapter.MusicViewHolder>(context, data) {
     override fun getViewLayoutId(): Int {
         return R.layout.playlist_item
     }
@@ -42,13 +38,11 @@ class PlaylistAdapter(
         return this.createViewHolder(binding.root.apply { tag = viewType.toString() })
     }
 
-    override fun onBindView(holder: MusicViewHolder, value: MusicInfo?, position: Int) {
-        value?.let {
-            val binding = DataBindingUtil.getBinding<PlaylistItemBinding>(holder.itemView)
-            binding?.music = value
-            binding?.root?.setOnClickListener {
-                MusicPlayerRemote.playAt(position)
-            }
+    override fun onBindView(holder: MusicViewHolder, value: Music, position: Int) {
+        val binding = DataBindingUtil.getBinding<PlaylistItemBinding>(holder.itemView)
+        binding?.music = value
+        binding?.root?.setOnClickListener {
+            MusicPlayerRemote.playAt(position)
         }
     }
 

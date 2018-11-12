@@ -13,7 +13,7 @@ import com.zaze.tribe.music.adapter.PlaylistAdapter
 import com.zaze.tribe.music.vm.PlaylistViewModel
 import com.zaze.tribe.util.obtainViewModel
 import com.zaze.tribe.util.setupActionBar
-import kotlinx.android.synthetic.main.music_list_frag.*
+import kotlinx.android.synthetic.main.music_local_frag.*
 import kotlinx.android.synthetic.main.playlist_act.*
 
 /**

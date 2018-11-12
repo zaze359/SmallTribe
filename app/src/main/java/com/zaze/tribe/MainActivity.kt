@@ -14,7 +14,7 @@ import androidx.fragment.app.Fragment
 import com.zaze.tribe.base.BaseActivity
 import com.zaze.tribe.databinding.ActivityMainBinding
 import com.zaze.tribe.music.vm.MainViewModel
-import com.zaze.tribe.music.MusicListFragment
+import com.zaze.tribe.music.LocalMusicFragment
 import com.zaze.tribe.util.*
 import com.zaze.utils.FileUtil
 import kotlinx.android.synthetic.main.activity_main.*
@@ -103,7 +103,7 @@ class MainActivity : BaseActivity() {
                     ?: when (itemId) {
                         R.id.action_home -> TestFragment.newInstance("$itemId")
                         R.id.action_book -> TestFragment.newInstance("$itemId")
-                        R.id.action_music -> MusicListFragment.newInstance()
+                        R.id.action_music -> LocalMusicFragment.newInstance()
                         R.id.action_game -> TestFragment.newInstance("$itemId")
                         else -> TestFragment.newInstance("$$itemId")
                     }.also { it ->

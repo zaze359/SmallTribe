@@ -1,7 +1,7 @@
 package com.zaze.tribe.util
 
 import android.media.MediaMetadataRetriever
-import com.zaze.tribe.data.dto.MusicInfo
+import com.zaze.tribe.data.dto.Music
 import com.zaze.utils.FileUtil
 import java.io.File
 import java.util.*
@@ -79,15 +79,15 @@ object Utils {
 
 
     @Deprecated("")
-    fun scanMusicFromSd(): ArrayList<MusicInfo> {
+    fun scanMusicFromSd(): ArrayList<Music> {
         val mediaMetadataRetriever = MediaMetadataRetriever()
         val fileList = Utils.searchFileBySuffix(File(FileUtil.getSDCardRoot()), "mp3", true)
-        val arrayList: ArrayList<MusicInfo> = ArrayList()
+        val arrayList: ArrayList<Music> = ArrayList()
         for (file in fileList) {
             try {
                 mediaMetadataRetriever.setDataSource(file.absolutePath)
                 mediaMetadataRetriever.let {
-                    //                    MusicInfo().apply {
+                    //                    Music().apply {
 //                        artist = it.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ARTIST) ?: ""
 //                        if (!TextUtils.isEmpty(artist)) {
 //                            localPath = file.absolutePath

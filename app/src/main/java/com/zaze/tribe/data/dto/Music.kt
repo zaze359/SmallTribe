@@ -12,7 +12,7 @@ import androidx.room.PrimaryKey
  * @version : 2018-07-05 - 21:48
  */
 @Entity(tableName = "music")
-data class MusicInfo(
+data class Music(
         /**
          * MediaStore 中的id
          */
@@ -103,21 +103,36 @@ data class MusicInfo(
         return 0
     }
 
-    companion object CREATOR : Parcelable.Creator<MusicInfo> {
-        override fun createFromParcel(parcel: Parcel): MusicInfo {
-            return MusicInfo(parcel)
+    companion object CREATOR : Parcelable.Creator<Music> {
+        override fun createFromParcel(parcel: Parcel): Music {
+            return Music(parcel)
         }
 
-        override fun newArray(size: Int): Array<MusicInfo?> {
+        override fun newArray(size: Int): Array<Music?> {
             return arrayOfNulls(size)
         }
     }
 
     override fun equals(other: Any?): Boolean {
-        return if (other is MusicInfo) {
+        return if (other is Music) {
             other.id == this.id
         } else {
             super.equals(other)
         }
+    }
+
+    override fun hashCode(): Int {
+        var result = id
+        result = 31 * result + title.hashCode()
+        result = 31 * result + track
+        result = 31 * result + year
+        result = 31 * result + duration.hashCode()
+        result = 31 * result + data.hashCode()
+        result = 31 * result + dateModified.hashCode()
+        result = 31 * result + albumId
+        result = 31 * result + albumName.hashCode()
+        result = 31 * result + artistId
+        result = 31 * result + artistName.hashCode()
+        return result
     }
 }

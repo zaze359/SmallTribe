@@ -4,7 +4,7 @@ import android.content.Context
 import android.database.Cursor
 import android.provider.BaseColumns
 import android.provider.MediaStore
-import com.zaze.tribe.data.dto.MusicInfo
+import com.zaze.tribe.data.dto.Music
 
 /**
  * Description :
@@ -18,7 +18,7 @@ object MusicLoader {
      * 获取所有title 不为空的 music
      */
     @JvmStatic
-    fun getAllMusics(context: Context): List<MusicInfo> {
+    fun getAllMusics(context: Context): List<Music> {
         return buildMusics(query(context,
                 "${MediaStore.Audio.AudioColumns.IS_MUSIC}=? AND ${MediaStore.Audio.AudioColumns.TITLE} != ?",
                 arrayOf("1", ""), MediaStore.Audio.Media.DEFAULT_SORT_ORDER))
@@ -26,8 +26,8 @@ object MusicLoader {
 
     // ------------------------------------------------------
 
-    private fun buildMusics(cursor: Cursor?): List<MusicInfo> {
-        val musics = ArrayList<MusicInfo>()
+    private fun buildMusics(cursor: Cursor?): List<Music> {
+        val musics = ArrayList<Music>()
         if (cursor != null && cursor.moveToFirst()) {
             do {
                 musics.add(buildMusicFormCursor(cursor))
@@ -36,7 +36,7 @@ object MusicLoader {
         return musics
     }
 
-    private fun buildMusicFormCursor(cursor: Cursor): MusicInfo {
+    private fun buildMusicFormCursor(cursor: Cursor): Music {
         val id = cursor.getInt(cursor.getColumnIndex(BaseColumns._ID))
         val title = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.AudioColumns.TITLE))
         val track = cursor.getInt(cursor.getColumnIndex(MediaStore.Audio.AudioColumns.TRACK))
@@ -48,7 +48,7 @@ object MusicLoader {
         val albumName = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.AudioColumns.ALBUM))
         val artistId = cursor.getInt(cursor.getColumnIndex(MediaStore.Audio.AudioColumns.ARTIST_ID))
         val artistName = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.AudioColumns.ARTIST))
-        return MusicInfo(id, title, track, year, duration, data, dateModified, albumId, albumName, artistId, artistName)
+        return Music(id, title, track, year, duration, data, dateModified, albumId, albumName, artistId, artistName)
 
     }
 

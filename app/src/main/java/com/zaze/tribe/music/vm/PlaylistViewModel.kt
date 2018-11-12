@@ -2,7 +2,7 @@ package com.zaze.tribe.music.vm
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
-import com.zaze.tribe.data.dto.MusicInfo
+import com.zaze.tribe.data.dto.Music
 import com.zaze.tribe.music.MusicPlayerRemote
 
 /**
@@ -17,7 +17,7 @@ class PlaylistViewModel(application: Application) : AndroidViewModel(application
         MusicPlayerRemote.playAt(position)
     }
 
-    fun showMore(music: MusicInfo) {
+    fun showMore(music: Music) {
 
     }
 }

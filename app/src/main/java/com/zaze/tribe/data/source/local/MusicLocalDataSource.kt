@@ -1,7 +1,7 @@
 package com.zaze.tribe.data.source.local
 
 import com.zaze.tribe.data.dao.MusicDao
-import com.zaze.tribe.data.dto.MusicInfo
+import com.zaze.tribe.data.dto.Music
 import com.zaze.tribe.data.source.MusicDataSource
 import io.reactivex.Flowable
 
@@ -27,25 +27,25 @@ class MusicLocalDataSource private constructor(
         }
     }
 
-    override fun getMusicInfo(localPath: String?): Flowable<MusicInfo> {
+    override fun getMusicInfo(localPath: String?): Flowable<Music> {
         return musicDao.getMusicByPath(localPath ?: "")
     }
 
-    override fun saveMusicInfo(musicInfo: MusicInfo?) {
-        musicInfo?.let {
-            musicDao.insertMusicInfo(musicInfo)
+    override fun saveMusicInfo(music: Music?) {
+        music?.let {
+            musicDao.insertMusicInfo(music)
         }
     }
 
     override fun getMusicInfo(musicId: Int) = musicDao.getMusicInfo(musicId)
 
-    override fun saveMusicInfos(musicInfos: List<MusicInfo>?) {
-        musicInfos?.let {
+    override fun saveMusicInfos(music: List<Music>?) {
+        music?.let {
             musicDao.insertMusicInfos(it)
         }
     }
 
-    override fun getMusicInfoList(): Flowable<List<MusicInfo>> {
+    override fun getMusicInfoList(): Flowable<List<Music>> {
         return musicDao.getMusicInfoList()
     }
 }

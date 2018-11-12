@@ -5,12 +5,13 @@ import androidx.databinding.ObservableArrayList
 import androidx.databinding.ObservableBoolean
 import androidx.databinding.ObservableList
 import androidx.lifecycle.AndroidViewModel
-import com.zaze.tribe.data.dto.MusicInfo
+import com.zaze.tribe.data.dto.Music
 import com.zaze.tribe.data.loaders.MusicLoader
 import com.zaze.tribe.data.source.repository.MusicRepository
 import com.zaze.tribe.music.MusicPlayerRemote
 import com.zaze.utils.ZTipUtil
 import io.reactivex.Observable
+import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import org.reactivestreams.Subscriber
@@ -21,11 +22,11 @@ import org.reactivestreams.Subscription
  * @author : ZAZE
  * @version : 2018-07-06 - 00:38
  */
-class MusicListViewModel(
+class LocalMusicViewModel(
         private val context: Application,
         private val musicRepository: MusicRepository
 ) : AndroidViewModel(context) {
-    val musicList: ObservableList<MusicInfo> = ObservableArrayList()
+    val musicList: ObservableList<Music> = ObservableArrayList()
     /**
      * 是否加载中
      */
@@ -50,7 +51,7 @@ class MusicListViewModel(
                             addAll(musics)
                         }
                     }
-                }.subscribe(object : Subscriber<List<MusicInfo>> {
+                }.subscribe(object : Subscriber<List<Music>> {
                     override fun onComplete() {
                     }
 
@@ -58,7 +59,7 @@ class MusicListViewModel(
                         s?.request(1)
                     }
 
-                    override fun onNext(t: List<MusicInfo>?) {
+                    override fun onNext(t: List<Music>?) {
                         dataLoading.set(false)
                     }
 
@@ -69,18 +70,20 @@ class MusicListViewModel(
                 })
     }
 
-    fun start(music: MusicInfo?) {
+    fun start(music: Music?) {
         music?.apply {
             compositeDisposable.add(
-                    Observable.create<MusicInfo> { emitter ->
+                    Observable.create<Music> { emitter ->
                         emitter.onNext(this)
                         emitter.onComplete()
-                    }.subscribeOn(Schedulers.io()).map { it ->
-                        musicRepository.saveMusicInfo(music)
-                        MusicPlayerRemote.addToPlayerList(it)
-                    }.map { position ->
-                        MusicPlayerRemote.playAt(position)
-                    }.subscribe()
+                    }.subscribeOn(Schedulers.io())
+                            .map { it ->
+                                musicRepository.saveMusicInfo(music)
+                                MusicPlayerRemote.addToPlayerList(it)
+                            }.observeOn(AndroidSchedulers.mainThread())
+                            .map { position ->
+                                MusicPlayerRemote.playAt(position)
+                            }.subscribe()
             )
         }
     }
@@ -89,7 +92,7 @@ class MusicListViewModel(
      * 显示更多
      * [music] music
      */
-    fun showMore(music: MusicInfo) {
+    fun showMore(music: Music) {
         ZTipUtil.toast(context, music.data)
     }
 

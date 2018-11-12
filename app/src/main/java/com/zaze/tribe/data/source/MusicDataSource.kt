@@ -1,6 +1,6 @@
 package com.zaze.tribe.data.source
 
-import com.zaze.tribe.data.dto.MusicInfo
+import com.zaze.tribe.data.dto.Music
 import io.reactivex.Flowable
 
 /**
@@ -12,33 +12,33 @@ interface MusicDataSource {
 
     /**
      * 保存歌曲信息
-     * [musicInfo] musicInfo
+     * [music] music
      * @return Int
      */
-    fun saveMusicInfo(musicInfo: MusicInfo?)
+    fun saveMusicInfo(music: Music?)
 
     /**
      * 获取歌曲信息
      * [musicId] musicId
-     * @return  MusicInfo
+     * @return  Music
      */
-    fun getMusicInfo(musicId: Int): Flowable<MusicInfo>
+    fun getMusicInfo(musicId: Int): Flowable<Music>
 
     /**
      * 获取歌曲信息
      * [musicId] localPath localPath
-     * @return  MusicInfo
+     * @return  Music
      */
-    fun getMusicInfo(localPath: String?): Flowable<MusicInfo>
+    fun getMusicInfo(localPath: String?): Flowable<Music>
 
     /**
      * 保存歌曲列表
      */
-    fun saveMusicInfos(musicInfos: List<MusicInfo>?)
+    fun saveMusicInfos(music: List<Music>?)
 
     /**
      * 获取歌曲列表
-     * @return List<MusicInfo>
+     * @return List<Music>
      */
-    fun getMusicInfoList(): Flowable<List<MusicInfo>>
+    fun getMusicInfoList(): Flowable<List<Music>>
 }
