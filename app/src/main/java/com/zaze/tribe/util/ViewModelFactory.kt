@@ -8,8 +8,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 import com.zaze.tribe.data.source.repository.MusicRepository
 import com.zaze.tribe.debug.DebugViewModel
-import com.zaze.tribe.music.vm.MainViewModel
-import com.zaze.tribe.music.vm.LocalMusicViewModel
+import com.zaze.tribe.music.vm.MusicViewModel
 import com.zaze.tribe.music.vm.PlaylistViewModel
 
 
@@ -46,10 +45,8 @@ class ViewModelFactory private constructor(
                 when {
                     isAssignableFrom(DebugViewModel::class.java) ->
                         DebugViewModel(application)
-                    isAssignableFrom(MainViewModel::class.java) ->
-                        MainViewModel(application)
-                    isAssignableFrom(LocalMusicViewModel::class.java) ->
-                        LocalMusicViewModel(application, MusicRepository.getInstance())
+                    isAssignableFrom(MusicViewModel::class.java) ->
+                        MusicViewModel(application)
                     isAssignableFrom(PlaylistViewModel::class.java) ->
                         PlaylistViewModel(application)
                     else ->

@@ -15,7 +15,7 @@ interface MusicDataSource {
      * [music] music
      * @return Int
      */
-    fun saveMusicInfo(music: Music?)
+    fun saveToPlayingQueue(music: Music?)
 
     /**
      * 获取歌曲信息
@@ -34,11 +34,11 @@ interface MusicDataSource {
     /**
      * 保存歌曲列表
      */
-    fun saveMusicInfos(music: List<Music>?)
+    fun savePlayingQueue(music: List<Music>?)
 
     /**
      * 获取歌曲列表
      * @return List<Music>
      */
-    fun getMusicInfoList(): Flowable<List<Music>>
+    fun getPlayingQueue(): List<Music>
 }

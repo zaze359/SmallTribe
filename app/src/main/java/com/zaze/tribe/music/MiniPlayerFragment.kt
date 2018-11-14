@@ -6,15 +6,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.LinearInterpolator
-import androidx.databinding.Observable
-import androidx.databinding.ObservableField
-import com.bumptech.glide.Glide
 import com.zaze.tribe.base.BaseFragment
-import com.zaze.tribe.data.dto.Music
 import com.zaze.tribe.databinding.MiniPlayerFragBinding
 import com.zaze.tribe.music.handler.MusicProgressHandler
-import com.zaze.tribe.util.MusicHelper
-import com.zaze.tribe.util.glide.MusicGlide
 import kotlinx.android.synthetic.main.mini_player_frag.*
 
 /**
@@ -55,7 +49,7 @@ class MiniPlayerFragment : BaseFragment(), MusicProgressHandler.Callback {
         }
         miniPlayerList.setOnClickListener {
             activity?.apply {
-                PlaylistActivity.start(this)
+                PlayingQueueActivity.start(this)
             }
         }
     }

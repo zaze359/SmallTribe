@@ -40,7 +40,7 @@ class MusicControlFragment : BaseFragment(), MusicProgressHandler.Callback {
         musicControlSeekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
                 if (fromUser) {
-                    MusicPlayerRemote.seekTo(progress.toLong())
+                    MusicPlayerRemote.seekTo(progress)
                     onProgress(MusicPlayerRemote.getProgress(), MusicPlayerRemote.getDuration())
                 }
             }

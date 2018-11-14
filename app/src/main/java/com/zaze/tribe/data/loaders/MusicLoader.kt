@@ -18,7 +18,7 @@ object MusicLoader {
      * 获取所有title 不为空的 music
      */
     @JvmStatic
-    fun getAllMusics(context: Context): List<Music> {
+    fun getLocalMusics(context: Context): List<Music> {
         return buildMusics(query(context,
                 "${MediaStore.Audio.AudioColumns.IS_MUSIC}=? AND ${MediaStore.Audio.AudioColumns.TITLE} != ?",
                 arrayOf("1", ""), MediaStore.Audio.Media.DEFAULT_SORT_ORDER))

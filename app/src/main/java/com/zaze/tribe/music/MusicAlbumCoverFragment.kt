@@ -32,7 +32,7 @@ class MusicAlbumCoverFragment : BaseFragment() , ViewPager.OnPageChangeListener{
         super.onViewCreated(view, savedInstanceState)
         fragmentManager?.let {
             musicAlbumCoverPager.apply {
-                adapter = AlbumCoverPagerAdapter(it, MusicPlayerRemote.playerList)
+                adapter = AlbumCoverPagerAdapter(it, MusicPlayerRemote.getPlayingQueue())
                 clipToPadding = false
                 pageMargin = 12
                 currentItem = MusicPlayerRemote.getCurPosition()

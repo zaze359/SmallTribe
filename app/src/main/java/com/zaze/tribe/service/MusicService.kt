@@ -12,13 +12,21 @@ import android.os.*
 import android.support.v4.media.session.MediaSessionCompat
 import android.widget.RemoteViews
 import androidx.core.app.NotificationCompat
+import androidx.databinding.ObservableArrayList
 import com.zaze.tribe.App
 import com.zaze.tribe.MainActivity
 import com.zaze.tribe.R
 import com.zaze.tribe.data.dto.Music
+import com.zaze.tribe.data.loaders.MusicLoader
+import com.zaze.tribe.data.source.repository.MusicRepository
+import com.zaze.tribe.music.MusicPlayerRemote.isPlaying
 import com.zaze.tribe.util.IconCache
+import com.zaze.tribe.util.MusicHelper
+import com.zaze.tribe.util.PreferenceUtil
 import com.zaze.utils.log.ZLog
 import com.zaze.utils.log.ZTag
+import java.lang.ref.WeakReference
+import java.util.*
 
 /**
  * Description :
@@ -27,31 +35,73 @@ import com.zaze.utils.log.ZTag
  */
 class MusicService : Service(), IPlayer {
 
-    private var mediaPlayer: MediaPlayer? = null
     private var startTimeMillis = 0L
     private var pauseTimeMillis = 0L
 
-    private val mBinder = ServiceBinder()
+    // ------------------------------------------------------
+    private lateinit var mediaPlayer : MyMediaPlayer
+
+    private lateinit var playerHandlerThread: HandlerThread
+    private lateinit var playerHandler: PlayerHandler
+
+    // ------------------------------------------------------
     private var callback: PlayerCallback? = null
+    private val serviceBinder = ServiceBinder()
 
-    private var curMusic: Music? = null
     private var mediaSession: MediaSessionCompat? = null
+    /**
+     * 播放队列
+     */
+    private val playingQueue = ObservableArrayList<Music>()
+    private var position = -1
+    /**
+     * 恢复状态
+     */
+    private var isRestored = false
 
+    /**
+     * 循环模式 LoopMode
+     */
+    private var LOOP_MODE = LoopMode.LOOP_LIST
 
     companion object {
         const val TAG = "MusicService"
-        const val PLAY = "play"
-        const val NEXT = "next"
-        const val PAUSE = "pause"
-        const val STOP = "stop"
-        const val CLOSE = "close"
         const val MUSIC = "music"
+        const val ACTION_PLAY = "play"
+        const val ACTION_NEXT = "next"
+        const val ACTION_PAUSE = "pause"
+        const val ACTION_STOP = "stop"
+        const val ACTION_CLOSE = "close"
+
+        const val PLAY = 0
+        const val PLAY_NEXT = 1
+        const val PAUSE = 2
+        const val STOP = 3
+        const val RESTORE = 4
+
     }
 
+    override fun onCreate() {
+        super.onCreate()
+        mediaPlayer = MyMediaPlayer(this)
+        playerHandlerThread = HandlerThread("playerHandlerThread")
+        playerHandlerThread.start()
+        playerHandler = PlayerHandler(this, playerHandlerThread.looper)
+        playerHandler.obtainMessage(RESTORE).sendToTarget()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
+            playerHandlerThread.quitSafely()
+        } else {
+            playerHandlerThread.quit()
+        }
+    }
 
     override fun onBind(intent: Intent?): IBinder? {
         setupMediaSession()
-        return mBinder
+        return serviceBinder
     }
 
     private fun setupMediaSession() {
@@ -61,26 +111,24 @@ class MusicService : Service(), IPlayer {
         }
     }
 
-
     override fun onUnbind(intent: Intent?): Boolean {
         mediaSession?.isActive = false
         stop()
         stopForeground(true)
-        return super.onUnbind(intent)
+        return true
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         intent?.action?.let {
+            restoreQueuesAndPositionIfNecessary()
             when (it) {
-                PLAY -> {
-                    curMusic?.apply {
-                        play(this)
-                    }
+                ACTION_PLAY -> {
+                    playAt(position)
                 }
-                PAUSE -> pause()
-                STOP -> stop()
-                NEXT -> callback?.toNext()
-                CLOSE -> {
+                ACTION_PAUSE -> pause()
+                ACTION_STOP -> stop()
+                ACTION_NEXT -> playNext()
+                ACTION_CLOSE -> {
                     stop()
                     stopForeground(true)
                 }
@@ -88,52 +136,99 @@ class MusicService : Service(), IPlayer {
                 }
             }
         }
-        return super.onStartCommand(intent, flags, startId)
+        return START_STICKY
     }
 
-    @Synchronized
-    override fun play(music: Music) {
-        music.apply {
-            if (mediaPlayer != null && mediaPlayer!!.isPlaying) {
-                return
+    /**
+     * 回复播放列表和当前播放的位置
+     */
+    private fun restoreQueuesAndPositionIfNecessary() {
+        if (!isRestored && playingQueue.isEmpty()) {
+            MusicRepository.getInstance().getPlayingQueue().apply {
+                playingQueue.addAll(this)
             }
-            mediaPlayer
-                    ?: MediaPlayer.create(this@MusicService, Uri.parse("file://$data"))?.let { it ->
-                        mediaPlayer = it
-                        it.setOnErrorListener { mp, what, extra ->
-                            it.release()
-                            startTimeMillis = 0L
-                            pauseTimeMillis = 0L
-                            mediaPlayer = null
-                            callback?.onError(mp, what, extra)
-                            true
-                        }
-                        it.setOnCompletionListener {
-                            it.release()
-                            startTimeMillis = 0L
-                            pauseTimeMillis = 0L
-                            mediaPlayer = null
-                            callback?.onCompletion()
-                        }
-                    } ?: run {
-                        callback?.onError(null, -1, -1)
-                        null
-                    }
-            mediaPlayer?.let { it ->
-                curMusic = music
+            if (playingQueue.isEmpty()) {
+                playingQueue.addAll(MusicLoader.getLocalMusics(this))
+            }
+            val restoredPosition = PreferenceUtil.getLastMusicPosition()
+            if (restoredPosition > 0 && !playingQueue.isEmpty() && restoredPosition < playingQueue.size) {
+                val restoredTrack = PreferenceUtil.getLastMusicTrack()
+            }
+        }
+        isRestored = true
+    }
+
+
+    private fun prepare() {
+        if(!mediaPlayer.setDataSource(MusicHelper.getMusicFileUri(getCurMusic().id).toString())) {
+            callback?.onError(null, -1, -1)
+        }
+//        if(!mediaPlayer.setDataSource(Uri.parse("file://${getCurMusic().data}").toString())) {
+//            callback?.onError(null, -1, -1)
+//        }
+    }
+
+    private fun play() {
+        mediaPlayer.let {
+            if(!it.isPlaying()) {
                 it.start()
                 updateNotification(true)
-                callback?.onStart(music)
+                callback?.onStart(getCurMusic())
                 startTimeMillis = System.currentTimeMillis()
             }
         }
     }
 
+    override fun playAt(position: Int) {
+        if (position >= 0 && position < playingQueue.size) {
+            this.position = position
+            prepare()
+            play()
+        }
+    }
+
+    override fun playNext() {
+        stop()
+        playAt(getNextPosition(true))
+    }
+
+    private fun getNextPosition(fromUser: Boolean): Int {
+        var nextPosition = position
+        if (nextPosition >= playingQueue.size - 1) {
+            nextPosition = 0
+        }
+        when (LOOP_MODE) {
+            LoopMode.LOOP_LIST -> {
+                nextPosition += 1
+            }
+            LoopMode.LOOP_RANDOM -> {
+                nextPosition = Random().nextInt(playingQueue.size)
+            }
+            LoopMode.LOOP_SINGLE -> {
+                if (!fromUser) {
+                    nextPosition += 1
+                }
+            }
+        }
+        return nextPosition
+    }
+
+    override fun enqueue(music: Music): Int {
+        val position = playingQueue.indexOf(music)
+        return if (position < 0) {
+            playingQueue.add(music)
+            MusicRepository.getInstance().saveToPlayingQueue(music)
+            playingQueue.size - 1
+        } else {
+            position
+        }
+    }
+
     @Synchronized
     override fun pause() {
-        mediaPlayer?.let {
-            ZLog.i(ZTag.TAG_DEBUG, "pause : $curMusic")
-            if (it.isPlaying) {
+        mediaPlayer.let {
+            ZLog.i(ZTag.TAG_DEBUG, "pause : ${getCurMusic()}")
+            if (it.isPlaying()) {
                 it.pause()
                 updateNotification(false)
                 callback?.onPause()
@@ -144,15 +239,12 @@ class MusicService : Service(), IPlayer {
 
     @Synchronized
     override fun stop() {
-        ZLog.i(ZTag.TAG_DEBUG, "stopPlaying : $curMusic")
-        mediaPlayer?.let {
-            val player = it
+        ZLog.i(ZTag.TAG_DEBUG, "stopPlaying : ${getCurMusic()}")
+        mediaPlayer.let {
             startTimeMillis = 0L
             pauseTimeMillis = 0L
-            mediaPlayer = null
-            if (player.isPlaying) {
-                player.stop()
-                player.release()
+            if (it.isPlaying()) {
+                it.release()
                 callback?.onStop()
             }
 
@@ -160,28 +252,39 @@ class MusicService : Service(), IPlayer {
     }
 
     @Synchronized
-    override fun seekTo(seekTimeMillis: Long) {
-        startTimeMillis = System.currentTimeMillis() - seekTimeMillis
-        mediaPlayer?.let {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                it.seekTo(seekTimeMillis, MediaPlayer.SEEK_PREVIOUS_SYNC)
-            } else {
-                it.seekTo(seekTimeMillis.toInt())
-            }
+    override fun seekTo(seekMillis: Int) {
+        startTimeMillis = System.currentTimeMillis() - seekMillis
+        mediaPlayer.seekTo(seekMillis)
+    }
+
+    override fun getPosition(): Int {
+        return position
+    }
+
+    fun getCurMusic(): Music {
+        return if (position >= 0 && position < playingQueue.size) {
+            playingQueue[position]
+        } else {
+            Music.EMPTY
         }
+
     }
 
     override fun getCurProgress(): Int {
-        return mediaPlayer?.currentPosition ?: 0
+        return mediaPlayer.position()
     }
 
     override fun getDuration(): Int {
-        return mediaPlayer?.duration ?: 0
+        return mediaPlayer.duration()
+    }
+
+    override fun getPlayingQueue(): ObservableArrayList<Music> {
+        return playingQueue
     }
     // --------------------------------------------------
 
     private fun updateNotification(isPlaying: Boolean) {
-        curMusic?.let { it ->
+        getCurMusic().let { it ->
             val channelId = "zaze"
             val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -199,19 +302,19 @@ class MusicService : Service(), IPlayer {
             remoteViews.setOnClickPendingIntent(R.id.musicNotificationPlayBtn, PendingIntent.getService(this, 0,
                     Intent(this, MusicService::class.java).apply {
                         action = if (isPlaying) {
-                            PAUSE
+                            ACTION_PAUSE
                         } else {
-                            PLAY
+                            ACTION_PLAY
                         }
                     }, PendingIntent.FLAG_UPDATE_CURRENT))
 
             remoteViews.setOnClickPendingIntent(R.id.musicNotificationNextBtn, PendingIntent.getService(this, 0,
                     Intent(this, MusicService::class.java).apply {
-                        action = NEXT
+                        action = ACTION_NEXT
                     }, PendingIntent.FLAG_UPDATE_CURRENT))
             remoteViews.setOnClickPendingIntent(R.id.musicNotificationCloseBtn, PendingIntent.getService(this, 0,
                     Intent(this, MusicService::class.java).apply {
-                        action = CLOSE
+                        action = ACTION_CLOSE
                     }, PendingIntent.FLAG_UPDATE_CURRENT))
 
             val builder = NotificationCompat.Builder(this, channelId).apply {
@@ -224,25 +327,62 @@ class MusicService : Service(), IPlayer {
         }
     }
 
+
+    // ------------------------------------------------------
+    inner class PlayerHandler(musicService: MusicService, looper: Looper) : Handler(looper) {
+        private val serviceRef = WeakReference<MusicService>(musicService)
+
+        override fun handleMessage(msg: Message) {
+            super.handleMessage(msg)
+            serviceRef.get()?.let {
+                when (msg.what) {
+                    PLAY -> it.playAt(msg.arg1)
+                    PLAY_NEXT -> it.playNext()
+                    PAUSE -> it.pause()
+                    STOP -> it.stop()
+                    RESTORE -> it.restoreQueuesAndPositionIfNecessary()
+                }
+            }
+        }
+    }
+    // ------------------------------------------------------
+
     inner class ServiceBinder : Binder(), IPlayer {
+
         fun setPlayerCallback(callback: PlayerCallback) {
             this@MusicService.callback = callback
         }
 
-        override fun play(music: Music) {
-            this@MusicService.play(music)
+        override fun playAt(position: Int) {
+            playerHandler.removeMessages(PLAY)
+            playerHandler.obtainMessage(PLAY, position, 0).sendToTarget()
+        }
+
+        override fun playNext() {
+            playerHandler.removeMessages(PLAY_NEXT)
+            playerHandler.obtainMessage(PLAY_NEXT).sendToTarget()
         }
 
         override fun pause() {
-            this@MusicService.pause()
+            playerHandler.removeMessages(PAUSE)
+            playerHandler.obtainMessage(PAUSE).sendToTarget()
         }
 
         override fun stop() {
-            this@MusicService.stop()
+            playerHandler.removeMessages(STOP)
+            playerHandler.obtainMessage(STOP).sendToTarget()
         }
 
-        override fun seekTo(seekTimeMillis: Long) {
-            this@MusicService.seekTo(seekTimeMillis)
+        override fun seekTo(seekMillis: Int) {
+            this@MusicService.seekTo(seekMillis)
+        }
+
+        override fun enqueue(music: Music): Int {
+            return this@MusicService.enqueue(music)
+        }
+
+        override fun getPosition(): Int {
+            return position
         }
 
         override fun getCurProgress(): Int {
@@ -252,9 +392,11 @@ class MusicService : Service(), IPlayer {
         override fun getDuration(): Int {
             return this@MusicService.getDuration()
         }
-    }
 
-    inner class PlayerHandler(looper: Looper) : Handler(looper)
+        override fun getPlayingQueue(): ObservableArrayList<Music> {
+            return playingQueue
+        }
+    }
 
     interface PlayerCallback {
 
@@ -274,11 +416,6 @@ class MusicService : Service(), IPlayer {
         fun onStop()
 
         /**
-         * 下一首
-         */
-        fun toNext()
-
-        /**
          * 播放完成
          */
         fun onCompletion()
@@ -288,14 +425,23 @@ class MusicService : Service(), IPlayer {
          */
         fun onError(mp: MediaPlayer?, what: Int, extra: Int)
     }
+
+    /**
+     * 循环方式
+     */
+    object LoopMode {
+        const val LOOP_LIST = 0
+        const val LOOP_SINGLE = 1
+        const val SINGLE = 2
+        const val LOOP_RANDOM = 3
+    }
 }
 
 interface IPlayer {
 
-    /**
-     * 开始播放
-     */
-    fun play(music: Music)
+    fun playAt(position: Int)
+
+    fun playNext()
 
     /**
      * 暂停
@@ -310,11 +456,19 @@ interface IPlayer {
     /**
      * 拖动
      */
-    fun seekTo(seekTimeMillis: Long)
+    fun seekTo(seekMillis: Int)
+
+    /**
+     * 加入播放队列中
+     */
+    fun enqueue(music: Music): Int
+
+    fun getPosition(): Int
 
     fun getCurProgress(): Int
 
     fun getDuration(): Int
-}
 
+    fun getPlayingQueue(): ObservableArrayList<Music>
+}
 

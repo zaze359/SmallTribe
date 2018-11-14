@@ -9,7 +9,7 @@
 
         <variable
             name="viewModel"
-            type="com.zaze.tribe.music.vm.LocalMusicViewModel" />
+            type="com.zaze.tribe.music.vm.MusicViewModel" />
 
     </data>
 
@@ -22,7 +22,7 @@
         android:focusable="true"
         android:foreground="@drawable/rect_selector"
         android:gravity="center_vertical"
-        android:onClick="@{()-> viewModel.start(music)}"
+        android:onClick="@{()-> viewModel.addAndPlay(music)}"
         android:orientation="horizontal">
 
 

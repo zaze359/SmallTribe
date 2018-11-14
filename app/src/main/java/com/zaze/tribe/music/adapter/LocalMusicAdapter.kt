@@ -6,16 +6,13 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
 import com.zaze.tribe.R
 import com.zaze.tribe.base.BaseRecyclerAdapter
 import com.zaze.tribe.data.dto.Music
 import com.zaze.tribe.databinding.MusicItemBinding
-import com.zaze.tribe.music.vm.LocalMusicViewModel
-import com.zaze.tribe.util.glide.MusicGlide
+import com.zaze.tribe.music.vm.MusicViewModel
 import com.zaze.utils.log.ZLog
 import com.zaze.utils.log.ZTag
-import kotlinx.android.synthetic.main.music_item.view.*
 import java.util.ArrayList
 
 
@@ -26,7 +23,7 @@ import java.util.ArrayList
  */
 class LocalMusicAdapter(
         context: Context,
-        private val viewModel: LocalMusicViewModel
+        private val viewModel: MusicViewModel
 ) : BaseRecyclerAdapter<Music, LocalMusicAdapter.MusicViewHolder>(context, ArrayList(0)) {
     override fun getViewLayoutId(): Int {
         return R.layout.music_item

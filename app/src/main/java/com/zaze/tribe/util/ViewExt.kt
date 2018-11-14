@@ -7,20 +7,18 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.bumptech.glide.Glide
 import com.zaze.tribe.base.BaseRecyclerAdapter
 import com.zaze.tribe.data.dto.Music
-import com.zaze.tribe.music.vm.LocalMusicViewModel
+import com.zaze.tribe.music.vm.MusicViewModel
 import com.zaze.tribe.util.glide.MusicGlide
-import com.zaze.utils.ThreadManager
-import kotlinx.android.synthetic.main.mini_player_frag.*
 
 /**
  * SwipeRefreshLayout
- * android:onRefresh --- LocalMusicViewModel
+ * android:onRefresh --- MusicViewModel
  * SwipeRefreshLayout.setOnRefreshListener()
  *
  */
 @BindingAdapter("android:onRefresh")
 fun SwipeRefreshLayout.setSwipeRefreshLayoutOnRefreshListener(
-        viewModel: LocalMusicViewModel) {
+        viewModel: MusicViewModel) {
     setOnRefreshListener { viewModel.loadMusics() }
 }
 

@@ -43,5 +43,5 @@ interface MusicDao {
      * 获取歌曲列表
      */
     @Query("SELECT * FROM music")
-    fun getMusicInfoList(): Flowable<List<Music>>
+    fun getPlayingQueue(): List<Music>
 }

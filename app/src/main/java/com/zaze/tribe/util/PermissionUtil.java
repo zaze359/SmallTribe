@@ -37,6 +37,10 @@ public class PermissionUtil {
                 permissionSet.add(permission);
             }
         }
-        ActivityCompat.requestPermissions(activity, permissionSet.toArray(new String[permissionSet.size()]), requestCode);
+        if(!permissionSet.isEmpty()) {
+            String[] reqPermissions = new String[permissionSet.size()];
+            permissionSet.toArray(reqPermissions);
+            ActivityCompat.requestPermissions(activity, reqPermissions, requestCode);
+        }
     }
 }

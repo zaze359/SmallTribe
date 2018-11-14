@@ -1,3 +1,4 @@
+
 package com.zaze.tribe.util
 
 import com.zaze.tribe.App
@@ -14,8 +15,9 @@ object PreferenceUtil {
 
     private val sharedPrefUtil = ZSharedPrefUtil.newInstance(App.INSTANCE)
 
-    private const val LATELY_PAGE = "lately_page"
-    private const val LATELY_MUSIC = "lately_music"
+    private const val LATELY_PAGE = "LATELY_PAGE"
+    private const val LATELY_MUSIC_POSITION = "LATELY_MUSIC_POSITION"
+    private const val LATELY_MUSIC_TRACK = "LATELY_MUSIC_TRACK"
 
 
     // ------------------------------------------------------
@@ -37,14 +39,24 @@ object PreferenceUtil {
     /**
      * 保存最后听的歌曲
      */
-    fun getLastMusic(): Int {
-        return sharedPrefUtil.get(LATELY_MUSIC, 0)
+    fun getLastMusicPosition(): Int {
+        return sharedPrefUtil.get(LATELY_MUSIC_POSITION, -1)
     }
 
     /**
      * 保存最近听的歌曲
      */
-    fun saveLastMusic(position: Int) {
-        sharedPrefUtil.apply(LATELY_MUSIC, position)
+    fun saveLastMusicPosition(position: Int) {
+        sharedPrefUtil.apply(LATELY_MUSIC_POSITION, position)
     }
+
+    fun getLastMusicTrack(): Int {
+        return sharedPrefUtil.get(LATELY_MUSIC_TRACK, -1)
+    }
+
+    fun saveLastMusicTrack(track : Int) {
+        sharedPrefUtil.apply(LATELY_MUSIC_TRACK, track)
+    }
+
+
 }

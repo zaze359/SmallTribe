@@ -4,7 +4,6 @@ import com.zaze.tribe.data.dto.Music
 import com.zaze.tribe.data.source.MusicDataSource
 import com.zaze.tribe.data.source.local.LocalDatabase
 import com.zaze.tribe.data.source.local.MusicLocalDataSource
-import io.reactivex.Flowable
 
 /**
  * Description :
@@ -15,23 +14,19 @@ class MusicRepository private constructor(
         private val localDataSource: MusicDataSource
 ) : MusicDataSource {
 
-    override fun getMusicInfo(localPath: String?): Flowable<Music> {
-        return localDataSource.getMusicInfo(localPath)
-    }
+    override fun getMusicInfo(localPath: String?) = localDataSource.getMusicInfo(localPath)
 
-    override fun saveMusicInfo(music: Music?) {
-        localDataSource.saveMusicInfo(music)
+    override fun saveToPlayingQueue(music: Music?) {
+        localDataSource.saveToPlayingQueue(music)
     }
 
     override fun getMusicInfo(musicId: Int) = localDataSource.getMusicInfo(musicId)
 
-    override fun saveMusicInfos(music: List<Music>?) {
-        localDataSource.saveMusicInfos(music)
+    override fun savePlayingQueue(music: List<Music>?) {
+        localDataSource.savePlayingQueue(music)
     }
 
-    override fun getMusicInfoList(): Flowable<List<Music>> {
-        return localDataSource.getMusicInfoList()
-    }
+    override fun getPlayingQueue() = localDataSource.getPlayingQueue()
 
     companion object {
         private var INSTANCE: MusicRepository? = null

@@ -13,7 +13,6 @@ import com.zaze.tribe.music.adapter.PlaylistAdapter
 import com.zaze.tribe.music.vm.PlaylistViewModel
 import com.zaze.tribe.util.obtainViewModel
 import com.zaze.tribe.util.setupActionBar
-import kotlinx.android.synthetic.main.music_local_frag.*
 import kotlinx.android.synthetic.main.playlist_act.*
 
 /**
@@ -22,11 +21,11 @@ import kotlinx.android.synthetic.main.playlist_act.*
  * @author : ZAZE
  * @version : 2018-11-11 - 23:17
  */
-class PlaylistActivity : BaseActivity() {
+class PlayingQueueActivity : BaseActivity() {
 
     companion object {
         fun start(context: Context) {
-            ContextCompat.startActivity(context, Intent(context, PlaylistActivity::class.java), null)
+            ContextCompat.startActivity(context, Intent(context, PlayingQueueActivity::class.java), null)
         }
     }
 
@@ -46,8 +45,8 @@ class PlaylistActivity : BaseActivity() {
         }
         val viewModel = obtainViewModel(PlaylistViewModel::class.java)
         playlistRecyclerView.let {
-            it.layoutManager = LinearLayoutManager(this@PlaylistActivity)
-            it.adapter = PlaylistAdapter(this, MusicPlayerRemote.playerList, viewModel)
+            it.layoutManager = LinearLayoutManager(this@PlayingQueueActivity)
+            it.adapter = PlaylistAdapter(this, MusicPlayerRemote.getPlayingQueue(), viewModel)
         }
     }
 }

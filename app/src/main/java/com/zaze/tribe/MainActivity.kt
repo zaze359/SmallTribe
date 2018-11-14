@@ -1,10 +1,14 @@
 package com.zaze.tribe
 
 import android.Manifest
+import android.content.ComponentName
+import android.content.Context
 import android.content.Intent
+import android.content.ServiceConnection
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
+import android.os.IBinder
 import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.ActionBarDrawerToggle
@@ -13,10 +17,13 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import com.zaze.tribe.base.BaseActivity
 import com.zaze.tribe.databinding.ActivityMainBinding
-import com.zaze.tribe.music.vm.MainViewModel
 import com.zaze.tribe.music.LocalMusicFragment
+import com.zaze.tribe.music.MusicPlayerRemote
+import com.zaze.tribe.service.MusicService
 import com.zaze.tribe.util.*
 import com.zaze.utils.FileUtil
+import com.zaze.utils.log.ZLog
+import com.zaze.utils.log.ZTag
 import kotlinx.android.synthetic.main.activity_main.*
 
 /**
@@ -29,12 +36,22 @@ class MainActivity : BaseActivity() {
 
     private lateinit var drawerToggle: ActionBarDrawerToggle
     private lateinit var viewDataBinding: ActivityMainBinding
-    private lateinit var viewModel: MainViewModel
+    private val serviceConnection = object : ServiceConnection {
+        override fun onServiceDisconnected(name: ComponentName?) {
+            ZLog.e(ZTag.TAG_DEBUG, "onServiceDisconnected : $name")
+            MusicPlayerRemote.mBinder = null
+        }
+
+        override fun onServiceConnected(name: ComponentName?, service: IBinder?) {
+            ZLog.i(ZTag.TAG_DEBUG, "onServiceConnected : $name")
+            MusicPlayerRemote.mBinder = service as MusicService.ServiceBinder
+        }
+    }
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         viewDataBinding = DataBindingUtil.setContentView(this, R.layout.activity_main)
-        viewModel = obtainViewModel(MainViewModel::class.java)
         setupPermission()
         setImmersion()
         setupActionBar(mainToolbar) {
@@ -65,16 +82,20 @@ class MainActivity : BaseActivity() {
             }
         }
         // ------------------------------------------------------
-        viewModel.bindService()
+        MusicPlayerRemote.bindService(this, serviceConnection)
     }
 
     override fun onDestroy() {
-        viewModel.unbindService()
+        MusicPlayerRemote.unbindService(this, serviceConnection)
         super.onDestroy()
     }
 
     private fun setupPermission() {
-        PermissionUtil.checkAndRequestUserPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE, 0)
+//        PermissionUtil.checkAndRequestUserPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE, 0)
+        PermissionUtil.checkAndRequestUserPermission(this, arrayOf(
+                Manifest.permission.READ_EXTERNAL_STORAGE,
+                Manifest.permission.WAKE_LOCK
+        ), 0)
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {

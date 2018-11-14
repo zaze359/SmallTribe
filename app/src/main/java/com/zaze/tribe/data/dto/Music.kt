@@ -71,6 +71,7 @@ data class Music(
         @ColumnInfo(name = "artist")
         val artistName: String
 ) : Parcelable {
+
     constructor(parcel: Parcel) : this(
             parcel.readInt(),
             parcel.readString(),
@@ -104,6 +105,9 @@ data class Music(
     }
 
     companion object CREATOR : Parcelable.Creator<Music> {
+        val EMPTY = Music(-1, "", -1, -1, -1L, "", -1L, -1, "", -1,"")
+
+
         override fun createFromParcel(parcel: Parcel): Music {
             return Music(parcel)
         }
