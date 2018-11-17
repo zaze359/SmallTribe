@@ -7,8 +7,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.zaze.tribe.data.entity.LrcLine;
-import com.zaze.tribe.util.LrcProcessor;
+import com.zaze.tribe.music.data.entity.LrcLine;
+import com.zaze.tribe.music.util.LrcProcessor;
 import com.zaze.tribe.view.LyricView;
 import com.zaze.utils.date.ZDateUtil;
 

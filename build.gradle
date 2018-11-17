@@ -39,6 +39,15 @@ ext {
     targetSdkVersion = 28
     versionCode = 1
     versionName = "v1.0.1"
+
+    dependencies = [
+            project : [
+                    moduleCommon : ':common',
+                    moduleMusic : ':music'
+            ]
+    ]
+
+
     //
     guavaVersion = '23.6-android'
     // Test
@@ -55,5 +64,8 @@ ext {
     runnerVersionx = '1.1.0-alpha3'
     uiautomatorx = '2.2.0'
     espressoVersionx = '3.1.0-alpha3'
+    //
+    zazeutilVersion = '1.0.0'
+    leakcanaryVersion = '1.5'
 }
 

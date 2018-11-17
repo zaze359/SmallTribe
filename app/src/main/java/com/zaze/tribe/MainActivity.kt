@@ -15,11 +15,15 @@ import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.core.view.GravityCompat
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
-import com.zaze.tribe.base.BaseActivity
+import com.zaze.tribe.common.BaseActivity
+import com.zaze.tribe.common.util.PermissionUtil
+import com.zaze.tribe.common.util.replaceFragmentInActivity
+import com.zaze.tribe.common.util.setImmersion
+import com.zaze.tribe.common.util.setupActionBar
 import com.zaze.tribe.databinding.ActivityMainBinding
 import com.zaze.tribe.music.LocalMusicFragment
 import com.zaze.tribe.music.MusicPlayerRemote
-import com.zaze.tribe.service.MusicService
+import com.zaze.tribe.music.service.MusicService
 import com.zaze.tribe.util.*
 import com.zaze.utils.FileUtil
 import com.zaze.utils.log.ZLog
@@ -48,12 +52,10 @@ class MainActivity : BaseActivity() {
         }
     }
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         viewDataBinding = DataBindingUtil.setContentView(this, R.layout.activity_main)
         setupPermission()
-        setImmersion()
         setupActionBar(mainToolbar) {
             setTitle(R.string.app_name)
             setDisplayHomeAsUpEnabled(true)

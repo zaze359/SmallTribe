@@ -1,22 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#3F51B5</color>
-    <color name="colorPrimaryDark">#303F9F</color>
-    <color name="colorAccent">#FF4081</color>
-
-    <color name="white">#FFFFFF</color>
-    <color name="teal">#00796B</color>
-    <color name="red">#FFC93437</color>
-    <color name="brown">#8D6E63</color>
-    <color name="blue">#2196F3</color>
-    <color name="grey_blue">#607D8B</color>
-    <color name="grey">#999999</color>
-    <color name="orange">#F57C00</color>
-    <color name="transparent">#00000000</color>
-
-
-
-    <color name="half_trans">#80000000</color>
-    <color name="main_split_line">#e1e1e1</color>
 
 </resources>

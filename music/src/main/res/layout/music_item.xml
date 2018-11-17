@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+
+    <data>
+
+        <variable
+            name="music"
+            type="com.zaze.tribe.music.data.dto.Music" />
+
+        <variable
+            name="viewModel"
+            type="com.zaze.tribe.music.vm.MusicViewModel" />
+
+    </data>
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:clickable="true"
+        android:focusable="true"
+        android:foreground="@drawable/rect_selector"
+        android:gravity="center_vertical"
+        android:onClick="@{()-> viewModel.addAndPlay(music)}"
+        android:orientation="horizontal">
+
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            app:cardCornerRadius="4dp"
+            app:cardElevation="0dp">
+
+            <ImageView
+                android:layout_width="@dimen/music_album_cover_size_list"
+                android:layout_height="@dimen/music_album_cover_size_list"
+                android:contentDescription="@null"
+                android:scaleType="fitCenter"
+                app:bmp="@{music}"
+                tools:src="@mipmap/ic_launcher" />
+        </androidx.cardview.widget.CardView>
+
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="4dp"
+                android:paddingBottom="4dp">
+
+                <ImageView
+                    android:id="@+id/musicItemMore"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:contentDescription="@null"
+                    android:onClick="@{()-> viewModel.showMore(music)}"
+                    android:scaleType="center"
+                    android:src="@drawable/ic_more_vert_black_24dp" />
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:layout_toStartOf="@id/musicItemMore"
+                    android:layout_toLeftOf="@id/musicItemMore"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:ellipsize="end"
+                        android:maxLines="1"
+                        android:text="@{music.title}"
+                        android:textColor="#333333"
+                        android:textSize="16sp"
+                        tools:text="@string/music_tip_name" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        android:ellipsize="end"
+                        android:maxLines="1"
+                        android:text="@{music.artistName}"
+                        android:textSize="14sp"
+                        tools:text="@string/music_tip_artist" />
+
+                </LinearLayout>
+
+            </RelativeLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_gravity="bottom"
+                android:layout_marginTop="4dp"
+                android:background="@color/main_split_line" />
+        </FrameLayout>
+
+    </LinearLayout>
+</layout>

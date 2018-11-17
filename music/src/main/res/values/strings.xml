@@ -1,0 +1,8 @@
+<resources>
+    <string name="music_app_name">music</string>
+
+
+    <string name="music_playlist">播放列表</string>
+    <string name="music_tip_name">极乐净土</string>
+    <string name="music_tip_artist">MARIA</string>
+</resources>
