@@ -5,6 +5,8 @@ import android.media.AudioManager
 import android.media.MediaPlayer
 import android.net.Uri
 import android.os.PowerManager
+import android.widget.Toast
+import com.zaze.tribe.music.R
 
 /**
  * Description :
@@ -16,7 +18,7 @@ class MyMediaPlayer(private val context: Context) : MediaPlayer.OnErrorListener,
 
     private var mediaPlayer = MediaPlayer()
     private var isInitialized = false
-
+    private val mediaCallback : MediaCallback? = null
     init {
         mediaPlayer.setWakeMode(context, PowerManager.PARTIAL_WAKE_LOCK)
     }
@@ -48,7 +50,7 @@ class MyMediaPlayer(private val context: Context) : MediaPlayer.OnErrorListener,
     fun start() {
         try {
             mediaPlayer.start()
-        } catch (e:Exception) {
+        } catch (e: Exception) {
             e.printStackTrace()
         }
     }
@@ -56,7 +58,7 @@ class MyMediaPlayer(private val context: Context) : MediaPlayer.OnErrorListener,
     fun pause() {
         try {
             mediaPlayer.pause()
-        } catch (e:Exception) {
+        } catch (e: Exception) {
             e.printStackTrace()
         }
     }
@@ -64,7 +66,7 @@ class MyMediaPlayer(private val context: Context) : MediaPlayer.OnErrorListener,
     fun seekTo(msec: Int) {
         try {
             mediaPlayer.seekTo(msec)
-        } catch (e:Exception) {
+        } catch (e: Exception) {
             e.printStackTrace()
         }
     }
@@ -76,7 +78,7 @@ class MyMediaPlayer(private val context: Context) : MediaPlayer.OnErrorListener,
     fun reset() {
         try {
             mediaPlayer.reset()
-        } catch (e:Exception) {
+        } catch (e: Exception) {
             e.printStackTrace()
         }
     }
@@ -85,7 +87,7 @@ class MyMediaPlayer(private val context: Context) : MediaPlayer.OnErrorListener,
         stop()
         try {
             mediaPlayer.release()
-        } catch (e:Exception) {
+        } catch (e: Exception) {
             e.printStackTrace()
         }
     }
@@ -95,14 +97,14 @@ class MyMediaPlayer(private val context: Context) : MediaPlayer.OnErrorListener,
     }
 
     fun duration(): Int {
-        if(!isInitialized) {
+        if (!isInitialized) {
             return -1
         }
         return mediaPlayer.duration
     }
 
     fun position(): Int {
-        if(!isInitialized) {
+        if (!isInitialized) {
             return -1
         }
         return mediaPlayer.currentPosition
@@ -110,11 +112,18 @@ class MyMediaPlayer(private val context: Context) : MediaPlayer.OnErrorListener,
 
     // ------------------------------------------------------
     override fun onError(mp: MediaPlayer?, what: Int, extra: Int): Boolean {
-        return true
+        Toast.makeText(context, "不能播放该歌曲！", Toast.LENGTH_SHORT).show()
+        return false
     }
 
     override fun onCompletion(mp: MediaPlayer?) {
+        mediaCallback?.onCompletion()
     }
 
+
+    interface MediaCallback {
+
+        fun onCompletion()
+    }
 
 }
