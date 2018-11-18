@@ -4,16 +4,14 @@ apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
 
 android {
-    compileSdkVersion 28
-
-
+    compileSdkVersion rootProject.ext.compileSdkVersion
 
     defaultConfig {
         resourcePrefix "music_"
-        minSdkVersion 15
-        targetSdkVersion 28
-        versionCode 1
-        versionName "1.0"
+        minSdkVersion rootProject.ext.minSdkVersion
+        targetSdkVersion rootProject.ext.targetSdkVersion
+        versionCode rootProject.ext.versionCode
+        versionName rootProject.ext.versionName
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         javaCompileOptions {
             annotationProcessorOptions {
@@ -28,6 +26,10 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+//
+//    kapt {
+//        generateStubs = true
+//    }
 
     dataBinding {
         enabled = true
@@ -41,9 +43,11 @@ dependencies {
     testImplementation "junit:junit:$junitVersion"
     androidTestImplementation "androidx.test:runner:$runnerVersionx"
     androidTestImplementation "androidx.test.espresso:espresso-core:$espressoVersionx"
-    implementation project(rootProject.ext.dependencies.project.moduleCommon)
     implementation "androidx.room:room-runtime:$roomVersionx"
     implementation "androidx.room:room-rxjava2:$roomVersionx"
     kapt "androidx.room:room-compiler:$roomVersionx"
     androidTestImplementation "androidx.room:room-testing:$roomVersionx"
+
+    implementation project(rootProject.ext.dependencies.project.moduleCommon)
+
 }

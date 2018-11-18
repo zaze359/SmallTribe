@@ -15,7 +15,7 @@ import com.zaze.tribe.util.glide.MusicGlide
  * SwipeRefreshLayout.setOnRefreshListener()
  *
  */
-@BindingAdapter("android:musicLoader")
+@BindingAdapter("app:musicLoader")
 fun SwipeRefreshLayout.setSwipeRefreshLayoutOnRefreshListener(
         viewModel: MusicViewModel) {
     setOnRefreshListener { viewModel.loadMusics() }
