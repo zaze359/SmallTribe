@@ -63,7 +63,7 @@
             android:layout_height="wrap_content"
             android:layout_margin="4dp"
             android:contentDescription="@null"
-            android:src="@drawable/ic_play_circle_outline_black_24dp" />
+            android:src="@drawable/music_play_circle_outline_black_24dp" />
 
         <ImageView
             android:id="@+id/musicNotificationNextBtn"
@@ -71,7 +71,7 @@
             android:layout_height="wrap_content"
             android:layout_margin="4dp"
             android:contentDescription="@null"
-            android:src="@drawable/ic_skip_next_black_24dp" />
+            android:src="@drawable/music_skip_next_black_24dp" />
 
         <ImageView
             android:id="@+id/musicNotificationCloseBtn"
@@ -79,7 +79,7 @@
             android:layout_height="wrap_content"
             android:layout_margin="4dp"
             android:contentDescription="@null"
-            android:src="@drawable/ic_close_gray_24dp" />
+            android:src="@drawable/music_close_gray_24dp" />
 
     </LinearLayout>
 

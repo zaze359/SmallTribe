@@ -63,7 +63,7 @@
                     android:contentDescription="@null"
                     android:onClick="@{()-> viewModel.showMore(music)}"
                     android:scaleType="center"
-                    android:src="@drawable/ic_more_vert_black_24dp" />
+                    android:src="@drawable/music_more_vert_black_24dp" />
 
 
                 <LinearLayout

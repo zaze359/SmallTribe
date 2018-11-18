@@ -6,10 +6,9 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.Observable
 import androidx.viewpager.widget.ViewPager
-import com.zaze.tribe.music.R
 import com.zaze.tribe.common.BaseFragment
 import com.zaze.tribe.music.adapter.AlbumCoverPagerAdapter
-import kotlinx.android.synthetic.main.music_album_cover_frag.*
+import kotlinx.android.synthetic.main.music_album_cover_pager_frag.*
 
 /**
  * Description :
@@ -17,7 +16,7 @@ import kotlinx.android.synthetic.main.music_album_cover_frag.*
  * @author : ZAZE
  * @version : 2018-07-05 - 23:25
  */
-class MusicAlbumCoverFragment : BaseFragment() , ViewPager.OnPageChangeListener{
+class MusicAlbumCoverPagerFragment : BaseFragment() , ViewPager.OnPageChangeListener{
     private val musicChangedCallback = object : Observable.OnPropertyChangedCallback() {
         override fun onPropertyChanged(sender: Observable?, propertyId: Int) {
             musicAlbumCoverPager.setCurrentItem(MusicPlayerRemote.getPosition(), true)
@@ -25,7 +24,7 @@ class MusicAlbumCoverFragment : BaseFragment() , ViewPager.OnPageChangeListener{
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.music_album_cover_frag, container, false)
+        return inflater.inflate(R.layout.music_album_cover_pager_frag, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -36,7 +35,7 @@ class MusicAlbumCoverFragment : BaseFragment() , ViewPager.OnPageChangeListener{
                 clipToPadding = false
                 pageMargin = 12
                 currentItem = MusicPlayerRemote.getPosition()
-                addOnPageChangeListener(this@MusicAlbumCoverFragment)
+                addOnPageChangeListener(this@MusicAlbumCoverPagerFragment)
             }
         }
         MusicPlayerRemote.curMusicData.addOnPropertyChangedCallback(musicChangedCallback)

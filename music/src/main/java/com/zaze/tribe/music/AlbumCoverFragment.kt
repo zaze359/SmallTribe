@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import com.zaze.tribe.common.BaseFragment
 import com.zaze.tribe.music.data.dto.Music
 import com.zaze.tribe.music.util.IconCache
-import kotlinx.android.synthetic.main.album_cover_frag.*
+import kotlinx.android.synthetic.main.music_album_cover_item_frag.*
 
 /**
  * Description :
@@ -34,13 +34,13 @@ class AlbumCoverFragment : BaseFragment() {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.album_cover_frag, container, false)
+        return inflater.inflate(R.layout.music_album_cover_item_frag, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         music?.let {
-            albumCover.setImageBitmap(IconCache.buildMediaIcon(it.data)
+            musicAlbumCover.setImageBitmap(IconCache.buildMediaIcon(it.data)
                     ?: IconCache.getDefaultMediaIcon())
         }
     }

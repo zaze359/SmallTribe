@@ -7,9 +7,9 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.animation.LinearInterpolator
 import com.zaze.tribe.common.BaseFragment
-import com.zaze.tribe.music.databinding.MiniPlayerFragBinding
+import com.zaze.tribe.music.databinding.MusicMiniPlayerFragBinding
 import com.zaze.tribe.music.handler.MusicProgressHandler
-import kotlinx.android.synthetic.main.mini_player_frag.*
+import kotlinx.android.synthetic.main.music_mini_player_frag.*
 
 /**
  * Description : 迷你播放控制器
@@ -19,7 +19,7 @@ import kotlinx.android.synthetic.main.mini_player_frag.*
  */
 class MiniPlayerFragment : BaseFragment(), MusicProgressHandler.Callback {
 
-    private lateinit var viewDataBinding: MiniPlayerFragBinding
+    private lateinit var viewDataBinding: MusicMiniPlayerFragBinding
     private lateinit var progressHandler: MusicProgressHandler
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -28,7 +28,7 @@ class MiniPlayerFragment : BaseFragment(), MusicProgressHandler.Callback {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        viewDataBinding = MiniPlayerFragBinding.inflate(inflater, container, false)
+        viewDataBinding = MusicMiniPlayerFragBinding.inflate(inflater, container, false)
         viewDataBinding.root.setOnClickListener {
             activity?.let { activity ->
                 MusicDetailActivity.start(activity)
@@ -39,23 +39,23 @@ class MiniPlayerFragment : BaseFragment(), MusicProgressHandler.Callback {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        miniPlayerStatus.setOnClickListener {
+        musicMiniPlayerStatus.setOnClickListener {
             if (MusicPlayerRemote.isPlaying.get()) {
                 MusicPlayerRemote.pause()
             } else {
                 MusicPlayerRemote.resumePlaying()
             }
         }
-        miniPlayerList.setOnClickListener {
+        musicMiniPlayerList.setOnClickListener {
             activity?.apply {
-                PlayingQueueActivity.start(this)
+                MusicPlayingQueueActivity.start(this)
             }
         }
     }
 
     override fun onProgress(progress: Int, total: Int) {
-        miniPlayerProgressBar.max = total
-        val animation = ObjectAnimator.ofInt(miniPlayerProgressBar, "progress", progress)
+        musicMiniPlayerProgressBar.max = total
+        val animation = ObjectAnimator.ofInt(musicMiniPlayerProgressBar, "progress", progress)
         animation.duration = 1000L
         animation.interpolator = LinearInterpolator()
         animation.start()

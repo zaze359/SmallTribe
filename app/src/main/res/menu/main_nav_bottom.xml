@@ -14,7 +14,7 @@
     <item
         android:id="@+id/action_music"
         android:enabled="true"
-        android:icon="@mipmap/ic_music_note_white_24dp"
+        android:icon="@mipmap/music_note_white_24dp"
         android:title="@string/music" />
     <item
         android:id="@+id/action_game"

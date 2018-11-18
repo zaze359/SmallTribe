@@ -8,7 +8,7 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme" />
         <activity
-            android:name=".PlayingQueueActivity"
+            android:name=".MusicPlayingQueueActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme" />
 

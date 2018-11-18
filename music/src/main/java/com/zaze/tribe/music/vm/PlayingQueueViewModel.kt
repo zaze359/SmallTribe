@@ -12,6 +12,6 @@ import com.zaze.tribe.music.MusicPlayerRemote
  * @author : ZAZE
  * @version : 2018-11-12 - 0:09
  */
-class PlaylistViewModel(application: Application) : MusicViewModel(application) {
+class PlayingQueueViewModel(application: Application) : MusicViewModel(application) {
 
 }

@@ -14,10 +14,10 @@
 
             <fragment
                 android:id="@+id/musicDetailAlbumCoverContainer"
-                android:name="com.zaze.tribe.music.MusicAlbumCoverFragment"
+                android:name="com.zaze.tribe.music.MusicAlbumCoverPagerFragment"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                tools:layout="@layout/album_cover_frag" />
+                tools:layout="@layout/music_album_cover_pager_frag" />
 
         </com.zaze.tribe.common.widget.WidthFitSquareLayout>
 

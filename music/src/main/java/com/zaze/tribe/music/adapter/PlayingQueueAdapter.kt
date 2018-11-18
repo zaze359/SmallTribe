@@ -10,8 +10,8 @@ import com.zaze.tribe.common.BaseRecyclerAdapter
 import com.zaze.tribe.music.data.dto.Music
 import com.zaze.tribe.music.MusicPlayerRemote
 import com.zaze.tribe.music.R
-import com.zaze.tribe.music.databinding.PlaylistItemBinding
-import com.zaze.tribe.music.vm.PlaylistViewModel
+import com.zaze.tribe.music.databinding.MusicPlayingQueueItemBinding
+import com.zaze.tribe.music.vm.PlayingQueueViewModel
 
 
 /**
@@ -19,13 +19,13 @@ import com.zaze.tribe.music.vm.PlaylistViewModel
  * @author : ZAZE
  * @version : 2018-07-10 - 10:26
  */
-class PlaylistAdapter(
+class PlayingQueueAdapter(
         context: Context,
         data: Collection<Music>,
-        private val viewModel: PlaylistViewModel
-) : BaseRecyclerAdapter<Music, PlaylistAdapter.MusicViewHolder>(context, data) {
+        private val viewModel: PlayingQueueViewModel
+) : BaseRecyclerAdapter<Music, PlayingQueueAdapter.MusicViewHolder>(context, data) {
     override fun getViewLayoutId(): Int {
-        return R.layout.playlist_item
+        return R.layout.music_playing_queue_item
     }
 
     override fun createViewHolder(convertView: View): MusicViewHolder {
@@ -33,13 +33,13 @@ class PlaylistAdapter(
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MusicViewHolder {
-        val binding = PlaylistItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        val binding = MusicPlayingQueueItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         binding.viewModel = viewModel
         return this.createViewHolder(binding.root.apply { tag = viewType.toString() })
     }
 
     override fun onBindView(holder: MusicViewHolder, value: Music, position: Int) {
-        val binding = DataBindingUtil.getBinding<PlaylistItemBinding>(holder.itemView)
+        val binding = DataBindingUtil.getBinding<MusicPlayingQueueItemBinding>(holder.itemView)
         binding?.music = value
         binding?.root?.setOnClickListener {
             MusicPlayerRemote.playAt(position)

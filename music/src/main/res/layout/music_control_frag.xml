@@ -63,7 +63,7 @@
                 android:text="@{MusicPlayerRemote.curMusicData.title}"
                 android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                 android:textColor="?android:attr/textColorPrimary"
-                tools:text="@string/tip_music_name" />
+                tools:text="@string/music_tip_name" />
 
             <TextView
                 android:layout_width="match_parent"
@@ -74,7 +74,7 @@
                 android:paddingEnd="12dp"
                 android:text="@{MusicPlayerRemote.curMusicData.artistName}"
                 android:textColor="?android:attr/textColorSecondary"
-                tools:text="@string/tip_music_artist" />
+                tools:text="@string/music_tip_artist" />
 
         </LinearLayout>
 

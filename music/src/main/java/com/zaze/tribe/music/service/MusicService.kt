@@ -291,7 +291,7 @@ class MusicService : Service(), IPlayer {
             remoteViews.setTextViewText(R.id.musicNotificationName, it.title)
             remoteViews.setTextViewText(R.id.musicNotificationArtist, it.artistName)
             remoteViews.setImageViewResource(R.id.musicNotificationPlayBtn,
-                    if (isPlaying) R.drawable.ic_pause_circle_outline_black_24dp else R.drawable.ic_play_circle_outline_black_24dp)
+                    if (isPlaying) R.drawable.music_pause_circle_outline_black_24dp else R.drawable.music_play_circle_outline_black_24dp)
             remoteViews.setOnClickPendingIntent(R.id.musicNotificationPlayBtn, PendingIntent.getService(this, 0,
                     Intent(this, MusicService::class.java).apply {
                         action = if (isPlaying) {
@@ -314,7 +314,7 @@ class MusicService : Service(), IPlayer {
                 setCustomContentView(remoteViews)
                 setContentIntent(targetIntent)
                 //设置小图标
-                setSmallIcon(R.mipmap.ic_music_note_white_24dp)
+                setSmallIcon(R.mipmap.music_note_white_24dp)
             }
             startForeground(1, builder.build())
         }
