@@ -55,11 +55,12 @@ object MusicPlayerRemote {
 
                 override fun onCompletion() {
                     ZLog.i(ZTag.TAG_DEBUG, "onCompletion")
+                    isPlaying.set(false)
                 }
 
                 override fun onError(mp: MediaPlayer?, what: Int, extra: Int) {
                     ZLog.i(ZTag.TAG_DEBUG, "onError")
-                    stop()
+                    isPlaying.set(false)
                 }
             })
         }

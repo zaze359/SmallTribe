@@ -31,7 +31,7 @@ import java.util.*
  * @author : ZAZE
  * @version : 2018-08-31 - 10:26
  */
-class MusicService : Service(), IPlayer {
+class MusicService : Service(), IPlayer, MyMediaPlayer.MediaCallback {
 
     // ------------------------------------------------------
     private lateinit var mediaPlayer: MyMediaPlayer
@@ -81,7 +81,9 @@ class MusicService : Service(), IPlayer {
 
     override fun onCreate() {
         super.onCreate()
-        mediaPlayer = MyMediaPlayer(this)
+        mediaPlayer = MyMediaPlayer(this).apply {
+            mediaCallback = this@MusicService
+        }
         playerHandlerThread = HandlerThread("playerHandlerThread")
         playerHandlerThread.start()
         playerHandler = PlayerHandler(this, playerHandlerThread.looper)
@@ -228,9 +230,9 @@ class MusicService : Service(), IPlayer {
             ZLog.i(ZTag.TAG_DEBUG, "pause : ${getCurMusic()}")
             if (it.isPlaying()) {
                 it.pause()
-                updateNotification(false)
-                callback?.onPause()
             }
+            updateNotification(false)
+            callback?.onPause()
         }
     }
 
@@ -249,6 +251,19 @@ class MusicService : Service(), IPlayer {
     override fun seekTo(seekMillis: Int) {
         mediaPlayer.seekTo(seekMillis)
     }
+
+    override fun onCompletion() {
+        getNextPosition(false).let {
+            if (it >= 0) {
+                playAt(it)
+            } else {
+                callback?.onCompletion()
+            }
+        }
+    }
+
+    // ------------------------------------------------------
+
 
     override fun getPosition(): Int {
         return position
@@ -286,7 +301,7 @@ class MusicService : Service(), IPlayer {
             }
             val targetIntent = PendingIntent.getActivity(this, 0,
                     Intent(Intent.ACTION_MAIN), PendingIntent.FLAG_UPDATE_CURRENT)
-                    val remoteViews = RemoteViews (App.INSTANCE.packageName, R.layout.music_notification_layout)
+            val remoteViews = RemoteViews(App.INSTANCE.packageName, R.layout.music_notification_layout)
             remoteViews.setImageViewBitmap(R.id.musicNotificationIcon, IconCache.getSmallMediaIcon(it.data))
             remoteViews.setTextViewText(R.id.musicNotificationName, it.title)
             remoteViews.setTextViewText(R.id.musicNotificationArtist, it.artistName)

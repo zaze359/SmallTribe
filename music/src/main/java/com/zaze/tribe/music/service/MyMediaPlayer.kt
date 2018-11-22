@@ -18,7 +18,7 @@ class MyMediaPlayer(private val context: Context) : MediaPlayer.OnErrorListener,
 
     private var mediaPlayer = MediaPlayer()
     private var isInitialized = false
-    private val mediaCallback : MediaCallback? = null
+    var mediaCallback : MediaCallback? = null
     init {
         mediaPlayer.setWakeMode(context, PowerManager.PARTIAL_WAKE_LOCK)
     }

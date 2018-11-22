@@ -83,16 +83,16 @@ subprojects {
 
         if (isMainApp) {
             productFlavors {
-                product {
-                    applicationId "com.zaze.tribe"
+                pro {
+                    applicationId "com.zaze.tribe.pro"
                     buildConfigField("String", "URL", "\"http://www.google.com\"")
-                    resValue("string", "app_name", "product")
+                    resValue("string", "app_name", "小部落P")
                 }
 
-                pre {
-                    applicationIdSuffix '.pre'
+                free {
+                    applicationIdSuffix '.free'
                     buildConfigField("String", "URL", "\"http://www.baidu.com\"")
-                    resValue("string", "app_name", "pre")
+                    resValue("string", "app_name", "小部落F")
                 }
             }
             sourceSets {
@@ -100,17 +100,17 @@ subprojects {
 //                    java.srcDirs = ['src/main/java']
 //                    res.srcDirs = ['src/main/res']
 //                }
-                product {
+                pro {
                     java.srcDirs = ['src/main/java']
                     res.srcDirs = ['src/main/res']
-                    java.srcDirs = ['src/product/java']
-                    res.srcDirs = ['src/product/res']
+                    java.srcDirs = ['src/pro/java']
+                    res.srcDirs = ['src/pro/res']
                 }
-                pre {
+                free {
                     java.srcDirs = ['src/main/java']
                     res.srcDirs = ['src/main/res']
-                    java.srcDirs = ['src/pre/java']
-                    res.srcDirs = ['src/pre/res']
+                    java.srcDirs = ['src/free/java']
+                    res.srcDirs = ['src/free/res']
                 }
             }
         }
