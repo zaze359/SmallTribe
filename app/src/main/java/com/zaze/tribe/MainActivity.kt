@@ -2,7 +2,6 @@ package com.zaze.tribe
 
 import android.Manifest
 import android.content.ComponentName
-import android.content.Context
 import android.content.Intent
 import android.content.ServiceConnection
 import android.content.pm.PackageManager
@@ -23,7 +22,7 @@ import com.zaze.tribe.databinding.ActivityMainBinding
 import com.zaze.tribe.music.LocalMusicFragment
 import com.zaze.tribe.music.MusicPlayerRemote
 import com.zaze.tribe.music.service.MusicService
-import com.zaze.tribe.util.*
+import com.zaze.tribe.util.PreferenceUtil
 import com.zaze.utils.FileUtil
 import com.zaze.utils.log.ZLog
 import com.zaze.utils.log.ZTag
@@ -54,7 +53,6 @@ class MainActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         viewDataBinding = DataBindingUtil.setContentView(this, R.layout.activity_main)
-        setupPermission()
         setupActionBar(mainToolbar) {
             setTitle(R.string.app_name)
             setDisplayHomeAsUpEnabled(true)
@@ -83,7 +81,9 @@ class MainActivity : BaseActivity() {
             }
         }
         // ------------------------------------------------------
-        MusicPlayerRemote.bindService(this, serviceConnection)
+        if (setupPermission()) {
+            MusicPlayerRemote.bindService(this, serviceConnection)
+        }
     }
 
     override fun onDestroy() {
@@ -91,9 +91,9 @@ class MainActivity : BaseActivity() {
         super.onDestroy()
     }
 
-    private fun setupPermission() {
+    private fun setupPermission(): Boolean {
 //        PermissionUtil.checkAndRequestUserPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE, 0)
-        PermissionUtil.checkAndRequestUserPermission(this, arrayOf(
+        return PermissionUtil.checkAndRequestUserPermission(this, arrayOf(
                 Manifest.permission.READ_EXTERNAL_STORAGE,
                 Manifest.permission.WAKE_LOCK
         ), 0)
@@ -104,6 +104,8 @@ class MainActivity : BaseActivity() {
         val isGranted = grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED
         if (!isGranted) {
             finish()
+        } else {
+            MusicPlayerRemote.bindService(this, serviceConnection)
         }
     }
 

@@ -47,6 +47,7 @@ public class TestFragment extends Fragment {
             }
             testLyricView.next();
             StringBuilder builder = new StringBuilder();
+            builder.append(BuildConfig.URL);
             builder.append(TimeZone.getDefault().getDisplayName() + "\n");
             builder.append(TimeZone.getDefault().getDisplayName(false, TimeZone.SHORT) + "\n");
             builder.append(TimeZone.getDefault().getRawOffset() / ZDateUtil.HOUR + "\n");

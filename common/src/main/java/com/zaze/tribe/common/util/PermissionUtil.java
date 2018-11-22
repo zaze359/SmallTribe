@@ -30,17 +30,20 @@ public class PermissionUtil {
         return hasPermission;
     }
 
-    public static void checkAndRequestUserPermission(Activity activity, String[] permissions, int requestCode) {
+    public static boolean checkAndRequestUserPermission(Activity activity, String[] permissions, int requestCode) {
         Set<String> permissionSet = new HashSet<>();
         for (String permission : permissions) {
             if (!checkUserPermission(activity, permission)) {
                 permissionSet.add(permission);
             }
         }
-        if(!permissionSet.isEmpty()) {
+        if (!permissionSet.isEmpty()) {
             String[] reqPermissions = new String[permissionSet.size()];
             permissionSet.toArray(reqPermissions);
             ActivityCompat.requestPermissions(activity, reqPermissions, requestCode);
+            return false;
+        } else {
+            return true;
         }
     }
 }

@@ -1,18 +1,7 @@
-apply plugin: 'com.android.library'
-apply plugin: 'kotlin-android'
-apply plugin: 'kotlin-android-extensions'
-apply plugin: 'kotlin-kapt'
-
 android {
-    compileSdkVersion rootProject.ext.compileSdkVersion
 
     defaultConfig {
         resourcePrefix "music_"
-        minSdkVersion rootProject.ext.minSdkVersion
-        targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode rootProject.ext.versionCode
-        versionName rootProject.ext.versionName
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         javaCompileOptions {
             annotationProcessorOptions {
                 arguments = ["room.schemaLocation": "$projectDir/schemas".toString()]
@@ -26,28 +15,15 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
-//
-//    kapt {
-//        generateStubs = true
-//    }
-
-    dataBinding {
-        enabled = true
-    }
-
 }
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-
-    testImplementation "junit:junit:$junitVersion"
-    androidTestImplementation "androidx.test:runner:$runnerVersionx"
-    androidTestImplementation "androidx.test.espresso:espresso-core:$espressoVersionx"
     implementation "androidx.room:room-runtime:$roomVersionx"
     implementation "androidx.room:room-rxjava2:$roomVersionx"
     kapt "androidx.room:room-compiler:$roomVersionx"
     androidTestImplementation "androidx.room:room-testing:$roomVersionx"
 
-    implementation project(rootProject.ext.dependencies.project.moduleCommon)
+    implementation project(rootProject.ext.moduleName.moduleCommon)
 
 }
