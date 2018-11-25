@@ -24,6 +24,6 @@ dependencies {
     kapt "androidx.room:room-compiler:$roomVersionx"
     androidTestImplementation "androidx.room:room-testing:$roomVersionx"
 
-    implementation project(rootProject.ext.moduleName.moduleCommon)
+    implementation project(rootProject.ext.modules.common)
 
 }

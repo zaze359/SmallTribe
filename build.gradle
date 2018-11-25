@@ -7,9 +7,9 @@ ext {
     versionCode = 1
     versionName = "v1.0.1"
 
-    moduleName = [
-            moduleCommon: ':common',
-            moduleMusic : ':music'
+    modules = [
+            common: ':common',
+            music : ':music'
     ]
 
     guavaVersion = '23.6-android'
