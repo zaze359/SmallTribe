@@ -12,7 +12,7 @@ import android.support.v4.media.session.MediaSessionCompat
 import android.widget.RemoteViews
 import androidx.core.app.NotificationCompat
 import androidx.databinding.ObservableArrayList
-import com.zaze.tribe.common.App
+import com.zaze.tribe.common.BaseApplication
 import com.zaze.tribe.music.R
 import com.zaze.tribe.music.data.dto.Music
 import com.zaze.tribe.music.data.loaders.MusicLoader
@@ -301,7 +301,7 @@ class MusicService : Service(), IPlayer, MyMediaPlayer.MediaCallback {
             }
             val targetIntent = PendingIntent.getActivity(this, 0,
                     Intent(Intent.ACTION_MAIN), PendingIntent.FLAG_UPDATE_CURRENT)
-            val remoteViews = RemoteViews(App.INSTANCE.packageName, R.layout.music_notification_layout)
+            val remoteViews = RemoteViews(BaseApplication.INSTANCE.packageName, R.layout.music_notification_layout)
             remoteViews.setImageViewBitmap(R.id.musicNotificationIcon, IconCache.getSmallMediaIcon(it.data))
             remoteViews.setTextViewText(R.id.musicNotificationName, it.title)
             remoteViews.setTextViewText(R.id.musicNotificationArtist, it.artistName)

@@ -6,7 +6,7 @@ import android.graphics.drawable.Drawable
 import android.media.MediaMetadataRetriever
 import android.util.LruCache
 import androidx.core.content.res.ResourcesCompat
-import com.zaze.tribe.common.App
+import com.zaze.tribe.common.BaseApplication
 import com.zaze.tribe.music.R
 import com.zaze.utils.BmpUtil
 import com.zaze.utils.log.ZLog
@@ -102,7 +102,7 @@ object IconCache {
 
     @JvmStatic
     private fun getFullResIcon(iconId: Int): Drawable? {
-        return ResourcesCompat.getDrawable(App.INSTANCE.resources, iconId, null)
+        return ResourcesCompat.getDrawable(BaseApplication.INSTANCE.resources, iconId, null)
     }
 
 

@@ -5,7 +5,7 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
-import com.zaze.tribe.common.App
+import com.zaze.tribe.common.BaseApplication
 import com.zaze.tribe.music.data.dao.LyricDao
 import com.zaze.tribe.music.data.dao.MusicDao
 import com.zaze.tribe.music.data.dto.Lyric
@@ -31,7 +31,7 @@ abstract class LocalDatabase : RoomDatabase() {
         }
 
         val database by lazy(mode = LazyThreadSafetyMode.SYNCHRONIZED) {
-            Room.databaseBuilder<LocalDatabase>(App.INSTANCE,
+            Room.databaseBuilder<LocalDatabase>(BaseApplication.INSTANCE,
                     LocalDatabase::class.java, "small_tribe.db")
                     .addMigrations(MIGRATION_1_2)
                     .build()

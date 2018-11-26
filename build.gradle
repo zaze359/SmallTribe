@@ -129,6 +129,7 @@ subprojects {
         testImplementation "junit:junit:$junitVersion"
         debugImplementation "com.squareup.leakcanary:leakcanary-android:$leakcanaryVersion"
         releaseImplementation "com.squareup.leakcanary:leakcanary-android-no-op:$leakcanaryVersion"
+        implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
     }
 }
 

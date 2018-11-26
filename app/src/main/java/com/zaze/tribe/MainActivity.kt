@@ -154,6 +154,8 @@ class MainActivity : BaseActivity() {
         return when (item.itemId) {
             R.id.menu_github -> {
                 val intent = Intent(Intent.ACTION_VIEW)
+//                val componentName = intent.resolveActivity(packageManager)
+//                ZLog.i(ZTag.TAG_DEBUG, "" + componentName.packageName)
                 intent.data = Uri.parse("https://github.com/zaze359/test.git")
                 startActivity(intent)
                 true

@@ -45,6 +45,7 @@ object MusicPlayerRemote {
 
                 override fun onPause() {
                     ZLog.i(ZTag.TAG_DEBUG, "onPause")
+
                     isPlaying.set(false)
                 }
 
