@@ -1,5 +1,6 @@
 package com.zaze.tribe.common.task
 
+import android.util.Log
 import java.util.concurrent.CountDownLatch
 import java.util.concurrent.Executors
 
@@ -13,6 +14,8 @@ import java.util.concurrent.Executors
 class StartupStore private constructor() {
 
     private val tasks = ArrayList<StartupTask>()
+    private var isRunning = false
+    private val executor = Executors.newFixedThreadPool(5)
 
     companion object {
         @JvmStatic
@@ -27,15 +30,21 @@ class StartupStore private constructor() {
     }
 
     fun execute() {
-        if (!tasks.isEmpty()) {
-            CountDownLatch(tasks.size).let { countDownLatch ->
-                val executor = Executors.newFixedThreadPool(tasks.size)
-                tasks.forEach { it ->
-                    it.countDownLatch = countDownLatch
-                    executor.execute(it)
+        if (!isRunning) {
+            isRunning = true
+            val startTime = System.currentTimeMillis()
+            if (!tasks.isEmpty()) {
+                CountDownLatch(tasks.size).let { countDownLatch ->
+                    tasks.forEach { it ->
+                        it.countDownLatch = countDownLatch
+                        executor.execute(it)
+                    }
+                    countDownLatch.await()
                 }
-                countDownLatch.await()
+                tasks.clear()
             }
+            Log.i("StartupStore", "耗时 : ${System.currentTimeMillis() - startTime}")
+            isRunning = false
         }
     }
 }

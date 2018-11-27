@@ -1,7 +1,6 @@
 package com.zaze.tribe.common.task
 
 import android.util.Log
-import java.lang.Exception
 import java.util.concurrent.CountDownLatch
 
 /**
@@ -15,6 +14,7 @@ abstract class StartupTask(private val taskName: String? = null) : Runnable {
     var countDownLatch: CountDownLatch? = null
 
     override fun run() {
+        val startTime = System.currentTimeMillis()
         isStartup = try {
             doTask()
             true
@@ -24,7 +24,8 @@ abstract class StartupTask(private val taskName: String? = null) : Runnable {
         } finally {
             countDownLatch?.countDown()
         }
-        Log.i("StartupTask", "${(taskName ?: this.hashCode().toString())} Startup : $isStartup")
+        Log.i("StartupTask", "${(taskName
+                ?: this.hashCode().toString())} Startup : $isStartup >> ${System.currentTimeMillis() - startTime}")
     }
 
     abstract fun doTask()

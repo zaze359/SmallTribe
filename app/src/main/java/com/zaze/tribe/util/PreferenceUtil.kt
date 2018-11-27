@@ -1,7 +1,5 @@
-
 package com.zaze.tribe.util
 
-import com.zaze.tribe.App
 import com.zaze.tribe.R
 import com.zaze.tribe.common.BaseApplication
 import com.zaze.utils.ZSharedPrefUtil

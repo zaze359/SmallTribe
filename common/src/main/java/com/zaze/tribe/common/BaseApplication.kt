@@ -21,20 +21,16 @@ open class BaseApplication : Application() {
         super.onCreate()
         INSTANCE = this
         val startupStore = StartupStore.build()
-                .push(object : StartupTask() {
+                .push(object : StartupTask("LeakCanary, Default init") {
                     override fun doTask() {
                         LeakCanary.install(INSTANCE)
-                    }
-                }).push(object : StartupTask() {
-                    override fun doTask() {
                         ZDisplayUtil.init(INSTANCE)
                     }
                 })
-        initStartupTask(startupStore)
+        initStartupTask(INSTANCE, startupStore)
         startupStore.execute()
     }
 
-    fun initStartupTask(startupStore: StartupStore) {
+    open fun initStartupTask(application: Application, startupStore: StartupStore) {
     }
-
 }
