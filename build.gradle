@@ -90,9 +90,9 @@ subprojects {
                 }
 
                 free {
-                    applicationIdSuffix '.free'
+//                    applicationIdSuffix '.free'
                     buildConfigField("String", "URL", "\"http://www.baidu.com\"")
-                    resValue("string", "app_name", "小部落F")
+                    resValue("string", "app_name", "小部落")
                 }
             }
             sourceSets {

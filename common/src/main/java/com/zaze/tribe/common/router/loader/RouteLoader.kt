@@ -3,6 +3,7 @@ package com.zaze.tribe.common.router.loader
 import android.content.Context
 import android.content.pm.PackageManager
 import com.zaze.tribe.common.router.RouteMeta
+import com.zaze.tribe.common.router.RouteType
 import com.zaze.tribe.common.router.anno.Router
 
 /**
@@ -18,7 +19,11 @@ class RouteLoader(private val context: Context) {
             it.activities?.forEach { act ->
                 val actClass = Class.forName(act.name)
                 actClass.getAnnotation(Router::class.java)?.let { router ->
-                    map[router.path] = RouteMeta().path(router.path).target(actClass)
+                    map[router.path] = RouteMeta().apply {
+                        path = router.path
+                        target = actClass
+                        type = RouteType.ACTIVITY
+                    }
                 }
             }
         }

@@ -19,14 +19,4 @@ open class RouteMeta {
      * 路由类型
      */
     var type: RouteType? = null
-
-    fun path(path: String): RouteMeta {
-        this.path = path
-        return this
-    }
-
-    fun target(target: Class<*>): RouteMeta {
-        this.target = target
-        return this
-    }
 }

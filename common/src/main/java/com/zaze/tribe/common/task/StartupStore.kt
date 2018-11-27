@@ -1,6 +1,7 @@
 package com.zaze.tribe.common.task
 
 import android.util.Log
+import com.zaze.tribe.common.thread.DefaultPoolExecutor
 import java.util.concurrent.CountDownLatch
 import java.util.concurrent.Executors
 
@@ -15,7 +16,7 @@ class StartupStore private constructor() {
 
     private val tasks = ArrayList<StartupTask>()
     private var isRunning = false
-    private val executor = Executors.newFixedThreadPool(5)
+    private val executor = DefaultPoolExecutor.getInstance()
 
     companion object {
         @JvmStatic

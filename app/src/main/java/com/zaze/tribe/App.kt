@@ -3,6 +3,7 @@ package com.zaze.tribe
 import android.app.Application
 import com.zaze.tribe.common.BaseApplication
 import com.zaze.tribe.common.router.ZRouter
+import com.zaze.tribe.common.router.loader.ClassUtils
 import com.zaze.tribe.common.task.StartupStore
 import com.zaze.tribe.common.task.StartupTask
 
@@ -18,6 +19,7 @@ class App : BaseApplication() {
         super.initStartupTask(application, startupStore)
         startupStore.push(object : StartupTask("ZRouter") {
             override fun doTask() {
+//                ZRouter.openDebug()
                 ZRouter.init(application)
             }
         })

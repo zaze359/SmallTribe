@@ -25,10 +25,18 @@ object ZRouter {
         return this
     }
 
+    fun openDebug() {
+        _ZRouter.openDebug()
+    }
+
+    fun debuggable(): Boolean {
+        return _ZRouter.debuggable()
+    }
+
     // --------------------------------------------------
 
-    fun build(): RouteMeta {
-        return _ZRouter.build()
+    fun build(path : String): Postcard {
+        return _ZRouter.build(path)
     }
 
     /**
@@ -38,7 +46,7 @@ object ZRouter {
      * [requestCode] requestCode
      * [callback] callback
      */
-    internal fun navigate(context: Context? = null, postcard: Postcard, requestCode: Int? = 0, callback: NavigationCallback? = null) {
-
+    internal fun navigate(context: Context? = null, postcard: Postcard, requestCode: Int = 0, callback: NavigationCallback? = null): Any? {
+        return _ZRouter.navigate(context, postcard, requestCode, callback)
     }
 }

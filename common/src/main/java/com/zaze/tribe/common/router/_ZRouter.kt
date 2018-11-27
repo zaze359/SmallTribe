@@ -8,8 +8,10 @@ import android.os.Handler
 import android.os.Looper
 import android.text.TextUtils
 import android.util.Log
+import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
+import com.zaze.tribe.common.NotFountActivity
 import com.zaze.tribe.common.router.interceptor.IInterceptor
 
 /**
@@ -22,22 +24,39 @@ internal object _ZRouter {
     private lateinit var application: Application
 
     private lateinit var mHandler: Handler
+    private var debuggable = false
 
     @Synchronized
     fun init(application: Application): Boolean {
-        RouteCenter.init(application)
         mHandler = Handler(Looper.getMainLooper())
         this.application = application
+        try {
+            RouteCenter.init(application)
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
         return true
     }
 
-    fun build(): RouteMeta {
-        return RouteMeta()
+    fun build(path: String): Postcard {
+        return Postcard(path)
     }
 
     fun registerInterceptor(interceptor: IInterceptor) {
         RouteCenter.registerInterceptor(interceptor)
     }
+
+    // ------------------------------------------------------
+
+    fun openDebug() {
+        debuggable = true
+    }
+
+    fun debuggable(): Boolean {
+        return debuggable
+    }
+
+    // ------------------------------------------------------
 
     /**
      * navigate
@@ -48,14 +67,18 @@ internal object _ZRouter {
      */
     fun navigate(context: Context? = null, postcard: Postcard, requestCode: Int = 0, callback: NavigationCallback? = null): Any? {
         // TODO 拦截器
-        val routeMeta = RouteCenter.routes[postcard.path]
-        routeMeta?.let {
-
+        RouteCenter.routes[postcard.path]?.let {
+            postcard.target = it.target
+            postcard.type = it.type
         }
+//                ?: postcard.let {
+//            postcard.target = NotFountActivity::class.java
+//            postcard.type = RouteType.ACTIVITY
+//        }
         return _navigate(context, postcard, requestCode, callback)
     }
 
-    fun _navigate(context: Context? = null, postcard: Postcard, requestCode: Int = 0, callback: NavigationCallback? = null): Any? {
+    private fun _navigate(context: Context? = null, postcard: Postcard, requestCode: Int = 0, callback: NavigationCallback? = null): Any? {
         val curContext = (context ?: application.applicationContext)
         when (postcard.type) {
             RouteType.ACTIVITY -> {
@@ -89,7 +112,9 @@ internal object _ZRouter {
                 }
             }
             else -> {
-
+                runInMainThread(Runnable {
+                    Toast.makeText(curContext, "找不到指定path: ${postcard.path}", Toast.LENGTH_LONG).show()
+                })
             }
         }
         return null

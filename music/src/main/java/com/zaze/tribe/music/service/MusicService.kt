@@ -299,14 +299,15 @@ class MusicService : Service(), IPlayer, MyMediaPlayer.MediaCallback {
                 val notificationChannel = NotificationChannel(channelId, channelId, NotificationManager.IMPORTANCE_LOW)
                 notificationManager.createNotificationChannel(notificationChannel)
             }
-            val targetIntent = PendingIntent.getActivity(this, 0,
-                    Intent(Intent.ACTION_MAIN), PendingIntent.FLAG_UPDATE_CURRENT)
+//            val targetIntent = PendingIntent.getActivity(this, 0,
+//                    Intent(this, MainActivity::class.java), PendingIntent.FLAG_UPDATE_CURRENT)
             val remoteViews = RemoteViews(BaseApplication.INSTANCE.packageName, R.layout.music_notification_layout)
             remoteViews.setImageViewBitmap(R.id.musicNotificationIcon, IconCache.getSmallMediaIcon(it.data))
             remoteViews.setTextViewText(R.id.musicNotificationName, it.title)
             remoteViews.setTextViewText(R.id.musicNotificationArtist, it.artistName)
             remoteViews.setImageViewResource(R.id.musicNotificationPlayBtn,
                     if (isPlaying) R.drawable.music_pause_circle_outline_black_24dp else R.drawable.music_play_circle_outline_black_24dp)
+
             remoteViews.setOnClickPendingIntent(R.id.musicNotificationPlayBtn, PendingIntent.getService(this, 0,
                     Intent(this, MusicService::class.java).apply {
                         action = if (isPlaying) {
@@ -327,7 +328,7 @@ class MusicService : Service(), IPlayer, MyMediaPlayer.MediaCallback {
 
             val builder = NotificationCompat.Builder(this, channelId).apply {
                 setCustomContentView(remoteViews)
-                setContentIntent(targetIntent)
+//                setContentIntent(targetIntent)
                 //设置小图标
                 setSmallIcon(R.mipmap.music_note_white_24dp)
             }

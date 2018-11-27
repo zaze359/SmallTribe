@@ -10,7 +10,7 @@ import java.util.concurrent.CountDownLatch
  */
 abstract class StartupTask(private val taskName: String? = null) : Runnable {
 
-    var isStartup = false
+    private var isStartup = false
     var countDownLatch: CountDownLatch? = null
 
     override fun run() {
@@ -25,7 +25,7 @@ abstract class StartupTask(private val taskName: String? = null) : Runnable {
             countDownLatch?.countDown()
         }
         Log.i("StartupTask", "${(taskName
-                ?: this.hashCode().toString())} Startup : $isStartup >> ${System.currentTimeMillis() - startTime}")
+                ?: this.hashCode().toString())} >> Startup : $isStartup >> ${System.currentTimeMillis() - startTime}ms")
     }
 
     abstract fun doTask()

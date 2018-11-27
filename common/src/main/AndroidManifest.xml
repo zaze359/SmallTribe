@@ -12,6 +12,8 @@
         android:theme="@style/AppTheme"
         tools:replace="android:name, android:allowBackup">
 
+
+        <activity android:name=".NotFountActivity" />
     </application>
 
 

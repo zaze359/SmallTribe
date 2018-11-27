@@ -7,6 +7,8 @@ import android.app.Service
 import android.content.Context
 import android.content.Intent
 import android.os.Build
+import com.zaze.tribe.music.MusicPlayerRemote.isPlaying
+import com.zaze.tribe.music.service.MusicService
 
 /**
  * Description :
@@ -68,5 +70,11 @@ class MusicNotification {
 //            }
 //            startForeground(1, builder.build())
 //        }
+    }
+
+    private fun createIntent(context: Context, action: String): Intent {
+        return Intent(context, MusicService::class.java).also { it ->
+            it.action = action
+        }
     }
 }
