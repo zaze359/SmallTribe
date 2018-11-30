@@ -1,11 +1,10 @@
 package com.zaze.tribe
 
 import android.app.Application
+import com.zaze.router.ZRouter
+import com.zaze.router.task.StartupStore
+import com.zaze.router.task.StartupTask
 import com.zaze.tribe.common.BaseApplication
-import com.zaze.tribe.common.router.ZRouter
-import com.zaze.tribe.common.router.loader.ClassUtils
-import com.zaze.tribe.common.task.StartupStore
-import com.zaze.tribe.common.task.StartupTask
 
 /**
  * Description :
@@ -20,7 +19,7 @@ class App : BaseApplication() {
         startupStore.push(object : StartupTask("ZRouter") {
             override fun doTask() {
 //                ZRouter.openDebug()
-                ZRouter.init(application)
+                ZRouter.init(application, "com.zaze.tribe")
             }
         })
     }

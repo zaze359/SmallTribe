@@ -1,1 +1,1 @@
-include ':app', ':music', ':common'
+include ':app', ':music', ':common', ':router'

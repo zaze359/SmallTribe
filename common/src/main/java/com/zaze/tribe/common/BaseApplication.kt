@@ -1,11 +1,9 @@
 package com.zaze.tribe.common
 
 import android.app.Application
-import android.util.Log
 import com.squareup.leakcanary.LeakCanary
-import com.zaze.tribe.common.router.loader.ClassUtils
-import com.zaze.tribe.common.task.StartupStore
-import com.zaze.tribe.common.task.StartupTask
+import com.zaze.router.task.StartupStore
+import com.zaze.router.task.StartupTask
 import com.zaze.utils.ZDisplayUtil
 
 /**
