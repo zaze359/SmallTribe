@@ -1,6 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout>
 
+    <data>
+
+        <variable
+            name="viewModel"
+            type="com.zaze.tribe.music.vm.MusicViewModel" />
+
+    </data>
+
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
@@ -17,19 +25,34 @@
                 android:name="com.zaze.tribe.music.MusicAlbumCoverPagerFragment"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                tools:layout="@layout/music_album_cover_pager_frag" />
+                tools:layout="@layout/music_album_cover_item_frag" />
 
         </com.zaze.tribe.common.widget.WidthFitSquareLayout>
 
         <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="wrap_content"
+            android:layout_weight="1">
 
             <fragment
                 android:id="@+id/musicDetailControlContainer"
                 android:name="com.zaze.tribe.music.MusicControlFragment"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent" />
+                android:layout_height="match_parent"
+                tools:layout="@layout/music_control_frag" />
+        </FrameLayout>
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="0">
+
+            <androidx.appcompat.widget.Toolbar
+                android:id="@+id/musicDetailToolbar"
+                style="@style/Toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:navigationIcon="@drawable/music_close_gray_24dp" />
         </FrameLayout>
 
     </LinearLayout>

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/action_toggle_favorite"
+        android:icon="@drawable/music_favorite_border_black_24dp"
+        android:orderInCategory="1"
+        android:title="@string/music_favorites_menu"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/action_playlist"
+        android:icon="@drawable/music_queue_black_24dp"
+        android:orderInCategory="2"
+        android:title="@string/music_playlist"
+        app:showAsAction="ifRoom" />
+
+    <item
+        android:icon="@drawable/music_favorite_border_black_24dp"
+        android:orderInCategory="3"
+        android:title="@string/music_favorites_menu" />
+</menu>

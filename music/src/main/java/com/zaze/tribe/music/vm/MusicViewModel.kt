@@ -5,6 +5,7 @@ import androidx.databinding.ObservableArrayList
 import androidx.databinding.ObservableBoolean
 import androidx.databinding.ObservableList
 import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.MutableLiveData
 import com.zaze.tribe.music.data.dto.Music
 import com.zaze.tribe.music.data.loaders.MusicLoader
 import com.zaze.tribe.music.data.source.repository.MusicRepository
@@ -30,6 +31,9 @@ open class MusicViewModel(
      * 是否加载中
      */
     val dataLoading = ObservableBoolean(false)
+
+    val isFavorite = MutableLiveData<Boolean>()
+
 
     private val compositeDisposable = CompositeDisposable()
 
@@ -75,6 +79,10 @@ open class MusicViewModel(
      */
     fun showMore(music: Music) {
         ZTipUtil.toast(context, music.data)
+    }
+
+    fun toggleFavorite(music: Music?) {
+
     }
 
     override fun onCleared() {

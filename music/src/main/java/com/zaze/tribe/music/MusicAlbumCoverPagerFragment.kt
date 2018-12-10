@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.Observable
+import androidx.lifecycle.Observer
 import androidx.viewpager.widget.ViewPager
 import com.zaze.tribe.common.BaseFragment
 import com.zaze.tribe.music.adapter.AlbumCoverPagerAdapter
@@ -16,12 +17,7 @@ import kotlinx.android.synthetic.main.music_album_cover_pager_frag.*
  * @author : ZAZE
  * @version : 2018-07-05 - 23:25
  */
-class MusicAlbumCoverPagerFragment : BaseFragment() , ViewPager.OnPageChangeListener{
-    private val musicChangedCallback = object : Observable.OnPropertyChangedCallback() {
-        override fun onPropertyChanged(sender: Observable?, propertyId: Int) {
-            musicAlbumCoverPager.setCurrentItem(MusicPlayerRemote.getPosition(), true)
-        }
-    }
+class MusicAlbumCoverPagerFragment : BaseFragment(), ViewPager.OnPageChangeListener {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.music_album_cover_pager_frag, container, false)
@@ -38,12 +34,13 @@ class MusicAlbumCoverPagerFragment : BaseFragment() , ViewPager.OnPageChangeList
                 addOnPageChangeListener(this@MusicAlbumCoverPagerFragment)
             }
         }
-        MusicPlayerRemote.curMusicData.addOnPropertyChangedCallback(musicChangedCallback)
+        MusicPlayerRemote.curMusicData.observe(this, Observer {
+            musicAlbumCoverPager.setCurrentItem(MusicPlayerRemote.getPosition(), true)
+        })
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
-        MusicPlayerRemote.curMusicData.removeOnPropertyChangedCallback(musicChangedCallback)
         musicAlbumCoverPager.removeOnPageChangeListener(this)
     }
 

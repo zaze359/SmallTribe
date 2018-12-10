@@ -2,8 +2,6 @@ package com.zaze.tribe
 
 import androidx.test.InstrumentationRegistry
 import androidx.test.runner.AndroidJUnit4
-import androidx.work.OneTimeWorkRequest
-import androidx.work.WorkManager
 import org.junit.Assert.assertEquals
 import org.junit.Test
 import org.junit.runner.RunWith

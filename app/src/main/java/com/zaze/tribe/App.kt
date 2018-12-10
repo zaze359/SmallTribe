@@ -18,7 +18,7 @@ class App : BaseApplication() {
         super.initStartupTask(application, startupStore)
         startupStore.push(object : StartupTask("ZRouter") {
             override fun doTask() {
-//                ZRouter.openDebug()
+                ZRouter.openDebug()
                 ZRouter.init(application, "com.zaze.tribe")
             }
         })

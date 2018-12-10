@@ -29,6 +29,7 @@ class MiniPlayerFragment : BaseFragment(), MusicProgressHandler.Callback {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         viewDataBinding = MusicMiniPlayerFragBinding.inflate(inflater, container, false)
+        viewDataBinding.setLifecycleOwner(this)
         viewDataBinding.root.setOnClickListener {
             activity?.let { activity ->
                 MusicDetailActivity.start(activity)

@@ -56,6 +56,7 @@
                     <androidx.appcompat.widget.Toolbar
                         android:id="@+id/mainToolbar"
                         style="@style/Toolbar"
+                        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
                         app:layout_scrollFlags="scroll|enterAlways" />
 
                     <!--</android.support.design.widget.CollapsingToolbarLayout>-->

@@ -49,9 +49,5 @@ class MusicPlayingQueueActivity : BaseActivity() {
             it.layoutManager = LinearLayoutManager(this@MusicPlayingQueueActivity)
             it.adapter = PlayingQueueAdapter(this, MusicPlayerRemote.getPlayingQueue(), viewModel)
         }
-        Toast.makeText(this, "测试Router跳转，2000L", Toast.LENGTH_SHORT).show()
-        musicPlayingQueueRv.postDelayed({
-            ZRouter.build("/app/main").navigate()
-        }, 2000L)
     }
 }

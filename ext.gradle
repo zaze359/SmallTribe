@@ -1,7 +1,7 @@
 ext {
     compileSdkVersion = 28
     buildToolsVersion = '28.0.3'
-    minSdkVersion = 16
+    minSdkVersion = 21
     targetSdkVersion = 28
     versionCode = 1
     versionName = "v1.0.1"
@@ -96,12 +96,13 @@ subprojects {
     }
 
     dependencies {
-        androidTestImplementation "androidx.test:rules:$runnerVersionx"
+//        androidTestImplementation "androidx.test:rules:$runnerVersionx"
+
         androidTestImplementation "androidx.test:runner:$runnerVersionx"
         androidTestImplementation "androidx.test.espresso:espresso-core:$espressoVersionx"
-//    androidTestImplementation "androidx.test.uiautomator:uiautomator:$rootProject.uiautomatorx"
-        // -----------------------
         testImplementation "junit:junit:$junitVersion"
+
+
         debugImplementation "com.squareup.leakcanary:leakcanary-android:$leakcanaryVersion"
         releaseImplementation "com.squareup.leakcanary:leakcanary-android-no-op:$leakcanaryVersion"
 
@@ -109,6 +110,7 @@ subprojects {
         implementation "androidx.core:core:$supportLibraryVersionx"
         implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
         implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
+
 
     }
 }

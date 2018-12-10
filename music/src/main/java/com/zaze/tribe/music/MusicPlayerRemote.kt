@@ -7,6 +7,8 @@ import android.media.MediaPlayer
 import androidx.databinding.ObservableArrayList
 import androidx.databinding.ObservableBoolean
 import androidx.databinding.ObservableField
+import androidx.lifecycle.MutableLiveData
+import com.zaze.tribe.common.util.set
 import com.zaze.tribe.music.data.dto.Music
 import com.zaze.tribe.music.service.MusicService
 import com.zaze.utils.log.ZLog
@@ -23,7 +25,7 @@ object MusicPlayerRemote {
      * 当前播放 Music Data
      */
     @JvmStatic
-    val curMusicData = ObservableField<Music>()
+    val curMusicData = MutableLiveData<Music>()
 
     /**
      * 是否在播放中
