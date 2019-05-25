@@ -10,7 +10,7 @@ import com.zaze.tribe.music.util.IconCache
 import kotlinx.android.synthetic.main.music_album_cover_item_frag.*
 
 /**
- * Description :
+ * Description : 单个唱片封面页
  *
  * @author : ZAZE
  * @version : 2018-10-01 - 23:26

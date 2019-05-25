@@ -15,9 +15,7 @@ dependencies {
     //
 //    implementation 'com.github.bumptech.glide:okhttp3-integration:1.5.0'
     //
-    implementation project(rootProject.ext.modules.common)
     implementation project(rootProject.ext.modules.music)
-
 //
 //    implementation "android.arch.work:work-runtime:$work_version" // use -ktx for Kotlin
 //    // optional - Firebase JobDispatcher support

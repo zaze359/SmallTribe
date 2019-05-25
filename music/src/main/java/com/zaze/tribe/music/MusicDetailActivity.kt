@@ -17,7 +17,7 @@ import com.zaze.tribe.music.vm.MusicViewModel
 import kotlinx.android.synthetic.main.music_detail_act.*
 
 /**
- * Description :
+ * Description : 音乐详情页
  * @author : ZAZE
  * @version : 2018-07-06 - 00:26
  */

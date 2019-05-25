@@ -10,4 +10,5 @@ import androidx.fragment.app.Fragment
  * @version : 2018-10-16 - 1:04
  */
 abstract class BaseFragment : Fragment() {
+
 }

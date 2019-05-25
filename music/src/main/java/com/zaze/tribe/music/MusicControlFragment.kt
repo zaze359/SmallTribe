@@ -15,7 +15,7 @@ import com.zaze.tribe.music.R.id.*
 import kotlinx.android.synthetic.main.music_control_frag.*
 
 /**
- * Description :
+ * Description : 音频控制操作
  *
  * @author : ZAZE
  * @version : 2018-10-16 - 0:45

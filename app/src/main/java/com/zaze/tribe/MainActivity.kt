@@ -14,6 +14,7 @@ import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.core.view.GravityCompat
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import com.zaze.router.RouterPath
 import com.zaze.router.anno.Router
 import com.zaze.tribe.common.BaseActivity
 import com.zaze.tribe.common.util.PermissionUtil
@@ -35,7 +36,7 @@ import kotlinx.android.synthetic.main.activity_main.*
  * @author : ZAZE
  * @version : 2018-09-30 - 0:37
  */
-@Router(path = "/app/main")
+@Router(path = RouterPath.main)
 class MainActivity : BaseActivity() {
 
     private lateinit var drawerToggle: ActionBarDrawerToggle

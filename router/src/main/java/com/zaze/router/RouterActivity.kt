@@ -18,5 +18,6 @@ class RouterActivity : AppCompatActivity() {
         savedInstanceState?.getString(ROUTER)?.let {
             ZRouter.build(it).navigate(this)
         }
+        finish()
     }
 }

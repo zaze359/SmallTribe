@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.databinding.Observable
 import androidx.lifecycle.Observer
 import androidx.viewpager.widget.ViewPager
 import com.zaze.tribe.common.BaseFragment
@@ -12,12 +11,12 @@ import com.zaze.tribe.music.adapter.AlbumCoverPagerAdapter
 import kotlinx.android.synthetic.main.music_album_cover_pager_frag.*
 
 /**
- * Description :
+ * Description : 歌曲封面分页页
  *
  * @author : ZAZE
  * @version : 2018-07-05 - 23:25
  */
-class MusicAlbumCoverPagerFragment : BaseFragment(), ViewPager.OnPageChangeListener {
+class AlbumCoverPagerFragment : BaseFragment(), ViewPager.OnPageChangeListener {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.music_album_cover_pager_frag, container, false)
@@ -25,13 +24,13 @@ class MusicAlbumCoverPagerFragment : BaseFragment(), ViewPager.OnPageChangeListe
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        fragmentManager?.let {
+        childFragmentManager.let {
             musicAlbumCoverPager.apply {
                 adapter = AlbumCoverPagerAdapter(it, MusicPlayerRemote.getPlayingQueue())
                 clipToPadding = false
                 pageMargin = 12
                 currentItem = MusicPlayerRemote.getPosition()
-                addOnPageChangeListener(this@MusicAlbumCoverPagerFragment)
+                addOnPageChangeListener(this@AlbumCoverPagerFragment)
             }
         }
         MusicPlayerRemote.curMusicData.observe(this, Observer {

@@ -22,7 +22,7 @@
 
             <fragment
                 android:id="@+id/musicDetailAlbumCoverContainer"
-                android:name="com.zaze.tribe.music.MusicAlbumCoverPagerFragment"
+                android:name="com.zaze.tribe.music.AlbumCoverPagerFragment"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 tools:layout="@layout/music_album_cover_item_frag" />

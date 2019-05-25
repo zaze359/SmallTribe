@@ -1,2 +1,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.zaze.router" />
+    package="com.zaze.router" >
+    <application>
+
+        <activity android:name=".RouterActivity"/>
+
+    </application>
+
+</manifest>

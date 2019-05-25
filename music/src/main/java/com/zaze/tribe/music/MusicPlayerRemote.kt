@@ -139,7 +139,7 @@ object MusicPlayerRemote {
     }
 
     fun getPlayingQueue(): ObservableArrayList<Music> {
-        return mBinder?.getPlayingQueue() ?: ObservableArrayList<Music>()
+        return mBinder?.getPlayingQueue() ?: ObservableArrayList()
     }
 
     // --------------------------------------------------
