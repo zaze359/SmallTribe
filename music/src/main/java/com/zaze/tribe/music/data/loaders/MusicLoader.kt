@@ -49,7 +49,6 @@ object MusicLoader {
         val artistId = cursor.getInt(cursor.getColumnIndex(MediaStore.Audio.AudioColumns.ARTIST_ID))
         val artistName = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.AudioColumns.ARTIST))
         return Music(id, title, track, year, duration, data, dateModified, albumId, albumName, artistId, artistName)
-
     }
 
     @JvmStatic

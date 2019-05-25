@@ -11,6 +11,7 @@ import com.zaze.tribe.common.BaseFragment
 import com.zaze.tribe.music.databinding.MusicControlFragBinding
 import com.zaze.tribe.music.handler.MusicProgressHandler
 import com.zaze.tribe.common.util.Utils
+import com.zaze.tribe.music.R.id.*
 import kotlinx.android.synthetic.main.music_control_frag.*
 
 /**

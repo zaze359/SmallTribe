@@ -76,7 +76,6 @@ class MusicService : Service(), IPlayer, MyMediaPlayer.MediaCallback {
         const val PAUSE = 3
         const val STOP = 4
         const val RESTORE = 5
-
     }
 
     override fun onCreate() {
@@ -291,6 +290,7 @@ class MusicService : Service(), IPlayer, MyMediaPlayer.MediaCallback {
     }
     // --------------------------------------------------
 
+    @Deprecated("")
     private fun updateNotification(isPlaying: Boolean) {
         getCurMusic().let { it ->
             val channelId = "zaze"

@@ -105,7 +105,7 @@ data class Music(
     }
 
     companion object CREATOR : Parcelable.Creator<Music> {
-        val EMPTY = Music(-1, "", -1, -1, -1L, "", -1L, -1, "", -1,"")
+        val EMPTY = Music(-1, "", -1, -1, -1L, "", -1L, -1, "", -1, "")
 
 
         override fun createFromParcel(parcel: Parcel): Music {

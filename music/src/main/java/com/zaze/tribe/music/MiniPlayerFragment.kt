@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.animation.LinearInterpolator
 import com.zaze.tribe.common.BaseFragment
+import com.zaze.tribe.music.R.id.*
 import com.zaze.tribe.music.databinding.MusicMiniPlayerFragBinding
 import com.zaze.tribe.music.handler.MusicProgressHandler
 import kotlinx.android.synthetic.main.music_mini_player_frag.*

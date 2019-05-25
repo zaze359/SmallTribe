@@ -17,6 +17,10 @@ abstract class CustomFragmentPagerAdapter<V>(fm: FragmentManager, list: Collecti
         setDataList(list, false)
     }
 
+    /**
+     * 更新数据
+     * []
+     */
     fun setDataList(list: Collection<V>?, notify: Boolean = true) {
         dataList.clear()
         list?.let {

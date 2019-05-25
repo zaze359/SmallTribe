@@ -12,8 +12,10 @@
         android:theme="@style/AppTheme"
         tools:replace="android:name, android:allowBackup">
 
-
         <activity android:name=".NotFountActivity" />
+        <activity
+            android:name=".RouterActivity"
+            android:launchMode="singleInstance" />
     </application>
 
 

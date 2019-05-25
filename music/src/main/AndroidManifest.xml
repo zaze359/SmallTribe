@@ -4,9 +4,15 @@
     <application>
 
         <activity
+            android:name=".MusicActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme" />
+
+        <activity
             android:name=".MusicDetailActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme" />
+
         <activity
             android:name=".MusicPlayingQueueActivity"
             android:screenOrientation="portrait"
