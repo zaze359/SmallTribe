@@ -7,10 +7,10 @@
         android:icon="@mipmap/ic_home_white_24dp"
         android:title="@string/home" />
     <item
-        android:id="@+id/action_book"
+        android:id="@+id/action_reader"
         android:enabled="true"
         android:icon="@mipmap/ic_book_white_24dp"
-        android:title="@string/book" />
+        android:title="@string/reader" />
     <item
         android:id="@+id/action_music"
         android:enabled="true"

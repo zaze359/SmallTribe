@@ -11,7 +11,6 @@ import androidx.lifecycle.Observer
 import com.zaze.tribe.common.BaseActivity
 import com.zaze.tribe.common.util.get
 import com.zaze.tribe.common.util.obtainViewModel
-import com.zaze.tribe.common.util.setupActionBar
 import com.zaze.tribe.music.databinding.MusicDetailActBinding
 import com.zaze.tribe.music.vm.MusicViewModel
 import kotlinx.android.synthetic.main.music_detail_act.*

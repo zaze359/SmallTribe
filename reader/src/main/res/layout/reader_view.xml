@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical">
+
+    <com.zaze.tribe.reader.widget.ReaderTopView
+        android:id="@+id/bookReaderTop"
+        android:layout_width="match_parent"
+        android:layout_height="24dp"
+        android:background="@color/red" />
+
+    <com.zaze.tribe.reader.widget.ReaderCenterView
+        android:id="@+id/bookReaderCenter"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:background="@color/yellow" />
+
+    <com.zaze.tribe.reader.widget.ReaderBottomView
+        android:id="@+id/bookReaderBottom"
+        android:layout_width="match_parent"
+        android:layout_height="24dp"
+        android:background="@color/blue" />
+
+</LinearLayout>

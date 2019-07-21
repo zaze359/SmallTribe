@@ -1,7 +1,7 @@
 android {
 
     defaultConfig {
-        resourcePrefix "music_"
+        resourcePrefix "music"
         javaCompileOptions {
             annotationProcessorOptions {
                 arguments = ["room.schemaLocation": "$projectDir/schemas".toString()]

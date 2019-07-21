@@ -1,4 +1,3 @@
-
 package com.zaze.tribe.music.util
 
 import com.zaze.tribe.common.BaseApplication
@@ -36,7 +35,7 @@ object MusicPreference {
         return sharedPrefUtil.get(LATELY_MUSIC_TRACK, -1)
     }
 
-    fun saveLastMusicTrack(track : Int) {
+    fun saveLastMusicTrack(track: Int) {
         sharedPrefUtil.apply(LATELY_MUSIC_TRACK, track)
     }
 

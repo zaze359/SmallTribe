@@ -9,7 +9,7 @@ import android.widget.TextView;
 
 import com.zaze.tribe.music.data.entity.LrcLine;
 import com.zaze.tribe.music.util.LrcProcessor;
-import com.zaze.tribe.view.LyricView;
+import com.zaze.tribe.music.widget.LyricView;
 import com.zaze.utils.date.ZDateUtil;
 
 import java.io.IOException;

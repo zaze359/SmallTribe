@@ -40,9 +40,9 @@ class StartupStore private constructor() {
         if (!isRunning) {
             isRunning = true
             val startTime = System.currentTimeMillis()
-            if (!tasks.isEmpty()) {
+            if (tasks.isNotEmpty()) {
                 CountDownLatch(tasks.size).let { countDownLatch ->
-                    tasks.forEach { it ->
+                    tasks.forEach {
                         it.countDownLatch = countDownLatch
                         it.debugLog = debugLog
                         executor.execute(it)

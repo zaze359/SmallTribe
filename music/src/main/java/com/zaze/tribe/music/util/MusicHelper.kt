@@ -1,4 +1,4 @@
-package com.zaze.tribe.util
+package com.zaze.tribe.music.util
 
 import android.content.ContentUris
 import android.net.Uri

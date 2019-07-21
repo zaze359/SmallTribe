@@ -1,4 +1,4 @@
-package com.zaze.tribe.util.glide
+package com.zaze.tribe.music.glide
 
 import android.graphics.Bitmap
 import android.net.Uri
@@ -8,7 +8,7 @@ import com.bumptech.glide.RequestManager
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.zaze.tribe.music.data.dto.Music
 import com.zaze.tribe.music.R
-import com.zaze.tribe.util.MusicHelper
+import com.zaze.tribe.music.util.MusicHelper
 
 /**
  * Description :

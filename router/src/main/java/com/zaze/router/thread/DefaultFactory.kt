@@ -9,12 +9,12 @@ import java.util.concurrent.ThreadFactory
  * @author : ZAZE
  * @version : 2018-11-27 - 23:34
  */
-class DefaultFactory : ThreadFactory {
+class DefaultFactory(private val name:String) : ThreadFactory {
     private var group: ThreadGroup = System.getSecurityManager()?.threadGroup
             ?: Thread.currentThread().threadGroup
 
     override fun newThread(r: Runnable?): Thread {
-        val thread = Thread(group, r, "DefaultFactory", 0)
+        val thread = Thread(group, r, name, 0)
         if (thread.isDaemon) {   //设为非后台线程
             thread.isDaemon = false
         }

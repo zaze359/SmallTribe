@@ -6,9 +6,13 @@
 
     <color name="white">#FFFFFF</color>
     <color name="teal">#00796B</color>
+
     <color name="red">#FFC93437</color>
-    <color name="brown">#8D6E63</color>
     <color name="blue">#2196F3</color>
+    <color name="yellow">#FFEB3B</color>
+
+
+    <color name="brown">#8D6E63</color>
     <color name="grey_blue">#607D8B</color>
     <color name="grey">#999999</color>
     <color name="orange">#F57C00</color>

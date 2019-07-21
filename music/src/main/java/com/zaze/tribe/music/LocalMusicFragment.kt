@@ -25,10 +25,7 @@ class LocalMusicFragment : BaseFragment() {
 
     companion object {
         fun newInstance(): LocalMusicFragment {
-            val args = Bundle()
-            val fragment = LocalMusicFragment()
-            fragment.arguments = args
-            return fragment
+            return LocalMusicFragment()
         }
     }
 
@@ -46,7 +43,7 @@ class LocalMusicFragment : BaseFragment() {
         super.onViewCreated(view, savedInstanceState)
         musicRecyclerView.apply {
             layoutManager = LinearLayoutManager(context)
-            localMusicAdapter = LocalMusicAdapter(context!!, viewModel)
+            localMusicAdapter = LocalMusicAdapter(context, viewModel)
             adapter = localMusicAdapter
         }
 

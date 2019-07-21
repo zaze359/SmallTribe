@@ -26,7 +26,7 @@ class DefaultPoolExecutor : ThreadPoolExecutor {
                     SURPLUS_THREAD_LIFE,
                     TimeUnit.SECONDS,
                     ArrayBlockingQueue(64),
-                    DefaultFactory()
+                    DefaultFactory("ZRouter")
             ).also {
                 INSTANCE = it
             }

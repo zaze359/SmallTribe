@@ -1,0 +1,16 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.zaze.tribe.reader">
+
+    <application>
+
+        <activity
+            android:name="com.zaze.tribe.reader.ReaderActivity"
+            android:launchMode="singleInstance"
+            android:theme="@style/ReadFullScreen">
+
+
+        </activity>
+
+    </application>
+
+</manifest>

@@ -11,9 +11,10 @@ import androidx.core.app.NotificationCompat
 import com.zaze.router.RouterActivity
 import com.zaze.router.RouterPath
 import com.zaze.tribe.common.BaseApplication
+import com.zaze.tribe.common.util.IconCache
 import com.zaze.tribe.music.R
 import com.zaze.tribe.music.service.MusicService
-import com.zaze.tribe.music.util.IconCache
+import com.zaze.tribe.music.util.MediaIconCache
 
 /**
  * Description :
@@ -53,7 +54,7 @@ class MusicNotification {
 
     fun updateNotification(isPlaying: Boolean) {
         service.getCurMusic().let { music ->
-            remoteViews.setImageViewBitmap(R.id.musicNotificationIcon, IconCache.getSmallMediaIcon(music.data))
+            remoteViews.setImageViewBitmap(R.id.musicNotificationIcon, MediaIconCache.getSmallMediaIcon(music.data))
             remoteViews.setTextViewText(R.id.musicNotificationName, music.title)
             remoteViews.setTextViewText(R.id.musicNotificationArtist, music.artistName)
             remoteViews.setImageViewResource(R.id.musicNotificationPlayBtn,

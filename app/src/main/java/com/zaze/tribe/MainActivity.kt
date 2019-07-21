@@ -3,6 +3,7 @@ package com.zaze.tribe
 import android.Manifest
 import android.content.ComponentName
 import android.content.Intent
+import android.content.IntentFilter
 import android.content.ServiceConnection
 import android.content.pm.PackageManager
 import android.net.Uri
@@ -21,9 +22,11 @@ import com.zaze.tribe.common.util.PermissionUtil
 import com.zaze.tribe.common.util.replaceFragmentInActivity
 import com.zaze.tribe.common.util.setupActionBar
 import com.zaze.tribe.databinding.ActivityMainBinding
+import com.zaze.tribe.debug.DebugReceiver
 import com.zaze.tribe.music.LocalMusicFragment
 import com.zaze.tribe.music.MusicPlayerRemote
 import com.zaze.tribe.music.service.MusicService
+import com.zaze.tribe.reader.bookshelf.BookshelfFragment
 import com.zaze.tribe.util.PreferenceUtil
 import com.zaze.utils.FileUtil
 import com.zaze.utils.log.ZLog
@@ -38,7 +41,7 @@ import kotlinx.android.synthetic.main.activity_main.*
  */
 @Router(path = RouterPath.main)
 class MainActivity : BaseActivity() {
-
+    private val debugReceiver = DebugReceiver()
     private lateinit var drawerToggle: ActionBarDrawerToggle
     private lateinit var viewDataBinding: ActivityMainBinding
     private val serviceConnection = object : ServiceConnection {
@@ -88,10 +91,13 @@ class MainActivity : BaseActivity() {
         if (setupPermission()) {
             MusicPlayerRemote.bindService(this, serviceConnection)
         }
+
+        registerReceiver(debugReceiver, IntentFilter("com.zaze.test.action"))
     }
 
     override fun onDestroy() {
         MusicPlayerRemote.unbindService(this, serviceConnection)
+        unregisterReceiver(debugReceiver)
         super.onDestroy()
     }
 
@@ -130,7 +136,7 @@ class MainActivity : BaseActivity() {
             supportFragmentManager.findFragmentByTag("$itemId")
                     ?: when (itemId) {
                         R.id.action_home -> TestFragment.newInstance("$itemId")
-                        R.id.action_book -> TestFragment.newInstance("$itemId")
+                        R.id.action_reader -> BookshelfFragment.newInstance()
                         R.id.action_music -> LocalMusicFragment.newInstance()
                         R.id.action_game -> TestFragment.newInstance("$itemId")
                         else -> TestFragment.newInstance("$$itemId")

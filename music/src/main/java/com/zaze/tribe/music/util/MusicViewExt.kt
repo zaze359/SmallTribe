@@ -5,8 +5,8 @@ import androidx.databinding.BindingAdapter
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.bumptech.glide.Glide
 import com.zaze.tribe.music.data.dto.Music
+import com.zaze.tribe.music.glide.MusicGlide
 import com.zaze.tribe.music.vm.MusicViewModel
-import com.zaze.tribe.util.glide.MusicGlide
 
 
 /**

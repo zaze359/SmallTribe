@@ -7,9 +7,10 @@ ext {
     versionName = "v1.0.1"
 
     modules = [
-            common: ':common',
-            music : ':music',
-            router: ':router'
+            common  : ':common',
+            music   : ':music',
+            reader  : ':reader',
+            router  : ':router'
     ]
 
     guavaVersion = '23.6-android'

@@ -6,6 +6,8 @@ import androidx.databinding.ObservableBoolean
 import androidx.databinding.ObservableList
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
+import com.zaze.tribe.common.BaseAndroidViewModel
+import com.zaze.tribe.common.util.set
 import com.zaze.tribe.music.data.dto.Music
 import com.zaze.tribe.music.data.loaders.MusicLoader
 import com.zaze.tribe.music.data.source.repository.MusicRepository
@@ -25,17 +27,11 @@ import org.reactivestreams.Subscription
  */
 open class MusicViewModel(
         private val context: Application
-) : AndroidViewModel(context) {
+) : BaseAndroidViewModel(context) {
     val musicList: ObservableList<Music> = ObservableArrayList()
-    /**
-     * 是否加载中
-     */
-    val dataLoading = ObservableBoolean(false)
 
     val isFavorite = MutableLiveData<Boolean>()
 
-
-    private val compositeDisposable = CompositeDisposable()
 
     // ------------------------------------------------------
     // ------------------------------------------------------
