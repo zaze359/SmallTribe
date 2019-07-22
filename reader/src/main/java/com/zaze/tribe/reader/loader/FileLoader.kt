@@ -1,6 +1,8 @@
 package com.zaze.tribe.reader.loader
 
+import com.zaze.tribe.reader.bean.Book
 import com.zaze.tribe.reader.bean.BookChapter
+import java.io.File
 
 /**
  * Description :
@@ -9,5 +11,6 @@ import com.zaze.tribe.reader.bean.BookChapter
  * @version : 2019-07-21 - 22:52
  */
 interface FileLoader {
-    fun loadFile(filePath: String): List<BookChapter>
+
+    fun loadFileIntoBook(book: Book, charset: String)
 }

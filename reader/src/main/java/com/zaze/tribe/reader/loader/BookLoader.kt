@@ -1,23 +1,32 @@
 package com.zaze.tribe.reader.loader
 
+import com.zaze.tribe.reader.bean.Book
+import com.zaze.tribe.reader.util.FileCharset
+import java.io.File
+
+
 /**
  * Description :
  *
  * @author : ZAZE
  * @version : 2019-07-21 - 22:50
  */
-class BookLoader {
+object BookLoader {
+    private const val TXT = ".txt"
 
-    companion object {
-        const val TXT = ".txt"
-    }
-
-    fun loadBook(filePath: String) {
-        val fileLoader: FileLoader = if(filePath.endsWith(TXT)) {
+    /**
+     * 加载书
+     */
+    fun loadBook(filePath: String): Book {
+        val file = File(filePath)
+        val book = Book(file.name, filePath)
+        val fileLoader: FileLoader = if (filePath.endsWith(TXT)) {
             TxtFileLoader()
         } else {
             TxtFileLoader()
         }
+        fileLoader.loadFileIntoBook(book, FileCharset.getCharset(filePath))
+        return book
     }
 
 }

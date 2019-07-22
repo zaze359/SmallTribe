@@ -6,15 +6,27 @@ package com.zaze.tribe.reader.bean
  * @author : ZAZE
  * @version : 2019-07-20 - 19:56
  */
-class BookChapter {
-    /**
-     * 标题
-     */
-    var title:String? = null
+data class BookChapter(var chapter: String) {
 
     /**
-     * 段落信息
+     * 第几段落开始
      */
-    var paragraphs : List<BookParagraph>? = null
+    var paragraphStartIndex: Int = 0
+    /**
+     * 第几段结束
+     */
+    var paragraphEndIndex: Int = paragraphStartIndex
+
+    fun reset(chapter: String, paragraphStartIndex: Int) {
+        this.chapter = chapter
+        this.paragraphStartIndex = paragraphStartIndex
+    }
+
+    fun fork(): BookChapter {
+        return BookChapter(chapter).also {
+            it.paragraphStartIndex = paragraphStartIndex
+            it.paragraphEndIndex = paragraphEndIndex
+        }
+    }
 
 }
