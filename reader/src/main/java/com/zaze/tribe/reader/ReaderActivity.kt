@@ -4,9 +4,11 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import androidx.databinding.DataBindingUtil
+import androidx.lifecycle.Observer
 import com.zaze.tribe.common.BaseActivity
 import com.zaze.tribe.common.util.obtainViewModel
 import com.zaze.tribe.reader.databinding.ReaderActBinding
+import kotlinx.android.synthetic.main.reader_act.*
 
 /**
  * Description : 阅读主页
@@ -29,10 +31,13 @@ class ReaderActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         viewDataBinding = DataBindingUtil.setContentView(this, R.layout.reader_act)
+        viewDataBinding.setLifecycleOwner(this)
         viewModel = obtainViewModel(ReaderViewModel::class.java).apply {
-
+            readerPageData.observe(this@ReaderActivity, Observer {
+                readerView.loadReaderPage(it)
+            })
         }
-        intent.getStringExtra("filePath")?.let{
+        intent.getStringExtra("filePath")?.let {
             viewModel.loadFile(it)
         }
     }

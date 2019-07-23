@@ -9,7 +9,11 @@ import android.view.MotionEvent
 import android.view.View
 import androidx.core.content.ContextCompat
 import com.zaze.tribe.reader.R
+import com.zaze.tribe.reader.bean.BookLine
+import com.zaze.tribe.reader.bean.BookParagraph
 import com.zaze.utils.ZDisplayUtil
+import com.zaze.utils.log.ZLog
+import com.zaze.utils.log.ZTag
 
 /**
  * Description :
@@ -17,17 +21,24 @@ import com.zaze.utils.ZDisplayUtil
  * @author : ZAZE
  * @version : 2019-07-20 - 22:40
  */
-class ReaderCenterView : View {
-    var values: List<String>? = null
+class ReaderContentView : View {
+    /**
+     * 最大行数
+     */
+    private var maxLines: Int = 0
+    private var viewPaddingHeight: Float = 0F
+    private var viewPaddingWidth: Float = 0F
+    //
+    private val lines = ArrayList<BookLine>()
     /**
      * 当前显示的第一行实际对应位置
      */
     private var selectedLineIndex = 0
+    //
+    private val paint: Paint
+    private var fontHeight: Float
 
-    private val paintL: Paint
-    private val paintH: Paint
-    private val interval = ZDisplayUtil.pxFromDp(24f)
-    private var mOffset = 0F
+    private var moveOffset = 0F
 
     private var baseX = 0f
     private var baseY = 0f
@@ -52,21 +63,16 @@ class ReaderCenterView : View {
     constructor(context: Context, attrs: AttributeSet) : super(context, attrs)
 
     init {
-        paintH = createPaint().also {
-            it.textSize = 22.0f
+        paint = createPaint().also {
+            it.textSize = 24.0f
             it.color = ContextCompat.getColor(context, R.color.colorPrimary)
             it.alpha = 255
         }
-        paintL = createPaint().also {
-            it.textSize = 18.0f
-            it.color = ContextCompat.getColor(context, R.color.colorPrimary)
-            it.alpha = DEFAULT_ALPHA
-        }
+        fontHeight = paint.textSize + 2
     }
 
     private fun createPaint(): Paint {
         return Paint().apply {
-            textAlign = Paint.Align.CENTER
             isDither = true
             isAntiAlias = true
         }
@@ -75,56 +81,10 @@ class ReaderCenterView : View {
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
         canvas.drawColor(Color.TRANSPARENT)
-        values?.let {
-            canvas.translate(0f, mOffset)
-            drawSelected(canvas, it, paintH)
-            drawAbove(canvas, it, paintL)
-            drawBelow(canvas, it, paintL)
-        }
-    }
-
-    /**
-     * 绘制当前选中部分
-     */
-    private fun drawSelected(canvas: Canvas, textList: List<String>, paint: Paint) {
-        if (selectedLineIndex >= 0 && selectedLineIndex < textList.size) {
-            val centerValue = textList[selectedLineIndex]
-            canvas.drawText(centerValue, baseX, baseY, paint)
-        }
-    }
-
-    /**
-     * 绘制选中部分上方
-     */
-    private fun drawAbove(canvas: Canvas, textList: List<String>, paint: Paint) {
-        paint.alpha = DEFAULT_ALPHA
-        var aboveY = baseY
-        for (i in selectedLineIndex - 1 downTo Math.max(0, selectedLineIndex - offsetCount)) {
-            textList[i].apply {
-                aboveY -= interval
-                paintL.alpha = Math.max(0, paintL.alpha - 10)
-                if (aboveY >= 0) {
-                    canvas.drawText(this, baseX, aboveY, paint)
-                }
-            }
-        }
-    }
-
-
-    /**
-     * 绘制选中部分下方
-     */
-    private fun drawBelow(canvas: Canvas, textList: List<String>, paint: Paint) {
-        paint.alpha = DEFAULT_ALPHA
-        var belowY = baseY
-        for (i in selectedLineIndex + 1 until Math.min(textList.size, selectedLineIndex + offsetCount)) {
-            textList[i].apply {
-                belowY += interval
-                paintL.alpha = Math.max(0, paintL.alpha - 10)
-                if (belowY <= height) {
-                    canvas.drawText(this, baseX, belowY, paint)
-                }
-            }
+        var y = viewPaddingHeight
+        lines.forEach {
+            y += fontHeight
+            canvas.drawText(it.content, viewPaddingWidth, y, paint)
         }
     }
 
@@ -134,7 +94,10 @@ class ReaderCenterView : View {
         val height = MeasureSpec.getSize(heightMeasureSpec)
         baseX = width * 0.5f
         baseY = height * 0.5f
-        offsetCount = (baseY / interval).toInt()
+        offsetCount = (baseY / fontHeight).toInt()
+        maxLines = (height / fontHeight).toInt()
+        viewPaddingHeight = Math.max(4f, (height - fontHeight * maxLines) / 2)
+        viewPaddingWidth = Math.max(2f, (width % paint.textSize / 2))
         setMeasuredDimension(width, height)
     }
 
@@ -146,14 +109,14 @@ class ReaderCenterView : View {
                 isDragging = true
             }
             MotionEvent.ACTION_MOVE -> {
-                mOffset = event.y - touchY
+                moveOffset = event.y - touchY
                 when {
-                    mOffset >= interval -> {
+                    moveOffset >= fontHeight -> {
                         // 下移
                         touchY = event.y
                         moveDown()
                     }
-                    mOffset <= -interval -> {
+                    moveOffset <= -fontHeight -> {
                         // 上移
                         touchY = event.y
                         moveUp()
@@ -169,13 +132,13 @@ class ReaderCenterView : View {
     }
 
     private fun moveUp() {
-        mOffset = 0F
-        selectedLineIndex = Math.min(values?.size?.let { it - 1 } ?: 0, selectedLineIndex + 1)
+        moveOffset = 0F
+        selectedLineIndex = Math.min(lines.size - 1, selectedLineIndex + 1)
         invalidate()
     }
 
     private fun moveDown() {
-        mOffset = 0F
+        moveOffset = 0F
         selectedLineIndex = Math.max(0, selectedLineIndex - 1)
         invalidate()
     }
@@ -186,5 +149,38 @@ class ReaderCenterView : View {
         if (!isDragging) {
             moveUp()
         }
+    }
+
+    fun load(paragraphs: List<BookParagraph>) {
+        for (paragraph in paragraphs) {
+            ZLog.d(ZTag.TAG_DEBUG, paragraph.paragraph)
+            var chars = paragraph.paragraph.toCharArray()
+            if (lines.size >= maxLines) {
+                break
+            } else {
+                while (chars.isNotEmpty()) {
+                    val index = measureTextWidth(chars)
+                    lines.add(BookLine(String(chars.copyOfRange(0, index))))
+                    chars = chars.copyOfRange(index, chars.size)
+                }
+            }
+        }
+        invalidate()
+    }
+
+    fun measureTextWidth(chars: CharArray): Int {
+        var textWidth = viewPaddingWidth * 2
+        var charWidth: Float
+        var length = 0
+        for (char in chars) {
+            charWidth = paint.measureText(String(charArrayOf(char)))
+            if ((textWidth + charWidth) > width) {
+                break
+            } else {
+                textWidth += charWidth
+            }
+            length++
+        }
+        return length
     }
 }

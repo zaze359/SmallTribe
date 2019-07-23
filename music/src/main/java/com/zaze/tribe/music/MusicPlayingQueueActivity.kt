@@ -3,11 +3,9 @@ package com.zaze.tribe.music
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.zaze.router.ZRouter
 import com.zaze.tribe.common.BaseActivity
 import com.zaze.tribe.common.util.obtainViewModel
 import com.zaze.tribe.common.util.setupActionBar

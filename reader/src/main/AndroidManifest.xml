@@ -1,13 +1,15 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.zaze.tribe.reader">
 
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+
     <application>
 
         <activity
             android:name="com.zaze.tribe.reader.ReaderActivity"
             android:launchMode="singleInstance"
             android:theme="@style/ReadFullScreen">
-
 
         </activity>
 

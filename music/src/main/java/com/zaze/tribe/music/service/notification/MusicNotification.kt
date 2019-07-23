@@ -8,10 +8,7 @@ import android.content.Intent
 import android.os.Build
 import android.widget.RemoteViews
 import androidx.core.app.NotificationCompat
-import com.zaze.router.RouterActivity
-import com.zaze.router.RouterPath
 import com.zaze.tribe.common.BaseApplication
-import com.zaze.tribe.common.util.IconCache
 import com.zaze.tribe.music.R
 import com.zaze.tribe.music.service.MusicService
 import com.zaze.tribe.music.util.MediaIconCache
@@ -44,9 +41,7 @@ class MusicNotification {
         builder = NotificationCompat.Builder(service, channelId).apply {
             setCustomContentView(remoteViews)
             setContentIntent(PendingIntent.getActivity(service, 0,
-                    Intent(service, RouterActivity::class.java).apply {
-                        putExtra(RouterActivity.ROUTER, RouterPath.main)
-                    }, PendingIntent.FLAG_UPDATE_CURRENT))
+                    service.packageManager.getLaunchIntentForPackage(BaseApplication.INSTANCE.packageName), PendingIntent.FLAG_UPDATE_CURRENT))
             //设置小图标
             setSmallIcon(R.mipmap.music_note_white_24dp)
         }

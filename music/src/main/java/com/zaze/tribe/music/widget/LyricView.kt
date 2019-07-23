@@ -101,7 +101,7 @@ class LyricView : View {
         for (i in selectedLineIndex - 1 downTo Math.max(0, selectedLineIndex - offsetCount)) {
             textList[i].apply {
                 aboveY -= interval
-                paintL.alpha = Math.max(0, paintL.alpha - 10)
+                paint.alpha = Math.max(0, paint.alpha - 10)
                 if (aboveY >= 0) {
                     canvas.drawText(this, baseX, aboveY, paint)
                 }
@@ -119,7 +119,7 @@ class LyricView : View {
         for (i in selectedLineIndex + 1 until Math.min(textList.size, selectedLineIndex + offsetCount)) {
             textList[i].apply {
                 belowY += interval
-                paintL.alpha = Math.max(0, paintL.alpha - 10)
+                paint.alpha = Math.max(0, paint.alpha - 10)
                 if (belowY <= height) {
                     canvas.drawText(this, baseX, belowY, paint)
                 }
