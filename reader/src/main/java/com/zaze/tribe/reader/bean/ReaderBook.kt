@@ -37,6 +37,11 @@ class ReaderBook(var book: Book) {
     private fun load(pageLoader: PageLoader, chapterIndex: Int, reverse: Boolean = false) {
         loadPagesFormChapter(pageLoader, chapterIndex)
         if (readerPages.isNotEmpty()) {
+            currPageIndex = if (reverse) {
+                readerPages.size - 1
+            } else {
+                0
+            }
             pageLoader.onLoaded(if (reverse) {
                 readerPages[readerPages.size - 1]
             } else {
@@ -81,7 +86,6 @@ class ReaderBook(var book: Book) {
             ZLog.i("ReaderBook", "当前为最后一章")
             return
         }
-        currPageIndex = 0
         ZLog.i("ReaderBook", "加载下一章节")
         readerHistory.nextChapter()
         load(pageLoader, readerHistory.chapterIndex)
@@ -97,7 +101,6 @@ class ReaderBook(var book: Book) {
             ZLog.i("ReaderBook", "当前为第一章")
             return
         }
-        currPageIndex = 0
         ZLog.i("ReaderBook", "加载上一章节")
         readerHistory.preChapter()
         load(pageLoader, readerHistory.chapterIndex, reverse)
