@@ -3,10 +3,8 @@ package com.zaze.tribe.reader.loader
 import com.zaze.tribe.reader.bean.Book
 import com.zaze.tribe.reader.bean.BookChapter
 import com.zaze.tribe.reader.bean.BookParagraph
-import java.io.BufferedReader
-import java.io.File
-import java.io.FileInputStream
-import java.io.InputStreamReader
+import java.io.*
+import java.lang.Exception
 import java.util.regex.Pattern
 
 /**
@@ -32,30 +30,40 @@ class TxtFileLoader : FileLoader {
 
     override fun loadFileIntoBook(book: Book, charset: String) {
         File(book.localPath).apply {
-            val bufferedReader = BufferedReader(InputStreamReader(FileInputStream(this), charset))
-            //
-            var paragraphIndex = 0
-            val chapter = BookChapter("开始").apply {
-                this.paragraphStartIndex = paragraphIndex
-            }
-            //
-            var line: String? = bufferedReader.readLine()
-            var charIndex = 0
-            while (line != null) {
-                if (line.isNotEmpty()) {
-                    matchChapter(line)?.let {
-                        chapter.paragraphEndIndex = paragraphIndex
-                        book.chapters.add(chapter.fork())
-                        chapter.reset(it, paragraphIndex)
-                    }
-                    book.paragraphs.add(BookParagraph(charIndex, line))
-                    charIndex += line.length
-                    paragraphIndex++
+            var bufferedReader : BufferedReader? = null
+            try {
+                bufferedReader = BufferedReader(InputStreamReader(FileInputStream(this), charset))
+                var paragraphIndex = 0
+                val chapter = BookChapter("开始").apply {
+                    this.paragraphStartIndex = paragraphIndex
                 }
-                line = bufferedReader.readLine()
+                //
+                var line: String? = bufferedReader.readLine()
+                var charIndex = 0
+                while (line != null) {
+                    if (line.isNotEmpty()) {
+                        matchChapter(line)?.let {
+                            chapter.paragraphEndIndex = paragraphIndex
+                            book.chapters.add(chapter.fork())
+                            chapter.reset(it, paragraphIndex)
+                        }
+                        book.paragraphs.add(BookParagraph(charIndex, line))
+                        charIndex += line.length
+                        paragraphIndex++
+                    }
+                    line = bufferedReader.readLine()
+                }
+                chapter.paragraphEndIndex = paragraphIndex
+                book.chapters.add(chapter)
+            } catch (e : Exception) {
+                e.printStackTrace()
+            } finally {
+                try {
+                    bufferedReader?.close()
+                } catch (e: IOException) {
+                    e.printStackTrace()
+                }
             }
-            chapter.paragraphEndIndex = paragraphIndex
-            book.chapters.add(chapter)
         }
     }
 

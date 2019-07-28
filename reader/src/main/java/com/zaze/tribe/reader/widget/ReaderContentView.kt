@@ -26,6 +26,12 @@ class ReaderContentView : View, OnConfigurationChangedListener, GestureDetector.
      * 最大行数
      */
     var maxLines: Int = 0
+    /**
+     * 一行最小字符数
+     */
+    var minCharSize: Int = 1
+
+
     private var viewPaddingHeight: Float = 0F
     private var viewPaddingWidth: Float = 0F
     //
@@ -84,6 +90,8 @@ class ReaderContentView : View, OnConfigurationChangedListener, GestureDetector.
         maxLines = (height / fontHeight).toInt()
         viewPaddingHeight = Math.max(4f, (height - fontHeight * maxLines) / 2)
         viewPaddingWidth = Math.max(12f, (width % paint.textSize / 2))
+        // 首先按照每个字最大宽度计算一行多少个字
+        minCharSize = ((width - viewPaddingWidth * 2) / paint.textSize).toInt()
         setMeasuredDimension(width, height)
     }
 
@@ -120,23 +128,45 @@ class ReaderContentView : View, OnConfigurationChangedListener, GestureDetector.
 
     fun measureTextWidth(chars: CharArray): Int {
         var textWidth = viewPaddingWidth * 2
-        var charWidth: Float
-        var length = 0
-        for (char in chars) {
-            charWidth = paint.measureText(String(charArrayOf(char)))
-            if ((textWidth + charWidth) > width) {
-                break
-            } else {
-                textWidth += charWidth
+        var length = minCharSize
+        if(chars.size <= length) {
+            return chars.size
+        } else {
+            var charWidth: Float
+            textWidth += paint.measureText(String(chars.copyOfRange(0, length)))
+            // 根据差值计算还至少需要多少个字符
+            val minFill = calculateMinCharSize(width - textWidth)
+            if(chars.size <= length + minFill) {
+                return chars.size
             }
-            length++
+            // >=2 才有重新计算的意义
+            if(minFill >= 2) {
+                textWidth += paint.measureText(String(chars.copyOfRange(length, length + minFill)))
+                length += minFill
+            }
+            // 逐字补充
+            for(i in length until chars.size) {
+                if(textWidth >= width) {
+                    break
+                }
+                charWidth = paint.measureText(String(charArrayOf(chars[i])))
+                if ((textWidth + charWidth) <= width) {
+                    length++
+                    textWidth += charWidth
+                } else {
+                    break
+                }
+            }
+            return length
         }
-        return length
     }
+
+   private fun calculateMinCharSize(width: Float):Int {
+       return (width / paint.textSize).toInt()
+   }
 
     // ------------------------------------------------------
     override fun onTouchEvent(event: MotionEvent): Boolean {
-        ZLog.i("onTouchEvent 2222 ", "${event.x} : ${event.y}")
         return gestureDetector.onTouchEvent(event)
 //        when (event.action) {
 //            MotionEvent.ACTION_DOWN -> {
@@ -157,8 +187,8 @@ class ReaderContentView : View, OnConfigurationChangedListener, GestureDetector.
 //                        moveUp()
 //                    }
 //                    else -> invalidate()
-//                }
-//            }
+//                }//            }
+
 //            else -> {
 //                isDragging = false
 //            }

@@ -4,6 +4,7 @@ import android.app.Application
 import com.zaze.router.task.StartupStore
 import com.zaze.router.task.StartupTask
 import com.zaze.tribe.common.BaseApplication
+import com.zaze.utils.log.ZLog
 
 /**
  * Description :
@@ -17,6 +18,7 @@ class App : BaseApplication() {
         super.initStartupTask(application, startupStore)
         startupStore.push(object : StartupTask("ZRouter") {
             override fun doTask() {
+                ZLog.setNeedStack(false)
 //                ZRouter.openDebug()
 //                ZRouter.init(application, "com.zaze.tribe")
             }

@@ -10,8 +10,7 @@ import android.widget.TextView;
 import com.zaze.tribe.music.data.entity.LrcLine;
 import com.zaze.tribe.music.util.LrcProcessor;
 import com.zaze.tribe.music.widget.LyricView;
-import com.zaze.utils.date.ZDateUtil;
-
+import com.zaze.utils.date.DateUtil;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -50,8 +49,8 @@ public class TestFragment extends Fragment {
             builder.append(BuildConfig.URL);
             builder.append(TimeZone.getDefault().getDisplayName() + "\n");
             builder.append(TimeZone.getDefault().getDisplayName(false, TimeZone.SHORT) + "\n");
-            builder.append(TimeZone.getDefault().getRawOffset() / ZDateUtil.HOUR + "\n");
-            builder.append(ZDateUtil.timeMillisToString(System.currentTimeMillis(), "yyyy-MM-dd HH:mm:ss"));
+            builder.append(TimeZone.getDefault().getRawOffset() / DateUtil.HOUR + "\n");
+            builder.append(DateUtil.timeMillisToString(System.currentTimeMillis(), "yyyy-MM-dd HH:mm:ss", TimeZone.getDefault()));
             mLiveData.setValue(builder.toString());
             handler.postDelayed(runnable, 1000L);
         }

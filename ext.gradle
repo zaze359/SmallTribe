@@ -29,7 +29,6 @@ ext {
     uiautomatorx = '2.2.0'
     espressoVersionx = '3.1.0-alpha3'
     //
-    zazeutilVersion = '1.0.0'
     leakcanaryVersion = '1.5'
 }
 
@@ -122,7 +121,7 @@ subprojects {
             implementation 'io.reactivex.rxjava2:rxandroid:2.0.2'
             implementation 'io.reactivex.rxjava2:rxjava:2.1.14'
             //
-            implementation "com.github.zaze359.test:zazeutil:$zazeutilVersion"
+            implementation 'com.github.zaze359.test:zazeutil:1.0.3'
             //
             implementation 'com.google.code.gson:gson:2.8.2'
             implementation 'com.github.bumptech.glide:glide:3.8.0'

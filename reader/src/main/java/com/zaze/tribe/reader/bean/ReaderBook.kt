@@ -3,7 +3,6 @@ package com.zaze.tribe.reader.bean
 import com.zaze.tribe.reader.widget.PageLoader
 import com.zaze.tribe.reader.widget.PageParser
 import com.zaze.utils.log.ZLog
-import com.zaze.utils.log.ZTag
 
 /**
  * Description :
@@ -17,12 +16,12 @@ class ReaderBook(var book: Book) {
     /**
      *
      */
-    private val readerPages = ArrayList<ReaderPage>()
+    private var currPageIndex = 0
+
     /**
      *
      */
-    private var currPageIndex = 0
-
+    private val readerPages = ArrayList<ReaderPage>()
 
     /**
      * 加载历史页
@@ -35,7 +34,7 @@ class ReaderBook(var book: Book) {
      * 加载
      */
     private fun load(pageLoader: PageLoader, chapterIndex: Int, reverse: Boolean = false) {
-        loadPagesFormChapter(pageLoader, chapterIndex)
+        loadAllPagesFormChapter(pageLoader, chapterIndex)
         if (readerPages.isNotEmpty()) {
             currPageIndex = if (reverse) {
                 readerPages.size - 1
@@ -106,20 +105,21 @@ class ReaderBook(var book: Book) {
         load(pageLoader, readerHistory.chapterIndex, reverse)
     }
 
+
     /**
      * 从章节数据中加载页面
      */
-    private fun loadPagesFormChapter(parser: PageParser, chapterIndex: Int) {
+    private fun loadAllPagesFormChapter(parser: PageParser, chapterIndex: Int) {
+        val startTime = System.currentTimeMillis()
         readerPages.clear()
         if (book.chapters.size > chapterIndex) {
             // 获取到历史阅读章节
             val chapter = book.chapters[chapterIndex]
             val paragraphs = book.subParagraphs(chapter.paragraphStartIndex, chapter.paragraphEndIndex)
-            var readerPage = ReaderPage()
+            var readerPage = ReaderPage(chapter.chapter)
             for ((paragraphIndex, paragraph) in paragraphs.withIndex()) {
-                ZLog.d(ZTag.TAG_DEBUG, paragraph.paragraph)
                 var readCharLength = 0
-                var chars = paragraph.paragraph.toCharArray()
+                var chars = ("    " + paragraph.paragraph).toCharArray()
                 while (chars.isNotEmpty()) {
                     val charLength = parser.measureTextWidth(chars)
                     readCharLength += charLength
@@ -128,7 +128,7 @@ class ReaderBook(var book: Book) {
                     if (readerPage.lines.size == parser.maxLines()) {
                         // 记录段落位置
                         readerPages.add(readerPage)
-                        readerPage = ReaderPage()
+                        readerPage = ReaderPage(chapter.chapter)
                         readerPage.paragraphIndex = paragraphIndex
                         readerPage.charIndex = readCharLength
                     }
@@ -138,5 +138,6 @@ class ReaderBook(var book: Book) {
                 readerPages.add(readerPage)
             }
         }
+        ZLog.i("loadAllPagesFormChapter", "finish ${readerPages.size}: ${System.currentTimeMillis() - startTime}")
     }
 }
