@@ -7,4 +7,8 @@ package com.zaze.tribe.reader.bean
  * @version : 2019-07-22 - 0:03
  */
 class BookLine(var content: String) {
+
+    var isFirstLine = false
+    var isLastLine = false
+
 }

@@ -34,7 +34,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_above="@id/readerProgress"
-        android:layout_below="@id/readerChapter"
-        android:background="@color/yellow" />
+        android:layout_below="@id/readerChapter" />
 
 </RelativeLayout>

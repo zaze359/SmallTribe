@@ -117,17 +117,38 @@ class ReaderBook(var book: Book) {
             val chapter = book.chapters[chapterIndex]
             val paragraphs = book.subParagraphs(chapter.paragraphStartIndex, chapter.paragraphEndIndex)
             var readerPage = ReaderPage(chapter.chapter)
+            //
+            var borderLineSize = 0
+            var charLength: Int
+            var readCharLength: Int
+            var chars : CharArray
+            //
+            var bookLine:BookLine
             for ((paragraphIndex, paragraph) in paragraphs.withIndex()) {
-                var readCharLength = 0
-                var chars = ("    " + paragraph.paragraph).toCharArray()
+                readCharLength = 0
+                chars = ("    " + paragraph.paragraph).toCharArray()
                 while (chars.isNotEmpty()) {
-                    val charLength = parser.measureTextWidth(chars)
+                    charLength = parser.measureTextWidth(chars)
+                    bookLine = BookLine(String(chars.copyOfRange(0, charLength)))
+                    // readCharLength = 0,表示为该段落中的第一行
+                    bookLine.isFirstLine = readCharLength == 0
+                    //
                     readCharLength += charLength
-                    readerPage.lines.add(BookLine(String(chars.copyOfRange(0, charLength))))
                     chars = chars.copyOfRange(charLength, chars.size)
-                    if (readerPage.lines.size == parser.maxLines()) {
+                    // 后面没有字符表示最后一行
+                    bookLine.isLastLine = chars.isEmpty()
+                    if(bookLine.isFirstLine) {
+                        borderLineSize ++
+                    }
+                    if(bookLine.isLastLine) {
+                        borderLineSize ++
+                    }
+                    readerPage.lines.add(bookLine)
+                    if(!parser.hasMoreSpace(readerPage.lines.size, borderLineSize)) {
                         // 记录段落位置
+                        ZLog.i("loadAllPagesFormChapter", "readerPage.lines : ${readerPage.lines.size},  borderLineSize : $borderLineSize")
                         readerPages.add(readerPage)
+                        borderLineSize = 0
                         readerPage = ReaderPage(chapter.chapter)
                         readerPage.paragraphIndex = paragraphIndex
                         readerPage.charIndex = readCharLength

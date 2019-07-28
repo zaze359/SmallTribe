@@ -26,10 +26,13 @@ import com.zaze.utils.ZDisplayUtil
  * 一些阅读的配置
  */
 class ReaderConfiguration {
-    var fontSize: Float = 0F
+
+    var borderLinePadding = 16F
+
+     var fontSize: Float = 0F
         get() {
             if (field <= 0) {
-                field = ZDisplayUtil.pxFromDp(20F)
+                field = ZDisplayUtil.pxFromSp(16F)
             }
             return field
         }
@@ -46,6 +49,7 @@ class ReaderConfiguration {
     fun createReaderContentPaint(context: Context): Paint {
         return createReaderPaint().also {
             it.textSize = fontSize
+            it.letterSpacing = 0.2F
             it.color = ContextCompat.getColor(context, R.color.colorPrimary)
             it.alpha = 255
         }

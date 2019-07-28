@@ -88,7 +88,8 @@ class ReaderView : LinearLayout, OnConfigurationChangedListener, PageLoader {
         return readerContent.measureTextWidth(chars)
     }
 
-    override fun maxLines(): Int {
-        return readerContent.maxLines
+    override fun hasMoreSpace(lineSize: Int, borderLineSize: Int): Boolean {
+        return lineSize * readerConfiguration.fontHeight + borderLineSize * readerConfiguration.borderLinePadding  <
+                (readerContent.height - readerConfiguration.fontHeight)
     }
 }

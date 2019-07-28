@@ -8,7 +8,6 @@ import android.util.AttributeSet
 import android.view.GestureDetector
 import android.view.MotionEvent
 import android.view.View
-import android.view.ViewGroup
 import com.zaze.tribe.reader.bean.BookLine
 import com.zaze.utils.log.ZLog
 
@@ -22,6 +21,9 @@ class ReaderContentView : View, OnConfigurationChangedListener, GestureDetector.
     var pageLoader: PageLoader? = null
     private var gestureDetector: GestureDetector = GestureDetector(context, this)
 
+    private var paint = Paint()
+    private var readerConfiguration= ReaderConfiguration()
+
     /**
      * 最大行数
      */
@@ -30,9 +32,8 @@ class ReaderContentView : View, OnConfigurationChangedListener, GestureDetector.
      * 一行最小字符数
      */
     var minCharSize: Int = 1
+    var textWidth = 1F
 
-
-    private var viewPaddingHeight: Float = 0F
     private var viewPaddingWidth: Float = 0F
     //
     private val lines = ArrayList<BookLine>()
@@ -40,20 +41,8 @@ class ReaderContentView : View, OnConfigurationChangedListener, GestureDetector.
      * 当前显示的第一行实际对应位置
      */
     private var selectedLineIndex = 0
-    //
-    var paint = Paint()
-    private var fontHeight: Float = 22F
 
     private var moveOffset = 0F
-
-    private var baseX = 0f
-    private var baseY = 0f
-    private var offsetCount = 0
-
-    /**
-     * 当前触摸的 y
-     */
-    private var touchY = 0F
 
     /**
      * 是否处于拖拽状态
@@ -69,29 +58,33 @@ class ReaderContentView : View, OnConfigurationChangedListener, GestureDetector.
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
         canvas.drawColor(Color.TRANSPARENT)
-        var y = viewPaddingHeight
-        canvas.drawLine(viewPaddingWidth, y, width - viewPaddingWidth, y, paint)
+        var y = 0F
+//        canvas.drawLine(viewPaddingWidth, y, width - viewPaddingWidth, y, paint)
         lines.forEach {
-            y += fontHeight
+            y += readerConfiguration.fontHeight
+            if(it.isFirstLine) {
+                y += readerConfiguration.borderLinePadding
+            }
             canvas.drawText(it.content, viewPaddingWidth, y, paint)
-            canvas.drawLine(viewPaddingWidth, y, width - viewPaddingWidth, y, paint)
+            if(it.isLastLine) {
+                y += readerConfiguration.borderLinePadding
+            }
+//            canvas.drawLine(viewPaddingWidth, y, width - viewPaddingWidth, y, paint)
         }
-        canvas.drawLine(0f, 0f, width * 1f, height * 1f, paint)
-        canvas.drawLine(width * 1f, 0f, 0f, height * 1f, paint)
+//        canvas.drawLine(0f, 0f, width * 1f, height * 1f, paint)
+//        canvas.drawLine(width * 1f, 0f, 0f, height * 1f, paint)
     }
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec)
         val width = MeasureSpec.getSize(widthMeasureSpec)
         val height = MeasureSpec.getSize(heightMeasureSpec)
-        baseX = width * 0.5f
-        baseY = height * 0.5f
-        offsetCount = (baseY / fontHeight).toInt()
-        maxLines = (height / fontHeight).toInt()
-        viewPaddingHeight = Math.max(4f, (height - fontHeight * maxLines) / 2)
-        viewPaddingWidth = Math.max(12f, (width % paint.textSize / 2))
+        maxLines = (height / readerConfiguration.fontHeight).toInt()
+        textWidth = paint.measureText("赵")
+        ZLog.i("ReaderContentView", "textWidth : $textWidth")
+        viewPaddingWidth = Math.max(14f, (width % textWidth / 2))
         // 首先按照每个字最大宽度计算一行多少个字
-        minCharSize = ((width - viewPaddingWidth * 2) / paint.textSize).toInt()
+        minCharSize = ((width - viewPaddingWidth * 2) / textWidth).toInt()
         setMeasuredDimension(width, height)
     }
 
@@ -123,30 +116,29 @@ class ReaderContentView : View, OnConfigurationChangedListener, GestureDetector.
 
     override fun onConfigurationChanged(readerConfiguration: ReaderConfiguration) {
         paint = readerConfiguration.createReaderContentPaint(context)
-        fontHeight = readerConfiguration.fontHeight
     }
 
     fun measureTextWidth(chars: CharArray): Int {
         var textWidth = viewPaddingWidth * 2
         var length = minCharSize
-        if(chars.size <= length) {
+        if (chars.size <= length) {
             return chars.size
         } else {
             var charWidth: Float
             textWidth += paint.measureText(String(chars.copyOfRange(0, length)))
             // 根据差值计算还至少需要多少个字符
             val minFill = calculateMinCharSize(width - textWidth)
-            if(chars.size <= length + minFill) {
+            if (chars.size <= length + minFill) {
                 return chars.size
             }
             // >=2 才有重新计算的意义
-            if(minFill >= 2) {
+            if (minFill >= 2) {
                 textWidth += paint.measureText(String(chars.copyOfRange(length, length + minFill)))
                 length += minFill
             }
             // 逐字补充
-            for(i in length until chars.size) {
-                if(textWidth >= width) {
+            for (i in length until chars.size) {
+                if (textWidth >= width) {
                     break
                 }
                 charWidth = paint.measureText(String(charArrayOf(chars[i])))
@@ -161,9 +153,9 @@ class ReaderContentView : View, OnConfigurationChangedListener, GestureDetector.
         }
     }
 
-   private fun calculateMinCharSize(width: Float):Int {
-       return (width / paint.textSize).toInt()
-   }
+    private fun calculateMinCharSize(width: Float): Int {
+        return (width / textWidth).toInt()
+    }
 
     // ------------------------------------------------------
     override fun onTouchEvent(event: MotionEvent): Boolean {

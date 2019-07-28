@@ -1,5 +1,6 @@
 package com.zaze.tribe.reader.widget
 
+
 /**
  * Description :
  * @author : ZAZE
@@ -9,5 +10,6 @@ interface PageParser {
 
     fun measureTextWidth(chars: CharArray): Int
 
-    fun maxLines(): Int
+    fun hasMoreSpace(lineSize: Int, borderLineSize: Int): Boolean
+
 }
