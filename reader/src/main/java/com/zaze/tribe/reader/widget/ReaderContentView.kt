@@ -5,15 +5,12 @@ import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
 import android.util.AttributeSet
+import android.view.GestureDetector
 import android.view.MotionEvent
 import android.view.View
-import androidx.core.content.ContextCompat
-import com.zaze.tribe.reader.R
+import android.view.ViewGroup
 import com.zaze.tribe.reader.bean.BookLine
-import com.zaze.tribe.reader.bean.BookParagraph
-import com.zaze.utils.ZDisplayUtil
 import com.zaze.utils.log.ZLog
-import com.zaze.utils.log.ZTag
 
 /**
  * Description :
@@ -21,11 +18,14 @@ import com.zaze.utils.log.ZTag
  * @author : ZAZE
  * @version : 2019-07-20 - 22:40
  */
-class ReaderContentView : View {
+class ReaderContentView : View, OnConfigurationChangedListener, GestureDetector.OnGestureListener {
+    var pageLoader: PageLoader? = null
+    private var gestureDetector: GestureDetector = GestureDetector(context, this)
+
     /**
      * 最大行数
      */
-    private var maxLines: Int = 0
+    var maxLines: Int = 0
     private var viewPaddingHeight: Float = 0F
     private var viewPaddingWidth: Float = 0F
     //
@@ -35,8 +35,8 @@ class ReaderContentView : View {
      */
     private var selectedLineIndex = 0
     //
-    private val paint: Paint
-    private var fontHeight: Float
+    var paint = Paint()
+    private var fontHeight: Float = 22F
 
     private var moveOffset = 0F
 
@@ -49,8 +49,6 @@ class ReaderContentView : View {
      */
     private var touchY = 0F
 
-    private val DEFAULT_ALPHA = 230
-
     /**
      * 是否处于拖拽状态
      */
@@ -62,30 +60,18 @@ class ReaderContentView : View {
     constructor(context: Context, attrs: AttributeSet, defStyle: Int) : super(context, attrs, defStyle)
     constructor(context: Context, attrs: AttributeSet) : super(context, attrs)
 
-    init {
-        paint = createPaint().also {
-            it.textSize = 24.0f
-            it.color = ContextCompat.getColor(context, R.color.colorPrimary)
-            it.alpha = 255
-        }
-        fontHeight = paint.textSize + 2
-    }
-
-    private fun createPaint(): Paint {
-        return Paint().apply {
-            isDither = true
-            isAntiAlias = true
-        }
-    }
-
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
         canvas.drawColor(Color.TRANSPARENT)
         var y = viewPaddingHeight
+        canvas.drawLine(viewPaddingWidth, y, width - viewPaddingWidth, y, paint)
         lines.forEach {
             y += fontHeight
             canvas.drawText(it.content, viewPaddingWidth, y, paint)
+            canvas.drawLine(viewPaddingWidth, y, width - viewPaddingWidth, y, paint)
         }
+        canvas.drawLine(0f, 0f, width * 1f, height * 1f, paint)
+        canvas.drawLine(width * 1f, 0f, 0f, height * 1f, paint)
     }
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
@@ -97,38 +83,8 @@ class ReaderContentView : View {
         offsetCount = (baseY / fontHeight).toInt()
         maxLines = (height / fontHeight).toInt()
         viewPaddingHeight = Math.max(4f, (height - fontHeight * maxLines) / 2)
-        viewPaddingWidth = Math.max(2f, (width % paint.textSize / 2))
+        viewPaddingWidth = Math.max(12f, (width % paint.textSize / 2))
         setMeasuredDimension(width, height)
-    }
-
-
-    override fun onTouchEvent(event: MotionEvent): Boolean {
-        when (event.action) {
-            MotionEvent.ACTION_DOWN -> {
-                touchY = event.y
-                isDragging = true
-            }
-            MotionEvent.ACTION_MOVE -> {
-                moveOffset = event.y - touchY
-                when {
-                    moveOffset >= fontHeight -> {
-                        // 下移
-                        touchY = event.y
-                        moveDown()
-                    }
-                    moveOffset <= -fontHeight -> {
-                        // 上移
-                        touchY = event.y
-                        moveUp()
-                    }
-                    else -> invalidate()
-                }
-            }
-            else -> {
-                isDragging = false
-            }
-        }
-        return true
     }
 
     private fun moveUp() {
@@ -151,21 +107,15 @@ class ReaderContentView : View {
         }
     }
 
-    fun load(paragraphs: List<BookParagraph>) {
-        for (paragraph in paragraphs) {
-            ZLog.d(ZTag.TAG_DEBUG, paragraph.paragraph)
-            var chars = paragraph.paragraph.toCharArray()
-            if (lines.size >= maxLines) {
-                break
-            } else {
-                while (chars.isNotEmpty()) {
-                    val index = measureTextWidth(chars)
-                    lines.add(BookLine(String(chars.copyOfRange(0, index))))
-                    chars = chars.copyOfRange(index, chars.size)
-                }
-            }
-        }
+    fun load(bookLines: List<BookLine>) {
+        lines.clear()
+        lines.addAll(bookLines)
         invalidate()
+    }
+
+    override fun onConfigurationChanged(readerConfiguration: ReaderConfiguration) {
+        paint = readerConfiguration.createReaderContentPaint(context)
+        fontHeight = readerConfiguration.fontHeight
     }
 
     fun measureTextWidth(chars: CharArray): Int {
@@ -182,5 +132,69 @@ class ReaderContentView : View {
             length++
         }
         return length
+    }
+
+    // ------------------------------------------------------
+    override fun onTouchEvent(event: MotionEvent): Boolean {
+        ZLog.i("onTouchEvent 2222 ", "${event.x} : ${event.y}")
+        return gestureDetector.onTouchEvent(event)
+//        when (event.action) {
+//            MotionEvent.ACTION_DOWN -> {
+//                touchY = event.y
+//                isDragging = true
+//            }
+//            MotionEvent.ACTION_MOVE -> {
+//                moveOffset = event.y - touchY
+//                when {
+//                    moveOffset >= fontHeight -> {
+//                        // 下移
+//                        touchY = event.y
+//                        moveDown()
+//                    }
+//                    moveOffset <= -fontHeight -> {
+//                        // 上移
+//                        touchY = event.y
+//                        moveUp()
+//                    }
+//                    else -> invalidate()
+//                }
+//            }
+//            else -> {
+//                isDragging = false
+//            }
+//        }
+//        return true
+    }
+
+    override fun onShowPress(e: MotionEvent) {
+    }
+
+    override fun onSingleTapUp(e: MotionEvent): Boolean {
+        return when {
+            e.x <= width / 3 -> {
+                pageLoader?.loadPrePage()
+                true
+            }
+            e.x >= 2 * width / 3 -> {
+                pageLoader?.loadNextPage()
+                true
+            }
+            else -> performClick()
+        }
+    }
+
+    override fun onDown(e: MotionEvent): Boolean {
+        return true
+    }
+
+    override fun onFling(e1: MotionEvent, e2: MotionEvent, velocityX: Float, velocityY: Float): Boolean {
+        return false
+    }
+
+    override fun onScroll(e1: MotionEvent, e2: MotionEvent, distanceX: Float, distanceY: Float): Boolean {
+        return false
+    }
+
+    override fun onLongPress(e: MotionEvent) {
     }
 }

@@ -3,8 +3,6 @@ package com.zaze.tribe.reader.loader
 import com.zaze.tribe.reader.bean.Book
 import com.zaze.tribe.reader.bean.BookChapter
 import com.zaze.tribe.reader.bean.BookParagraph
-import com.zaze.tribe.reader.util.FileCharset
-import com.zaze.utils.log.ZLog
 import java.io.BufferedReader
 import java.io.File
 import java.io.FileInputStream
@@ -35,25 +33,29 @@ class TxtFileLoader : FileLoader {
     override fun loadFileIntoBook(book: Book, charset: String) {
         File(book.localPath).apply {
             val bufferedReader = BufferedReader(InputStreamReader(FileInputStream(this), charset))
-            var line: String? = bufferedReader.readLine()
             //
-            var index = 0
+            var paragraphIndex = 0
             val chapter = BookChapter("开始").apply {
-                this.paragraphStartIndex = index
+                this.paragraphStartIndex = paragraphIndex
             }
             //
+            var line: String? = bufferedReader.readLine()
+            var charIndex = 0
             while (line != null) {
                 if (line.isNotEmpty()) {
                     matchChapter(line)?.let {
-                        chapter.paragraphEndIndex = index
+                        chapter.paragraphEndIndex = paragraphIndex
                         book.chapters.add(chapter.fork())
-                        chapter.reset(it, index)
+                        chapter.reset(it, paragraphIndex)
                     }
-                    book.paragraphs.add(BookParagraph(line))
-                    index++
+                    book.paragraphs.add(BookParagraph(charIndex, line))
+                    charIndex += line.length
+                    paragraphIndex++
                 }
                 line = bufferedReader.readLine()
             }
+            chapter.paragraphEndIndex = paragraphIndex
+            book.chapters.add(chapter)
         }
     }
 

@@ -6,7 +6,6 @@ import android.media.MediaPlayer
 import android.net.Uri
 import android.os.PowerManager
 import android.widget.Toast
-import com.zaze.tribe.music.R
 
 /**
  * Description :
@@ -18,7 +17,8 @@ class MyMediaPlayer(private val context: Context) : MediaPlayer.OnErrorListener,
 
     private var mediaPlayer = MediaPlayer()
     private var isInitialized = false
-    var mediaCallback : MediaCallback? = null
+    var mediaCallback: MediaCallback? = null
+
     init {
         mediaPlayer.setWakeMode(context, PowerManager.PARTIAL_WAKE_LOCK)
     }
@@ -38,6 +38,15 @@ class MyMediaPlayer(private val context: Context) : MediaPlayer.OnErrorListener,
                 prepare()
                 setOnCompletionListener(this@MyMediaPlayer)
                 setOnErrorListener(this@MyMediaPlayer)
+//                setOnBufferingUpdateListener { mp, percent ->
+//                    ZLog.d("setOnBufferingUpdateListener", "percent : $percent")
+//                }
+//                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+//                    setOnTimedMetaDataAvailableListener { mp, data ->
+//                        ZLog.d("setOnTimedMetaDataAvailableListener", "${data.timestamp}")
+//                        ZLog.d("setOnTimedMetaDataAvailableListener", "${data.metaData.size}")
+//                    }
+//                }
                 true
             } catch (e: Exception) {
                 e.printStackTrace()

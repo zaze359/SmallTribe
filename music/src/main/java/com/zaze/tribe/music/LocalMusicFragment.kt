@@ -31,6 +31,7 @@ class LocalMusicFragment : BaseFragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         viewDataBinding = MusicLocalFragBinding.inflate(inflater, container, false)
+        viewDataBinding.setLifecycleOwner(this)
         obtainViewModel(MusicViewModel::class.java).let {
             viewModel = it
             viewDataBinding.viewModel = viewModel

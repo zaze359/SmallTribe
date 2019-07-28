@@ -2,11 +2,12 @@ package com.zaze.tribe.reader.widget
 
 import android.content.Context
 import android.util.AttributeSet
+import android.view.MotionEvent
 import android.widget.LinearLayout
 import android.widget.TextView
 import com.zaze.tribe.reader.R
+import com.zaze.tribe.reader.bean.ReaderBook
 import com.zaze.tribe.reader.bean.ReaderPage
-import com.zaze.tribe.reader.util.ReaderProfile
 
 /**
  * Description :
@@ -14,27 +15,28 @@ import com.zaze.tribe.reader.util.ReaderProfile
  * @author : ZAZE
  * @version : 2019-07-20 - 22:24
  */
-class ReaderView : LinearLayout {
+class ReaderView : LinearLayout, OnConfigurationChangedListener, PageLoader {
+    private var readerBook: ReaderBook? = null
+    private var readerConfiguration: ReaderConfiguration
 
-    private lateinit var readerChapter: TextView
-    private lateinit var readerContent: ReaderContentView
+    private var readerChapter: TextView
+    private var readerContent: ReaderContentView
     private lateinit var readerProgress: TextView
+    // ------------------------------------------------------
+
+    constructor(context: Context?) : super(context)
+    constructor(context: Context?, attrs: AttributeSet?) : super(context, attrs)
+    constructor(context: Context?, attrs: AttributeSet?, defStyleAttr: Int) : super(context, attrs, defStyleAttr)
+    constructor(context: Context?, attrs: AttributeSet?, defStyleAttr: Int, defStyleRes: Int) : super(context, attrs, defStyleAttr, defStyleRes)
 
 
-    constructor(context: Context?) : super(context) {
-        init(context)
-    }
-
-    constructor(context: Context?, attrs: AttributeSet?) : super(context, attrs) {
-        init(context)
-    }
-
-    constructor(context: Context?, attrs: AttributeSet?, defStyleAttr: Int) : super(context, attrs, defStyleAttr) {
-        init(context)
-    }
-
-    constructor(context: Context?, attrs: AttributeSet?, defStyleAttr: Int, defStyleRes: Int) : super(context, attrs, defStyleAttr, defStyleRes) {
-        init(context)
+    init {
+        val reader = inflate(context, R.layout.reader_view, this)
+        readerConfiguration = ReaderConfiguration()
+        readerChapter = reader.findViewById(R.id.readerChapter)
+        readerContent = reader.findViewById(R.id.bookReaderContent)
+        readerContent.pageLoader = this
+        readerContent.onConfigurationChanged(readerConfiguration)
     }
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
@@ -42,20 +44,51 @@ class ReaderView : LinearLayout {
         val width = MeasureSpec.getSize(widthMeasureSpec)
         val height = MeasureSpec.getSize(heightMeasureSpec)
         setMeasuredDimension(width, height)
-        ReaderProfile.init(context, width, height)
     }
 
 
-    private fun init(context: Context?) {
-        val reader = inflate(context, R.layout.reader_view, this)
-        readerChapter = reader.findViewById(R.id.readerChapter)
-        readerContent = reader.findViewById(R.id.bookReaderCenter)
+    override fun onConfigurationChanged(readerConfiguration: ReaderConfiguration) {
+        this.readerConfiguration = readerConfiguration
+        readerContent.onConfigurationChanged(readerConfiguration)
+        invalidate()
     }
 
-    fun loadReaderPage(page: ReaderPage?) {
-        page?.let {
-            readerChapter.text = it.chapter.chapter
-            readerContent.load(page.maxParagraphs)
-        }
+    fun startReadBook(readerBook: ReaderBook) {
+        this.readerBook = readerBook
+        readerBook.loadFromHistory(this)
+    }
+
+    override fun setOnClickListener(l: OnClickListener?) {
+        readerContent.setOnClickListener(l)
+    }
+
+    override fun loadNextPage() {
+        readerBook?.loadNextPage(this)
+    }
+
+    override fun loadPrePage() {
+        readerBook?.loadPrePage(this)
+    }
+
+    override fun loadNextChapter() {
+        readerBook?.loadNextChapter(this)
+    }
+
+    override fun loadPreChapter() {
+        readerBook?.loadPreChapter(this)
+    }
+
+    override fun onLoaded(readerPage: ReaderPage) {
+        readerChapter.text = readerPage.chapter
+        readerContent.load(readerPage.lines)
+        invalidate()
+    }
+
+    override fun measureTextWidth(chars: CharArray): Int {
+        return readerContent.measureTextWidth(chars)
+    }
+
+    override fun maxLines(): Int {
+        return readerContent.maxLines
     }
 }

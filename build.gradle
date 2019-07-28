@@ -3,6 +3,7 @@ buildscript {
     ext.gradlePluginVersion = '3.2.1'
 
     repositories {
+        mavenCentral()
         google()
         jcenter()
     }
@@ -14,6 +15,7 @@ buildscript {
 
 allprojects {
     repositories {
+        mavenCentral()
         google()
         jcenter()
 //        maven {

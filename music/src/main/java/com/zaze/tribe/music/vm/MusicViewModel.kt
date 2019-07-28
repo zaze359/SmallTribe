@@ -2,23 +2,17 @@ package com.zaze.tribe.music.vm
 
 import android.app.Application
 import androidx.databinding.ObservableArrayList
-import androidx.databinding.ObservableBoolean
 import androidx.databinding.ObservableList
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import com.zaze.tribe.common.BaseAndroidViewModel
 import com.zaze.tribe.common.util.set
+import com.zaze.tribe.music.MusicPlayerRemote
 import com.zaze.tribe.music.data.dto.Music
 import com.zaze.tribe.music.data.loaders.MusicLoader
-import com.zaze.tribe.music.data.source.repository.MusicRepository
-import com.zaze.tribe.music.MusicPlayerRemote
 import com.zaze.utils.ZTipUtil
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
-import org.reactivestreams.Subscriber
-import org.reactivestreams.Subscription
 
 /**
  * Description :
@@ -32,8 +26,6 @@ open class MusicViewModel(
 
     val isFavorite = MutableLiveData<Boolean>()
 
-
-    // ------------------------------------------------------
     // ------------------------------------------------------
 
     fun loadMusics() {

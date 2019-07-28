@@ -1,32 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white"
-    android:orientation="vertical">
+    android:background="@color/white">
 
-    <RelativeLayout
+    <TextView
+        android:id="@+id/readerChapter"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:padding="8dp"
+        android:textColor="@color/reader_text_color"
+        tools:text="第一章" />
 
-        <TextView
-            android:id="@+id/readerChapter"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:ellipsize="end"
-            android:maxLines="1"
-            android:padding="8dp"
-            android:textColor="@color/reader_text_color"
-            tools:text="第一章" />
+    <TextView
+        android:id="@+id/readerProgress"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:padding="8dp"
+        android:textColor="@color/reader_text_color"
+        tools:text="0.0" />
 
-    </RelativeLayout>
 
     <com.zaze.tribe.reader.widget.ReaderContentView
-        android:id="@+id/bookReaderCenter"
+        android:id="@+id/bookReaderContent"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
+        android:layout_height="match_parent"
+        android:layout_above="@id/readerProgress"
+        android:layout_below="@id/readerChapter"
         android:background="@color/yellow" />
-</LinearLayout>
+
+</RelativeLayout>
