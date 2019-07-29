@@ -26,10 +26,15 @@ import com.zaze.utils.ZDisplayUtil
  * 一些阅读的配置
  */
 class ReaderConfiguration {
-
-    var borderLinePadding = 16F
-
-     var fontSize: Float = 0F
+    /**
+     * 一个段落中上下边界行的padding值
+     *
+     */
+    var borderLinePadding = 14F
+    /**
+     * 字号
+     */
+    var fontSize: Float = 0F
         get() {
             if (field <= 0) {
                 field = ZDisplayUtil.pxFromSp(16F)
@@ -37,6 +42,9 @@ class ReaderConfiguration {
             return field
         }
 
+    /**
+     * 字高
+     */
     var fontHeight: Float = 0F
         get() {
             if (field <= 0) {

@@ -33,9 +33,8 @@ class ReaderContentView : View, OnConfigurationChangedListener, GestureDetector.
      */
     var minCharSize: Int = 1
     var textWidth = 1F
-
-    private var viewPaddingWidth: Float = 0F
     //
+    private var viewPaddingWidth: Float = 0F
     private val lines = ArrayList<BookLine>()
     /**
      * 当前显示的第一行实际对应位置
@@ -49,9 +48,7 @@ class ReaderContentView : View, OnConfigurationChangedListener, GestureDetector.
      */
     private var isDragging = false
 
-
     constructor(context: Context) : super(context)
-
     constructor(context: Context, attrs: AttributeSet, defStyle: Int) : super(context, attrs, defStyle)
     constructor(context: Context, attrs: AttributeSet) : super(context, attrs)
 

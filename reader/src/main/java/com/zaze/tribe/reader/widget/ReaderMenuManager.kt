@@ -1,5 +1,6 @@
 package com.zaze.tribe.reader.widget
 
+import android.app.Activity
 import android.content.Context
 import android.view.Gravity
 import android.view.View
@@ -17,18 +18,26 @@ class ReaderMenuManager(context: Context, private val pageLoader: PageLoader) {
     private val popupWindow: PopupWindow
     private val readerMenuNext: TextView
     private val readerMenuPre: TextView
+    private val readerNavBack: TextView
 
     init {
         val view = View.inflate(context, R.layout.reader_menu_view, null)
         readerMenuNext = view.findViewById(R.id.readerMenuNext)
+        readerMenuPre = view.findViewById(R.id.readerMenuPre)
+        readerNavBack = view.findViewById(R.id.readerNavBack)
+        //
         readerMenuNext.setOnClickListener {
             pageLoader.loadNextChapter()
-//            pageLoader.loadNextPage()
         }
-        readerMenuPre = view.findViewById(R.id.readerMenuPre)
         readerMenuPre.setOnClickListener {
-//            pageLoader.loadPrePage()
             pageLoader.loadPreChapter()
+        }
+        //
+        readerNavBack.setOnClickListener {
+            dismiss()
+            if (context is Activity) {
+                context.finish()
+            }
         }
         //
         popupWindow = PopupWindow(view, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
@@ -38,6 +47,10 @@ class ReaderMenuManager(context: Context, private val pageLoader: PageLoader) {
             dismiss()
         }
         popupWindow.update()
+    }
+
+    fun setTitle(title: String) {
+        readerNavBack.text = title
     }
 
     /**

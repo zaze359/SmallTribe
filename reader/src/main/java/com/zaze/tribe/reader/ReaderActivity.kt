@@ -3,7 +3,6 @@ package com.zaze.tribe.reader
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.view.MotionEvent
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import com.zaze.tribe.common.BaseActivity
@@ -37,6 +36,7 @@ class ReaderActivity : BaseActivity() {
         viewDataBinding.setLifecycleOwner(this)
         viewModel = obtainViewModel(ReaderViewModel::class.java).apply {
             readerBookData.observe(this@ReaderActivity, Observer {
+                readerMenuManager?.setTitle(it.book.name)
                 readerView.startReadBook(it)
             })
         }

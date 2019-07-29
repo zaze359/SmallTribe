@@ -146,7 +146,6 @@ class ReaderBook(var book: Book) {
                     readerPage.lines.add(bookLine)
                     if(!parser.hasMoreSpace(readerPage.lines.size, borderLineSize)) {
                         // 记录段落位置
-                        ZLog.i("loadAllPagesFormChapter", "readerPage.lines : ${readerPage.lines.size},  borderLineSize : $borderLineSize")
                         readerPages.add(readerPage)
                         borderLineSize = 0
                         readerPage = ReaderPage(chapter.chapter)
