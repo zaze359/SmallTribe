@@ -1,17 +1,19 @@
 package com.zaze.tribe.reader.bean
 
+import java.io.File
+
 /**
  * Description :
  *
  * @author : ZAZE
  * @version : 2019-06-08 - 0:43
  */
-class Book(val name: String, val localPath: String) {
+class Book(file: File) {
+    val name: String = file.name.split(".")[0]
+    val localPath: String = file.absolutePath
 
     var chapters = ArrayList<BookChapter>()
-
     var paragraphs = ArrayList<BookParagraph>()
-
 
     fun isLastChapter(chapterIndex: Int): Boolean {
         return chapterIndex >= chapters.size - 1

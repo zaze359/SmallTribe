@@ -29,11 +29,11 @@ class BookshelfViewModel(application: Application) : BaseAndroidViewModel(applic
             it.onNext(FileUtil.searchFileBySuffix(Environment.getExternalStorageDirectory(), "txt", true))
             it.onComplete()
         }.subscribeOn(Schedulers.io()).map {
-            it.mapTo(arrayListOf(), { file ->
-                Book(file.name, file.absolutePath)
-            })
+            it.mapTo(arrayListOf()) { file ->
+                Book(file)
+            }
         }.observeOn(AndroidSchedulers.mainThread())
-                .doFinally{
+                .doFinally {
                     dataLoading.set(false)
                 }
                 .subscribe(object : MyObserver<ArrayList<Book>>(compositeDisposable) {

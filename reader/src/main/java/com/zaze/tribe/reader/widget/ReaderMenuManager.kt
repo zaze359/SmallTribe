@@ -7,6 +7,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.PopupWindow
 import android.widget.TextView
+import androidx.drawerlayout.widget.DrawerLayout
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.zaze.tribe.reader.R
 
 /**
@@ -14,25 +16,28 @@ import com.zaze.tribe.reader.R
  * @author : ZAZE
  * @version : 2019-07-26 - 16:20
  */
-class ReaderMenuManager(context: Context, private val pageLoader: PageLoader) {
+class ReaderMenuManager(context: Context, private val pageLoader: PageLoader) : DrawerLayout.DrawerListener {
+
     private val popupWindow: PopupWindow
-    private val readerMenuNext: TextView
-    private val readerMenuPre: TextView
+    private val readerNavNext: TextView
+    private val readerNavPre: TextView
     private val readerNavBack: TextView
+    private val readerNavMenu: BottomNavigationView
+    var readerMenuListener: ReaderMenuListener? = null
 
     init {
         val view = View.inflate(context, R.layout.reader_menu_view, null)
-        readerMenuNext = view.findViewById(R.id.readerMenuNext)
-        readerMenuPre = view.findViewById(R.id.readerMenuPre)
+        readerNavNext = view.findViewById(R.id.readerNavNext)
+        readerNavPre = view.findViewById(R.id.readerNavPre)
         readerNavBack = view.findViewById(R.id.readerNavBack)
+        readerNavMenu = view.findViewById(R.id.readerNavMenu)
         //
-        readerMenuNext.setOnClickListener {
+        readerNavNext.setOnClickListener {
             pageLoader.loadNextChapter()
         }
-        readerMenuPre.setOnClickListener {
+        readerNavPre.setOnClickListener {
             pageLoader.loadPreChapter()
         }
-        //
         readerNavBack.setOnClickListener {
             dismiss()
             if (context is Activity) {
@@ -40,11 +45,27 @@ class ReaderMenuManager(context: Context, private val pageLoader: PageLoader) {
             }
         }
         //
+        readerNavMenu.itemTextColor = context.resources.getColorStateList(R.color.white)
+        readerNavMenu.itemIconTintList = context.resources.getColorStateList(R.color.white)
+
+        readerNavMenu.setOnNavigationItemSelectedListener {
+            when (it.itemId) {
+                R.id.action_catalog -> {
+                    readerMenuListener?.showCatalog()
+                    dismiss()
+                }
+                else -> {
+                }
+            }
+            true
+        }
+        //
         popupWindow = PopupWindow(view, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
-//        popupWindow.setBackgroundDrawable(ContextCompat.getDrawable(context, R.drawable.bg_corner_stroke_gray))
-        popupWindow.isOutsideTouchable = true
-        view.setOnClickListener {
+        popupWindow.contentView.setOnClickListener {
             dismiss()
+        }
+        popupWindow.setOnDismissListener {
+            readerMenuListener?.onDismiss()
         }
         popupWindow.update()
     }
@@ -70,5 +91,28 @@ class ReaderMenuManager(context: Context, private val pageLoader: PageLoader) {
         if (popupWindow.isShowing) {
             popupWindow.dismiss()
         }
+    }
+
+    // --------------------------------------------------
+
+    override fun onDrawerStateChanged(newState: Int) {
+        // 状态改变时
+    }
+
+    override fun onDrawerSlide(drawerView: View, slideOffset: Float) {
+        // 滑动时
+    }
+
+    override fun onDrawerClosed(drawerView: View) {
+        // 完全关闭时
+    }
+
+    override fun onDrawerOpened(drawerView: View) {
+        // 完全展开时
+    }
+
+    // --------------------------------------------------
+    interface ReaderMenuListener : PopupWindow.OnDismissListener {
+        fun showCatalog()
     }
 }

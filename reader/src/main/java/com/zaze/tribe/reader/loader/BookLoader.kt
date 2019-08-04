@@ -18,8 +18,7 @@ object BookLoader {
      * 加载书
      */
     fun loadBook(filePath: String): Book {
-        val file = File(filePath)
-        val book = Book(file.name, filePath)
+        val book = Book(File(filePath))
         val fileLoader: FileLoader = if (filePath.endsWith(TXT)) {
             TxtFileLoader()
         } else {

@@ -12,6 +12,9 @@ import com.zaze.utils.log.ZLog
  */
 class ReaderBook(var book: Book) {
 
+    /**
+     * 阅读历史
+     */
     var readerHistory = ReaderHistory()
     /**
      *
@@ -23,6 +26,14 @@ class ReaderBook(var book: Book) {
      */
     private val readerPages = ArrayList<ReaderPage>()
 
+    // --------------------------------------------------
+
+
+    fun getCurChapter(): BookChapter {
+        return book.chapters[readerHistory.chapterIndex]
+    }
+
+    // --------------------------------------------------
     /**
      * 加载历史页
      */
@@ -121,9 +132,9 @@ class ReaderBook(var book: Book) {
             var borderLineSize = 0
             var charLength: Int
             var readCharLength: Int
-            var chars : CharArray
+            var chars: CharArray
             //
-            var bookLine:BookLine
+            var bookLine: BookLine
             for ((paragraphIndex, paragraph) in paragraphs.withIndex()) {
                 readCharLength = 0
                 chars = ("    " + paragraph.paragraph).toCharArray()
@@ -137,14 +148,14 @@ class ReaderBook(var book: Book) {
                     chars = chars.copyOfRange(charLength, chars.size)
                     // 后面没有字符表示最后一行
                     bookLine.isLastLine = chars.isEmpty()
-                    if(bookLine.isFirstLine) {
-                        borderLineSize ++
+                    if (bookLine.isFirstLine) {
+                        borderLineSize++
                     }
-                    if(bookLine.isLastLine) {
-                        borderLineSize ++
+                    if (bookLine.isLastLine) {
+                        borderLineSize++
                     }
                     readerPage.lines.add(bookLine)
-                    if(!parser.hasMoreSpace(readerPage.lines.size, borderLineSize)) {
+                    if (!parser.hasMoreSpace(readerPage.lines.size, borderLineSize)) {
                         // 记录段落位置
                         readerPages.add(readerPage)
                         borderLineSize = 0

@@ -15,5 +15,4 @@ interface PageLoader : PageParser {
     fun loadNextChapter()
     fun loadPreChapter()
     fun onLoaded(readerPage: ReaderPage)
-
 }

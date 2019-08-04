@@ -4,7 +4,6 @@ import com.zaze.tribe.reader.bean.Book
 import com.zaze.tribe.reader.bean.BookChapter
 import com.zaze.tribe.reader.bean.BookParagraph
 import java.io.*
-import java.lang.Exception
 import java.util.regex.Pattern
 
 /**
@@ -25,7 +24,7 @@ class TxtFileLoader : FileLoader {
          * 5. 空格或者非下划线符号
          * 6. 至多20个字的章节描述
          */
-        val pattern = Pattern.compile("(^([\\W]*)第[0-9\\u4e00-\\u9fa5\\u767e\\u5343\\u96f6]{1,10}[章部节卷集级片篇回])([\\W]+(.{0,20}))?")
+        val pattern = Pattern.compile("(^([\\W]*)第[0-9\\u4e00-\\u9fa5\\u767e\\u5343\\u96f6]{1,10}[章部节卷集片篇回])([\\W]+(.{0,20}))^?")
     }
 
     override fun loadFileIntoBook(book: Book, charset: String) {

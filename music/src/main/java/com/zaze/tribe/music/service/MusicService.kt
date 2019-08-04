@@ -153,7 +153,12 @@ class MusicService : Service(), IPlayer, MyMediaPlayer.MediaCallback {
         if (position >= 0 && position < playingQueue.size) {
             this.position = position
             mediaPlayer.apply {
-                if (setDataSource(MusicHelper.getMusicFileUri(getCurMusic().id).toString())) {
+                val path = if (getCurMusic().id > 0) {
+                    MusicHelper.getMusicFileUri(getCurMusic().id).toString()
+                } else {
+                    getCurMusic().data
+                }
+                if (setDataSource(path)) {
                     start()
                     updateNotification(true)
                     callback?.onStart(getCurMusic())

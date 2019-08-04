@@ -15,7 +15,6 @@ import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.core.view.GravityCompat
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
-import com.zaze.router.anno.Router
 import com.zaze.tribe.common.BaseActivity
 import com.zaze.tribe.common.util.PermissionUtil
 import com.zaze.tribe.common.util.replaceFragmentInActivity

@@ -61,7 +61,7 @@ subprojects {
         if (isMainApp) {
             productFlavors {
                 pro {
-                    applicationId "com.zaze.tribe.pro"
+//                    applicationId "com.zaze.tribe.pro"
                     buildConfigField("String", "URL", "\"http://www.google.com\"")
                     resValue("string", "app_name", "小部落P")
                 }

@@ -9,7 +9,7 @@
         <activity
             android:name="com.zaze.tribe.reader.ReaderActivity"
             android:launchMode="singleTask"
-            android:theme="@style/ReadFullScreen">
+            android:theme="@style/AppTheme">
 
         </activity>
 
