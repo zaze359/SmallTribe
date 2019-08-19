@@ -26,14 +26,16 @@ class ReaderHistory {
      */
     var progress = 0.0F
 
-    fun nextChapter() {
-        chapterIndex++
-        paragraphIndex = 0
-        charIndex = 0
-    }
+//    fun nextChapter() {
+//        loadChapter(chapterIndex++)
+//    }
+//
+//    fun preChapter() {
+//        loadChapter(Math.max(0, chapterIndex - 1))
+//    }
 
-    fun preChapter() {
-        chapterIndex = Math.max(0, chapterIndex - 1)
+    fun loadChapter(chapterIndex: Int) {
+        this.chapterIndex = chapterIndex
         paragraphIndex = 0
         charIndex = 0
     }

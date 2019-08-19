@@ -2,7 +2,6 @@ package com.zaze.tribe.reader.widget
 
 import android.content.Context
 import android.util.AttributeSet
-import android.view.MotionEvent
 import android.widget.LinearLayout
 import android.widget.TextView
 import com.zaze.tribe.reader.R
@@ -78,6 +77,10 @@ class ReaderView : LinearLayout, OnConfigurationChangedListener, PageLoader {
         readerBook?.loadPreChapter(this)
     }
 
+    override fun loadChapter(chapterIndex: Int) {
+        readerBook?.loadChapter(this, chapterIndex)
+    }
+
     override fun onLoaded(readerPage: ReaderPage) {
         readerChapter.text = readerPage.chapter
         readerContent.load(readerPage.lines)
@@ -89,7 +92,7 @@ class ReaderView : LinearLayout, OnConfigurationChangedListener, PageLoader {
     }
 
     override fun hasMoreSpace(lineSize: Int, borderLineSize: Int): Boolean {
-        return lineSize * readerConfiguration.fontHeight + borderLineSize * readerConfiguration.borderLinePadding  <
+        return lineSize * readerConfiguration.fontHeight + borderLineSize * readerConfiguration.borderLinePadding <
                 (readerContent.height - readerConfiguration.fontHeight)
     }
 }

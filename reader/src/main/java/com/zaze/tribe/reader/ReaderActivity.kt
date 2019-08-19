@@ -9,6 +9,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.zaze.tribe.common.BaseActivity
+import com.zaze.tribe.common.util.get
 import com.zaze.tribe.common.util.obtainViewModel
 import com.zaze.tribe.reader.databinding.ReaderActBinding
 import com.zaze.tribe.reader.widget.ReaderMenuManager
@@ -49,19 +50,16 @@ class ReaderActivity : BaseActivity(), ReaderMenuManager.ReaderMenuListener {
                 readerCatalogBookName.text = it.book.name
                 readerView.startReadBook(it)
             })
-
-            catalogBookData.observe(this@ReaderActivity, Observer {
-                if (catalogAdapter == null) {
-                    catalogAdapter = ReaderCatalogAdapter(this@ReaderActivity, it)
+            curChapterIndex.observe(this@ReaderActivity, Observer {
+                readerView.loadChapter(it)
+                mainDrawerLayout.closeDrawer(GravityCompat.START)
+            })
+            catalogBookData.observe(this@ReaderActivity, Observer { list ->
+                catalogAdapter?.setDataList(list) ?: let {
+                    catalogAdapter = ReaderCatalogAdapter(this@ReaderActivity, list, viewModel)
                     readerCatalog.layoutManager = LinearLayoutManager(this@ReaderActivity)
                     readerCatalog.adapter = catalogAdapter
-                } else {
-                    catalogAdapter!!.setDataList(it)
                 }
-            })
-            curChapterIndex.observe(this@ReaderActivity, Observer {
-                (readerCatalog.layoutManager as LinearLayoutManager?)?.scrollToPositionWithOffset(it, 0)
-                catalogAdapter?.scrollTo(it)
             })
         }
         readMode()
@@ -69,7 +67,6 @@ class ReaderActivity : BaseActivity(), ReaderMenuManager.ReaderMenuListener {
             menuMode()
             readerMenuManager?.show(it)
         }
-
         readerMenuManager = ReaderMenuManager(this, readerView).apply {
             readerMenuListener = this@ReaderActivity
             mainDrawerLayout.addDrawerListener(this)
@@ -102,7 +99,10 @@ class ReaderActivity : BaseActivity(), ReaderMenuManager.ReaderMenuListener {
 
 
     override fun showCatalog() {
-        viewModel.loadCatalog()
+        viewModel.curChapterIndex.get()?.let {
+            (readerCatalog.layoutManager as LinearLayoutManager?)?.scrollToPositionWithOffset(it, 0)
+            catalogAdapter?.scrollTo(it)
+        }
         mainDrawerLayout.openDrawer(GravityCompat.START)
     }
 

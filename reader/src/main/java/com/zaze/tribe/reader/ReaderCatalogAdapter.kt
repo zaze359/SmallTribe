@@ -13,7 +13,7 @@ import com.zaze.tribe.reader.bean.BookChapter
  * @author : ZAZE
  * @version : 2019-08-04 - 16:47
  */
-class ReaderCatalogAdapter(context: Context, chapters: Collection<BookChapter>) : BaseRecyclerAdapter<BookChapter, ReaderCatalogAdapter.CatalogHolder>(context, chapters) {
+class ReaderCatalogAdapter(context: Context, chapters: Collection<BookChapter>, private val viewModel: ReaderViewModel) : BaseRecyclerAdapter<BookChapter, ReaderCatalogAdapter.CatalogHolder>(context, chapters) {
 
     private var selectedItem = 0
 
@@ -32,6 +32,9 @@ class ReaderCatalogAdapter(context: Context, chapters: Collection<BookChapter>) 
             holder.catalogItemName.setTextColor(ContextCompat.getColor(context, R.color.black))
         }
         holder.catalogItemName.text = value.chapter
+        holder.itemView.setOnClickListener {
+            viewModel.showPointChapter(position)
+        }
     }
 
     fun scrollTo(position: Int) {

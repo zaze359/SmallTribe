@@ -4,7 +4,6 @@ import android.app.Application
 import androidx.lifecycle.MutableLiveData
 import com.zaze.tribe.common.BaseAndroidViewModel
 import com.zaze.tribe.common.plugins.rx.MyObserver
-import com.zaze.tribe.common.util.get
 import com.zaze.tribe.common.util.set
 import com.zaze.tribe.reader.bean.BookChapter
 import com.zaze.tribe.reader.bean.ReaderBook
@@ -35,9 +34,7 @@ class ReaderViewModel(application: Application) : BaseAndroidViewModel(applicati
                 .subscribe(MyObserver(compositeDisposable))
     }
 
-    fun loadCatalog() {
-        readerBookData.get()?.let {
-            curChapterIndex.set(it.readerHistory.chapterIndex)
-        }
+    fun showPointChapter(chapterIndex: Int) {
+        curChapterIndex.set(chapterIndex)
     }
 }

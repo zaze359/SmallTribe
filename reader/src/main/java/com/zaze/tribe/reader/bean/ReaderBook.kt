@@ -27,8 +27,6 @@ class ReaderBook(var book: Book) {
     private val readerPages = ArrayList<ReaderPage>()
 
     // --------------------------------------------------
-
-
     fun getCurChapter(): BookChapter {
         return book.chapters[readerHistory.chapterIndex]
     }
@@ -38,13 +36,14 @@ class ReaderBook(var book: Book) {
      * 加载历史页
      */
     fun loadFromHistory(pageLoader: PageLoader) {
-        load(pageLoader, readerHistory.chapterIndex)
+        loadChapter(pageLoader, readerHistory.chapterIndex)
     }
 
     /**
      * 加载
      */
-    private fun load(pageLoader: PageLoader, chapterIndex: Int, reverse: Boolean = false) {
+    fun loadChapter(pageLoader: PageLoader, chapterIndex: Int, reverse: Boolean = false) {
+        readerHistory.loadChapter(chapterIndex)
         loadAllPagesFormChapter(pageLoader, chapterIndex)
         if (readerPages.isNotEmpty()) {
             currPageIndex = if (reverse) {
@@ -59,6 +58,33 @@ class ReaderBook(var book: Book) {
             })
         }
     }
+
+    /**
+     * 加载下一章
+     */
+    fun loadNextChapter(pageLoader: PageLoader) {
+        if (book.isLastChapter(readerHistory.chapterIndex)) {
+            ZLog.i("ReaderBook", "当前为最后一章")
+            return
+        }
+        ZLog.i("ReaderBook", "加载下一章节")
+        loadChapter(pageLoader, readerHistory.chapterIndex + 1)
+    }
+
+    /**
+     * 加载上一章
+     * [pageLoader] pageLoader
+     * [reverse] 是否需要反转显示 默认false 从第一页显示
+     */
+    fun loadPreChapter(pageLoader: PageLoader, reverse: Boolean = false) {
+        if (book.isFirstChapter(readerHistory.chapterIndex)) {
+            ZLog.i("ReaderBook", "当前为第一章")
+            return
+        }
+        ZLog.i("ReaderBook", "加载上一章节")
+        loadChapter(pageLoader, readerHistory.chapterIndex - 1, reverse)
+    }
+
 
     /**
      * 加载下一页
@@ -86,34 +112,6 @@ class ReaderBook(var book: Book) {
             readerHistory.prePage(readerPage)
             pageLoader.onLoaded(readerPage)
         }
-    }
-
-    /**
-     * 加载下一章
-     */
-    fun loadNextChapter(pageLoader: PageLoader) {
-        if (book.isLastChapter(readerHistory.chapterIndex)) {
-            ZLog.i("ReaderBook", "当前为最后一章")
-            return
-        }
-        ZLog.i("ReaderBook", "加载下一章节")
-        readerHistory.nextChapter()
-        load(pageLoader, readerHistory.chapterIndex)
-    }
-
-    /**
-     * 加载上一章
-     * [pageLoader] pageLoader
-     * [reverse] 是否需要反转显示 默认false 从第一页显示
-     */
-    fun loadPreChapter(pageLoader: PageLoader, reverse: Boolean = false) {
-        if (book.isFirstChapter(readerHistory.chapterIndex)) {
-            ZLog.i("ReaderBook", "当前为第一章")
-            return
-        }
-        ZLog.i("ReaderBook", "加载上一章节")
-        readerHistory.preChapter()
-        load(pageLoader, readerHistory.chapterIndex, reverse)
     }
 
 
