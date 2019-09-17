@@ -31,7 +31,7 @@ class ReaderCatalogAdapter(context: Context, chapters: Collection<BookChapter>, 
         } else {
             holder.catalogItemName.setTextColor(ContextCompat.getColor(context, R.color.black))
         }
-        holder.catalogItemName.text = value.chapter
+        holder.catalogItemName.text = value.chapter.trim()
         holder.itemView.setOnClickListener {
             viewModel.showPointChapter(position)
         }

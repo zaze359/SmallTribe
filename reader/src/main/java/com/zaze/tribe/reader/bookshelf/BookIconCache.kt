@@ -36,9 +36,19 @@ object BookIconCache {
     private fun createDefaultCover(name: String): Bitmap {
         synchronized(sCanvas) {
             val bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.RGB_565)
+            val lineSize = (width / textPaint.textSize).toInt()
             sCanvas.setBitmap(bitmap)
             sCanvas.drawColor(Color.WHITE)
-            sCanvas.drawText(name, 0F, textPaint.textSize, textPaint)
+            var offsetX = 0F
+            for (i in 0..name.length / lineSize) {
+//                if(height - width <= textPaint.textSize) {
+//                    break
+//                }
+                sCanvas.drawText(name.substring(i * lineSize, (i + 1) * lineSize), offsetX, textPaint.textSize, textPaint)
+                offsetX += textPaint.textSize + 2
+            }
+            // 剩余字数
+            sCanvas.drawText(name.substring(name.length - name.length % lineSize, name.length), offsetX, textPaint.textSize, textPaint)
             sCanvas.setBitmap(null)
             return bitmap
         }

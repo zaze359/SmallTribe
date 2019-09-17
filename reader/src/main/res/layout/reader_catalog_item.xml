@@ -17,7 +17,7 @@
         android:paddingBottom="8dp"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1"
         android:textColor="@color/black"
-        android:textSize="20sp"
+        android:textSize="18sp"
         tools:text="Developer" />
 
     <View

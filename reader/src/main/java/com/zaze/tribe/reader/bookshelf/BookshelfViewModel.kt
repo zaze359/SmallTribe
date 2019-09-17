@@ -5,6 +5,7 @@ import android.os.Environment
 import androidx.lifecycle.MutableLiveData
 import com.zaze.tribe.common.BaseAndroidViewModel
 import com.zaze.tribe.common.plugins.rx.MyObserver
+import com.zaze.tribe.common.util.Utils
 import com.zaze.tribe.common.util.set
 import com.zaze.tribe.reader.bean.Book
 import com.zaze.utils.FileUtil
@@ -26,7 +27,7 @@ class BookshelfViewModel(application: Application) : BaseAndroidViewModel(applic
     fun loadBookshelf() {
         dataLoading.set(true)
         Observable.create<List<File>> {
-            it.onNext(FileUtil.searchFileBySuffix(Environment.getExternalStorageDirectory(), "txt", true))
+            it.onNext(Utils.searchFileBySuffix(Environment.getExternalStorageDirectory(), "txt", true))
             it.onComplete()
         }.subscribeOn(Schedulers.io()).map {
             it.mapTo(arrayListOf()) { file ->

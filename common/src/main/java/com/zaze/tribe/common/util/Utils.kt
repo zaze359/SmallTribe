@@ -2,6 +2,8 @@ package com.zaze.tribe.common.util
 
 import android.media.MediaMetadataRetriever
 import com.zaze.utils.FileUtil
+import com.zaze.utils.log.ZLog
+import com.zaze.utils.log.ZTag
 import java.io.File
 import java.util.*
 
@@ -54,6 +56,7 @@ object Utils {
         if (dir.exists() && dir.isDirectory) {
             val childFileList = dir.listFiles()
             for (childFile in childFileList) {
+                ZLog.i(ZTag.TAG_FILE, "childFile : ${childFile.absoluteFile}")
                 if (childFile.isFile && childFile.name.endsWith(".$suffix", true)) {
                     searchedFileList.add(childFile)
                 }

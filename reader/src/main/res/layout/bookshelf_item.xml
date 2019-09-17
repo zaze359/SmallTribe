@@ -8,10 +8,18 @@
     app:cardCornerRadius="4dp"
     app:cardElevation="4dp">
 
-    <ImageView
+    <!--<ImageView-->
+    <!--android:id="@+id/bookCover"-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:layout_gravity="center"-->
+    <!--android:padding="4dp"-->
+    <!--tools:src="@mipmap/ic_launcher" />-->
+
+    <TextView
         android:id="@+id/bookCover"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_height="160dp"
         android:layout_gravity="center"
         android:padding="4dp"
         tools:src="@mipmap/ic_launcher" />
