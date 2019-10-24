@@ -6,6 +6,7 @@ import android.os.Looper
 import com.zaze.router.thread.DefaultFactory
 import io.reactivex.Scheduler
 import io.reactivex.schedulers.Schedulers
+import kotlinx.coroutines.newSingleThreadContext
 import java.util.concurrent.LinkedBlockingQueue
 import java.util.concurrent.ThreadPoolExecutor
 import java.util.concurrent.TimeUnit
@@ -42,7 +43,8 @@ object ThreadPlugins {
     /**
      * io操作线程
      */
-    private val ioExecutor by lazy(mode = LazyThreadSafetyMode.SYNCHRONIZED) {
+    @JvmStatic
+    val ioExecutor by lazy(mode = LazyThreadSafetyMode.SYNCHRONIZED) {
         ThreadPoolExecutor(1, 1, 1L, TimeUnit.MINUTES, LinkedBlockingQueue(), DefaultFactory("io"))
     }
 

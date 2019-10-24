@@ -107,6 +107,8 @@ subprojects {
         implementation "androidx.appcompat:appcompat:$supportLibraryVersionx"
         implementation "androidx.core:core:$supportLibraryVersionx"
         implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+//        implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.3.2'
+        implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.3.2'
         if (!isRouter) {
             implementation "com.google.android.material:material:$supportLibraryVersionx"
             implementation "androidx.appcompat:appcompat:$supportLibraryVersionx"

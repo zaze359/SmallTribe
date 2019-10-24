@@ -1,6 +1,9 @@
 android {
     defaultConfig {
         applicationId "com.zaze.tribe"
+        packagingOptions {
+            exclude 'META-INF/proguard/coroutines.pro'
+        }
     }
     buildTypes {
         release {
