@@ -20,7 +20,7 @@
         android:layout_height="wrap_content"
         android:clickable="true"
         android:focusable="true"
-        android:foreground="@drawable/rect_selector"
+        android:background="@drawable/rect_selector"
         android:gravity="center_vertical"
         android:orientation="horizontal">
 
