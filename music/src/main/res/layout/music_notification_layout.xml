@@ -30,6 +30,7 @@
             android:ellipsize="end"
             android:maxWidth="100dp"
             android:maxLines="1"
+            android:textColor="#5b5b5b"
             android:textSize="14sp"
             tools:text="@string/music_tip_name" />
 

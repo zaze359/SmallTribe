@@ -74,7 +74,7 @@ class ReaderBook(var book: Book) {
     /**
      * 加载上一章
      * [pageLoader] pageLoader
-     * [reverse] 是否需要反转显示 默认false 从第一页显示
+     * [reverse] 是否需要反转显示 默认false 从第一页显示，true则直接显示最后一页
      */
     fun loadPreChapter(pageLoader: PageLoader, reverse: Boolean = false) {
         if (book.isFirstChapter(readerHistory.chapterIndex)) {
@@ -143,24 +143,28 @@ class ReaderBook(var book: Book) {
                     bookLine.isFirstLine = readCharLength == 0
                     //
                     readCharLength += charLength
+                    // TODO 此处拷贝可以优化
                     chars = chars.copyOfRange(charLength, chars.size)
                     // 后面没有字符表示最后一行
+                    var borderLineOffset = 0
                     bookLine.isLastLine = chars.isEmpty()
                     if (bookLine.isFirstLine) {
-                        borderLineSize++
+                        borderLineOffset++
                     }
                     if (bookLine.isLastLine) {
-                        borderLineSize++
+                        borderLineOffset++
                     }
-                    readerPage.lines.add(bookLine)
+                    // --------------------------------------------------
+                    borderLineSize += borderLineOffset
                     if (!parser.hasMoreSpace(readerPage.lines.size, borderLineSize)) {
                         // 记录段落位置
                         readerPages.add(readerPage)
-                        borderLineSize = 0
+                        borderLineSize = borderLineOffset
                         readerPage = ReaderPage(chapter.chapter)
                         readerPage.paragraphIndex = paragraphIndex
                         readerPage.charIndex = readCharLength
                     }
+                    readerPage.lines.add(bookLine)
                 }
             }
             if (readerPage.lines.isNotEmpty()) {

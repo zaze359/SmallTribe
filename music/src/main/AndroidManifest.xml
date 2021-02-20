@@ -1,12 +1,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.zaze.tribe.music">
 
-    <application>
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
 
-        <activity
-            android:name=".MusicActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppTheme" />
+    <application>
 
         <activity
             android:name=".MusicDetailActivity"

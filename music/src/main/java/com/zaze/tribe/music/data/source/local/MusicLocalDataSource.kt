@@ -16,13 +16,13 @@ class MusicLocalDataSource private constructor(
     companion object {
         private var INSTANCE: MusicLocalDataSource? = null
         @JvmStatic
+        @Synchronized
         fun getInstance(musicDao: MusicDao): MusicLocalDataSource {
-            if (INSTANCE == null) {
-                synchronized(MusicLocalDataSource::javaClass) {
-                    INSTANCE = MusicLocalDataSource(musicDao)
+            return INSTANCE ?: let {
+                MusicLocalDataSource(musicDao).apply {
+                    INSTANCE = this
                 }
             }
-            return INSTANCE!!
         }
     }
 

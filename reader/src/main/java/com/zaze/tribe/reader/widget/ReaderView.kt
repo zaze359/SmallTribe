@@ -92,7 +92,7 @@ class ReaderView : LinearLayout, OnConfigurationChangedListener, PageLoader {
     }
 
     override fun hasMoreSpace(lineSize: Int, borderLineSize: Int): Boolean {
-        return lineSize * readerConfiguration.fontHeight + borderLineSize * readerConfiguration.borderLinePadding <
+        return (lineSize * readerConfiguration.fontHeight + borderLineSize * readerConfiguration.borderLinePadding) <
                 (readerContent.height - readerConfiguration.fontHeight)
     }
 }

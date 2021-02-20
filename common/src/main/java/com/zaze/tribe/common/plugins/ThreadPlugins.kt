@@ -22,7 +22,6 @@ object ThreadPlugins {
      * cup 数量
      */
     private val CPU_COUNT = Runtime.getRuntime().availableProcessors()
-
     // --------------------------------------------------
     /**
      * 网络请求线程池
@@ -64,13 +63,6 @@ object ThreadPlugins {
     }
 
     /**
-     * 安装线程
-     */
-    private val installExecutor by lazy(mode = LazyThreadSafetyMode.SYNCHRONIZED) {
-        ThreadPoolExecutor(1, 1, 1L, TimeUnit.MINUTES, LinkedBlockingQueue(), DefaultFactory("install"))
-    }
-
-    /**
      * ui thread
      */
     private val uiHandler = Handler(Looper.getMainLooper())
@@ -104,15 +96,6 @@ object ThreadPlugins {
     }
 
     // --------------------------------------------------
-
-    /**
-     * 在安装线程执行
-     * [runnable] runnable
-     */
-    @JvmStatic
-    fun runInInstallThread(runnable: Runnable) {
-        installExecutor.execute(runnable)
-    }
 
     /**
      * 在下载线程执行

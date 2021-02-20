@@ -3,6 +3,7 @@ package com.zaze.tribe.reader
 import android.app.Application
 import androidx.lifecycle.MutableLiveData
 import com.zaze.tribe.common.BaseAndroidViewModel
+import com.zaze.tribe.common.plugins.ThreadPlugins
 import com.zaze.tribe.common.plugins.rx.MyObserver
 import com.zaze.tribe.common.util.set
 import com.zaze.tribe.reader.bean.BookChapter
@@ -26,7 +27,7 @@ class ReaderViewModel(application: Application) : BaseAndroidViewModel(applicati
     fun loadFile(filePath: String) {
         Observable.fromCallable {
             BookLoader.loadBook(filePath)
-        }.subscribeOn(Schedulers.io())
+        }.subscribeOn(ThreadPlugins.ioScheduler())
                 .map {
                     readerBookData.set(ReaderBook(it))
                     catalogBookData.set(it.chapters)
