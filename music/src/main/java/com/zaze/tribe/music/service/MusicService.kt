@@ -8,7 +8,7 @@ import android.support.v4.media.session.MediaSessionCompat
 import androidx.databinding.ObservableArrayList
 import com.zaze.tribe.music.data.dto.Music
 import com.zaze.tribe.music.data.loaders.MusicLoader
-import com.zaze.tribe.music.data.source.repository.MusicRepository
+import com.zaze.tribe.music.data.repository.MusicRepository
 import com.zaze.tribe.music.service.notification.MusicNotification
 import com.zaze.tribe.music.util.MusicHelper
 import com.zaze.tribe.music.util.MusicPreference

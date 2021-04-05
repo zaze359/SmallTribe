@@ -1,4 +1,4 @@
-package com.zaze.tribe.reader.loader
+package com.zaze.tribe.reader.data.loader
 
 import com.zaze.tribe.reader.bean.Book
 import com.zaze.tribe.reader.util.FileCharset

@@ -1,9 +1,8 @@
-package com.zaze.tribe.reader.loader
+package com.zaze.tribe.reader.data.loader
 
 import org.junit.Test
 
 import org.junit.Assert.*
-import org.junit.Before
 
 /**
  * Description :

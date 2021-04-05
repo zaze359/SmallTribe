@@ -7,10 +7,10 @@ ext {
     versionName = "v1.0.1"
 
     modules = [
-            common  : ':common',
-            music   : ':music',
-            reader  : ':reader',
-            router  : ':router'
+            common: ':common',
+            music : ':music',
+            reader: ':reader',
+            router: ':router'
     ]
 
     guavaVersion = '23.6-android'
@@ -23,7 +23,7 @@ ext {
     work_version = '1.0.0-alpha11'
     // -------------
     supportLibraryVersionx = '1.0.0'
-    archLifecycleVersionx = "2.0.0"
+    archLifecycleVersionx = "2.2.0"
     roomVersionx = "2.0.0"
     runnerVersionx = '1.1.0-alpha3'
     uiautomatorx = '2.2.0'
@@ -95,6 +95,15 @@ subprojects {
         dataBinding {
             enabled = true
         }
+
+        compileOptions {
+            sourceCompatibility JavaVersion.VERSION_1_8
+            targetCompatibility JavaVersion.VERSION_1_8
+        }
+
+        kotlinOptions {
+            jvmTarget = "1.8"
+        }
     }
 
     dependencies {
@@ -106,9 +115,11 @@ subprojects {
         releaseImplementation "com.squareup.leakcanary:leakcanary-android-no-op:$leakcanaryVersion"
         implementation "androidx.appcompat:appcompat:$supportLibraryVersionx"
         implementation "androidx.core:core:$supportLibraryVersionx"
-        implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+        implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
 //        implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.3.2'
         implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.3.2'
+
+
         if (!isRouter) {
             implementation "com.google.android.material:material:$supportLibraryVersionx"
             implementation "androidx.appcompat:appcompat:$supportLibraryVersionx"
@@ -116,8 +127,16 @@ subprojects {
             implementation "androidx.viewpager:viewpager:$supportLibraryVersionx"
             implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
             implementation "androidx.legacy:legacy-support-v4:$supportLibraryVersionx"
+            //
+            implementation "androidx.activity:activity-ktx:1.1.0"
+            implementation "androidx.fragment:fragment-ktx:1.1.0"
+
+            implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$archLifecycleVersionx"
+            implementation "androidx.lifecycle:lifecycle-runtime-ktx:$archLifecycleVersionx"
+            implementation "androidx.lifecycle:lifecycle-livedata-ktx:$archLifecycleVersionx"
             implementation "androidx.lifecycle:lifecycle-extensions:$archLifecycleVersionx"
             kapt "androidx.lifecycle:lifecycle-compiler:$archLifecycleVersionx"
+
 //            annotationProcessor "androidx.lifecycle:lifecycle-compiler:$archLifecycleVersionx"
             //
             implementation 'io.reactivex.rxjava2:rxandroid:2.0.2'

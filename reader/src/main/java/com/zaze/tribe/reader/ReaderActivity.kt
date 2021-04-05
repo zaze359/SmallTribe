@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
+import androidx.activity.viewModels
 import androidx.core.view.GravityCompat
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
@@ -23,10 +24,10 @@ import kotlinx.android.synthetic.main.reader_act.*
  */
 class ReaderActivity : BaseActivity(), ReaderMenuManager.ReaderMenuListener {
     private lateinit var viewDataBinding: ReaderActBinding
-    private lateinit var viewModel: ReaderViewModel
+    private val viewModel: ReaderViewModel by viewModels { ReaderViewModelFactory.provideFactory(application) }
+
     private var readerMenuManager: ReaderMenuManager? = null
     private var catalogAdapter: ReaderCatalogAdapter? = null
-
 
     override fun getStatusBarColor(): Int {
         return R.color.black
@@ -44,7 +45,7 @@ class ReaderActivity : BaseActivity(), ReaderMenuManager.ReaderMenuListener {
         super.onCreate(savedInstanceState)
         viewDataBinding = DataBindingUtil.setContentView(this, R.layout.reader_act)
         viewDataBinding.setLifecycleOwner(this)
-        viewModel = obtainViewModel(ReaderViewModel::class.java).apply {
+        viewModel.apply {
             readerBookData.observe(this@ReaderActivity, Observer {
                 readerMenuManager?.setTitle(it.book.name)
                 readerCatalogBookName.text = it.book.name

@@ -1,4 +1,4 @@
-package com.zaze.tribe.music.data.source.local
+package com.zaze.tribe.music.data.db
 
 import androidx.room.Database
 import androidx.room.Room
@@ -6,8 +6,6 @@ import androidx.room.RoomDatabase
 import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
 import com.zaze.tribe.common.BaseApplication
-import com.zaze.tribe.music.data.dao.LyricDao
-import com.zaze.tribe.music.data.dao.MusicDao
 import com.zaze.tribe.music.data.dto.Lyric
 import com.zaze.tribe.music.data.dto.Music
 import com.zaze.utils.log.ZLog

@@ -1,4 +1,4 @@
-package com.zaze.tribe.music.data.dao
+package com.zaze.tribe.music.data.db
 
 import androidx.room.Dao
 import androidx.room.OnConflictStrategy

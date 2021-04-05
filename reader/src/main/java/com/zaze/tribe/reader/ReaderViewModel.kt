@@ -2,15 +2,18 @@ package com.zaze.tribe.reader
 
 import android.app.Application
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewModelScope
 import com.zaze.tribe.common.BaseAndroidViewModel
-import com.zaze.tribe.common.plugins.ThreadPlugins
-import com.zaze.tribe.common.plugins.rx.MyObserver
 import com.zaze.tribe.common.util.set
 import com.zaze.tribe.reader.bean.BookChapter
 import com.zaze.tribe.reader.bean.ReaderBook
-import com.zaze.tribe.reader.loader.BookLoader
-import io.reactivex.Observable
-import io.reactivex.schedulers.Schedulers
+import com.zaze.tribe.reader.data.repository.BookRepository
+import com.zaze.utils.log.ZLog
+import com.zaze.utils.log.ZTag
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 /**
  * Description :
@@ -18,24 +21,31 @@ import io.reactivex.schedulers.Schedulers
  * @author : ZAZE
  * @version : 2019-07-20 - 18:52
  */
-class ReaderViewModel(application: Application) : BaseAndroidViewModel(application) {
+class ReaderViewModel(application: Application, private val repository: BookRepository) : BaseAndroidViewModel(application) {
 
     val readerBookData = MutableLiveData<ReaderBook>()
     val catalogBookData = MutableLiveData<List<BookChapter>>()
     val curChapterIndex = MutableLiveData<Int>()
 
     fun loadFile(filePath: String) {
-        Observable.fromCallable {
-            BookLoader.loadBook(filePath)
-        }.subscribeOn(ThreadPlugins.ioScheduler())
-                .map {
-                    readerBookData.set(ReaderBook(it))
-                    catalogBookData.set(it.chapters)
-                }
-                .subscribe(MyObserver(compositeDisposable))
+        viewModelScope.launch {
+            val book = repository.loadBook(filePath)
+            readerBookData.value = ReaderBook(book)
+            catalogBookData.value = book.chapters
+        }
     }
 
     fun showPointChapter(chapterIndex: Int) {
         curChapterIndex.set(chapterIndex)
+    }
+}
+
+object ReaderViewModelFactory {
+
+    fun provideFactory(application: Application): ViewModelProvider.Factory = object : ViewModelProvider.Factory {
+        @Suppress("UNCHECKED_CAST")
+        override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+            return ReaderViewModel(application, BookRepository(Dispatchers.IO)) as T
+        }
     }
 }
