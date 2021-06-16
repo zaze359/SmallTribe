@@ -1,9 +1,11 @@
 buildscript {
     ext.kotlin_version = '1.3.50'
-    ext.gradlePluginVersion = '3.2.1'
+    ext.gradlePluginVersion = '3.3.2'
 
     repositories {
         maven { url 'https://maven.aliyun.com/repository/jcenter' }
+        maven { url 'https://maven.aliyun.com/repository/google' }
+
         maven { url 'https://jitpack.io' }
         mavenCentral()
         google()
@@ -18,6 +20,8 @@ buildscript {
 allprojects {
     repositories {
         maven { url 'https://maven.aliyun.com/repository/jcenter' }
+        maven { url 'https://maven.aliyun.com/repository/google' }
+
         maven { url 'https://jitpack.io' }
         mavenCentral()
         google()
