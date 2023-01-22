@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.GridLayoutManager
 import com.zaze.tribe.common.BaseFragment
-import com.zaze.tribe.common.util.obtainViewModel
+import com.zaze.tribe.common.util.myActivityViewModels
 import com.zaze.tribe.reader.bean.Book
 import com.zaze.tribe.reader.databinding.BookshelfFragBinding
 import kotlinx.android.synthetic.main.bookshelf_frag.*
@@ -22,7 +22,7 @@ class BookshelfFragment : BaseFragment() {
 
     private lateinit var viewDataBinding: BookshelfFragBinding
     private var adapter: BookshelfAdapter? = null
-    private lateinit var viewModel: BookshelfViewModel
+    private val viewModel: BookshelfViewModel by myActivityViewModels()
 
     companion object {
         fun newInstance(): BookshelfFragment {
@@ -30,15 +30,17 @@ class BookshelfFragment : BaseFragment() {
         }
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
         viewDataBinding = BookshelfFragBinding.inflate(inflater, container, false)
-        viewDataBinding.setLifecycleOwner(this)
-        viewDataBinding.viewModel = obtainViewModel(BookshelfViewModel::class.java).apply {
-            this.bookData.observe(this@BookshelfFragment, Observer {
-                showBookshelf(it)
-            })
-            viewModel = this
-        }
+        viewDataBinding.viewModel = viewModel
+        viewDataBinding.lifecycleOwner = viewLifecycleOwner
+        viewModel.bookData.observe(viewLifecycleOwner, Observer {
+            showBookshelf(it)
+        })
         return viewDataBinding.root
     }
 

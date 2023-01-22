@@ -26,9 +26,9 @@ object MusicGlide {
     class Builder(val requestManager: RequestManager, val music: Music) {
         fun build(): DrawableRequestBuilder<Uri> {
             return requestManager
-                    .loadFromMediaStore(MusicHelper.getMediaStoreAlbumCoverUri(music.albumId))
-                    .diskCacheStrategy(DiskCacheStrategy.NONE)
-                    .error(R.mipmap.ic_launcher)
+                .loadFromMediaStore(MusicHelper.getMediaStoreAlbumCoverUri(music.albumId))
+                .diskCacheStrategy(DiskCacheStrategy.NONE)
+                .error(R.mipmap.ic_launcher)
         }
 
         fun asBitmap(): BmpBuilder {
@@ -39,9 +39,9 @@ object MusicGlide {
     class BmpBuilder(private val builder: Builder) {
         fun build(): DrawableRequestBuilder<Uri> {
             return builder.requestManager
-                    .loadFromMediaStore(MusicHelper.getMediaStoreAlbumCoverUri(builder.music.albumId))
-                    .diskCacheStrategy(DiskCacheStrategy.NONE)
-                    .error(R.mipmap.ic_launcher)
+                .loadFromMediaStore(MusicHelper.getMediaStoreAlbumCoverUri(builder.music.albumId))
+                .diskCacheStrategy(DiskCacheStrategy.NONE)
+                .error(R.mipmap.ic_launcher)
         }
     }
 }

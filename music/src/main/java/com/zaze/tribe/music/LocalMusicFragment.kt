@@ -6,7 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.zaze.tribe.common.BaseFragment
-import com.zaze.tribe.common.util.obtainViewModel
+import com.zaze.tribe.common.util.myActivityViewModels
 import com.zaze.tribe.music.adapter.LocalMusicAdapter
 import com.zaze.tribe.music.databinding.MusicLocalFragBinding
 import com.zaze.tribe.music.vm.MusicViewModel
@@ -21,7 +21,7 @@ class LocalMusicFragment : BaseFragment() {
 
     private lateinit var viewDataBinding: MusicLocalFragBinding
     private lateinit var localMusicAdapter: LocalMusicAdapter
-    private lateinit var viewModel: MusicViewModel
+    private val viewModel: MusicViewModel by myActivityViewModels()
 
     companion object {
         fun newInstance(): LocalMusicFragment {
@@ -29,14 +29,15 @@ class LocalMusicFragment : BaseFragment() {
         }
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
         viewDataBinding = MusicLocalFragBinding.inflate(inflater, container, false)
         viewDataBinding.setLifecycleOwner(this)
-        obtainViewModel(MusicViewModel::class.java).let {
-            viewModel = it
-            viewDataBinding.viewModel = viewModel
-            viewModel.loadMusics()
-        }
+        viewDataBinding.viewModel = viewModel
+        viewModel.loadMusics()
         return viewDataBinding.root
     }
 

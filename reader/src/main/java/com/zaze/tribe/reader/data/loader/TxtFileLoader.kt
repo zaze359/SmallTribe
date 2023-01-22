@@ -24,7 +24,7 @@ class TxtFileLoader : FileLoader {
          * 5 后面什么都没 或者 存在至少一个空格或者非下划线符号
          * 6. 至多20个字的章节描述
          */
-        val pattern = Pattern.compile("(^([\\W]*)第[0-9\\u4e00-\\u9fa5\\u767e\\u5343\\u96f6]{1,10}[章部节卷集片篇回])([\\W]+(.{0,20}))?$")
+        val pattern = Pattern.compile("(^([\\W]*)第[0-9\\u4e00-\\u9fa5\\u767e\\u5343\\u96f6]{1,10}[章部节卷集片篇回])([ \\-_]+(.{0,20}))?\$")
     }
 
     override fun loadFileIntoBook(book: Book, charset: String) {

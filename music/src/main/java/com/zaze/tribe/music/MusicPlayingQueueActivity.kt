@@ -7,7 +7,7 @@ import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.zaze.tribe.common.BaseActivity
-import com.zaze.tribe.common.util.obtainViewModel
+import com.zaze.tribe.common.util.myViewModels
 import com.zaze.tribe.common.util.setupActionBar
 import com.zaze.tribe.music.adapter.PlayingQueueAdapter
 import com.zaze.tribe.music.databinding.MusicPlayingQueueActBinding
@@ -24,11 +24,16 @@ class MusicPlayingQueueActivity : BaseActivity() {
 
     companion object {
         fun start(context: Context) {
-            ContextCompat.startActivity(context, Intent(context, MusicPlayingQueueActivity::class.java), null)
+            ContextCompat.startActivity(
+                context,
+                Intent(context, MusicPlayingQueueActivity::class.java),
+                null
+            )
         }
     }
 
     private lateinit var dataBinding: MusicPlayingQueueActBinding
+    private val viewModel: PlayingQueueViewModel by myViewModels()
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -42,7 +47,6 @@ class MusicPlayingQueueActivity : BaseActivity() {
         musicPlayingQueueToolbar.setNavigationOnClickListener {
             onBackPressed()
         }
-        val viewModel = obtainViewModel(PlayingQueueViewModel::class.java)
         musicPlayingQueueRv.let {
             it.layoutManager = LinearLayoutManager(this@MusicPlayingQueueActivity)
             it.adapter = PlayingQueueAdapter(this, MusicPlayerRemote.getPlayingQueue(), viewModel)

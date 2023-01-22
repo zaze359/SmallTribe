@@ -8,6 +8,8 @@ import android.util.AttributeSet
 import android.view.GestureDetector
 import android.view.MotionEvent
 import android.view.View
+import android.view.animation.LinearInterpolator
+import android.widget.Scroller
 import com.zaze.tribe.reader.bean.BookLine
 import com.zaze.utils.log.ZLog
 
@@ -27,7 +29,6 @@ class ReaderContentView : View, OnConfigurationChangedListener, GestureDetector.
 
     private var textPaint = Paint()
     private var readerConfiguration = ReaderConfiguration()
-
     /**
      * 最大行数
      */
@@ -56,6 +57,7 @@ class ReaderContentView : View, OnConfigurationChangedListener, GestureDetector.
 
     constructor(context: Context) : super(context) {
         init(context)
+
     }
 
     constructor(context: Context, attrs: AttributeSet, defStyle: Int) : super(context, attrs, defStyle) {

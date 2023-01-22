@@ -28,12 +28,18 @@ abstract class LocalDatabase : RoomDatabase() {
             }
         }
 
-        val database by lazy(mode = LazyThreadSafetyMode.SYNCHRONIZED) {
-            Room.databaseBuilder<LocalDatabase>(BaseApplication.INSTANCE,
-                    LocalDatabase::class.java, "small_tribe.db")
-                    .addMigrations(MIGRATION_1_2)
-                    .build()
-        }
+        @Volatile
+        private var INSTANCE: LocalDatabase? = null
+
+        val database: LocalDatabase
+            get() = INSTANCE ?: synchronized(this) {
+                return INSTANCE ?: Room.databaseBuilder<LocalDatabase>(
+                    BaseApplication.INSTANCE,
+                    LocalDatabase::class.java, "small_tribe.db"
+                ).addMigrations(MIGRATION_1_2).build().also {
+                    INSTANCE = it
+                }
+            }
     }
 
     abstract fun getMusicDao(): MusicDao

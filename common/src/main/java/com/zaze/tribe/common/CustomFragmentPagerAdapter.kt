@@ -10,7 +10,7 @@ import java.util.*
  * @author : ZAZE
  * @version : 2018-10-02 - 0:03
  */
-abstract class CustomFragmentPagerAdapter<V>(fm: FragmentManager, list: Collection<V>) : FragmentPagerAdapter(fm) {
+abstract class CustomFragmentPagerAdapter<V>(fm: FragmentManager, list: Collection<V>) : FragmentPagerAdapter(fm,  BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {
     val dataList = ArrayList<V>()
 
     init {

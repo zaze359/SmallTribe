@@ -10,7 +10,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import com.zaze.tribe.common.BaseActivity
 import com.zaze.tribe.common.util.get
-import com.zaze.tribe.common.util.obtainViewModel
+import com.zaze.tribe.common.util.myViewModels
 import com.zaze.tribe.music.databinding.MusicDetailActBinding
 import com.zaze.tribe.music.vm.MusicViewModel
 import kotlinx.android.synthetic.main.music_detail_act.*
@@ -24,30 +24,32 @@ class MusicDetailActivity : BaseActivity(), Toolbar.OnMenuItemClickListener {
 
     private lateinit var viewDataBinding: MusicDetailActBinding
 
-    private lateinit var viewModel: MusicViewModel
+    private val viewModel: MusicViewModel by myViewModels()
 
     companion object {
         fun start(context: Context) {
-            ContextCompat.startActivity(context, Intent(context, MusicDetailActivity::class.java), null)
+            ContextCompat.startActivity(
+                context,
+                Intent(context, MusicDetailActivity::class.java),
+                null
+            )
         }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         viewDataBinding = DataBindingUtil.setContentView(this, R.layout.music_detail_act)
-        viewModel = obtainViewModel(MusicViewModel::class.java).apply {
-            this.isFavorite.observe(this@MusicDetailActivity, Observer { isFavorite ->
-                musicDetailToolbar.menu.findItem(R.id.action_toggle_favorite).apply {
-                    if (isFavorite) {
-                        setIcon(R.drawable.music_favorite_black_24dp)
-                        setTitle(R.string.music_favorites_remove)
-                    } else {
-                        setIcon(R.drawable.music_favorite_border_black_24dp)
-                        setTitle(R.string.music_favorites_add)
-                    }
+        viewModel.isFavorite.observe(this@MusicDetailActivity, Observer { isFavorite ->
+            musicDetailToolbar.menu.findItem(R.id.action_toggle_favorite).apply {
+                if (isFavorite) {
+                    setIcon(R.drawable.music_favorite_black_24dp)
+                    setTitle(R.string.music_favorites_remove)
+                } else {
+                    setIcon(R.drawable.music_favorite_border_black_24dp)
+                    setTitle(R.string.music_favorites_add)
                 }
-            })
-        }
+            }
+        })
         musicDetailToolbar.let {
             it.inflateMenu(R.menu.music_player_menu)
             it.setNavigationOnClickListener {

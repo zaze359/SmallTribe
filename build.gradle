@@ -3,13 +3,13 @@ buildscript {
     ext.gradlePluginVersion = '3.3.2'
 
     repositories {
+        maven { url 'http://localhost:8081/repository/maven-public' }
+        maven { url 'https://maven.aliyun.com/repository/public' }
         maven { url 'https://maven.aliyun.com/repository/jcenter' }
         maven { url 'https://maven.aliyun.com/repository/google' }
-
         maven { url 'https://jitpack.io' }
         mavenCentral()
         google()
-        jcenter()
     }
     dependencies {
         classpath "com.android.tools.build:gradle:$gradlePluginVersion"
@@ -19,16 +19,17 @@ buildscript {
 
 allprojects {
     repositories {
+        //        maven {
+//            url "https://dl.bintray.com/zaze359/maven"
+//        }
+        maven { url 'http://localhost:8081/repository/maven-public' }
+        maven { url 'https://maven.aliyun.com/repository/public' }
         maven { url 'https://maven.aliyun.com/repository/jcenter' }
         maven { url 'https://maven.aliyun.com/repository/google' }
-
+//        maven { url "https://oss.sonatypTe.org/content/repositories/snapshots" }
         maven { url 'https://jitpack.io' }
         mavenCentral()
         google()
-        jcenter()
-//        maven {
-//            url "https://dl.bintray.com/zaze359/maven"
-//        }
     }
 }
 

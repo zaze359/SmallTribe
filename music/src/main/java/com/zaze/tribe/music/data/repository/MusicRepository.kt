@@ -18,10 +18,8 @@ class MusicRepository private constructor(
 
         @JvmStatic
         fun getInstance(): MusicRepository {
-            if (INSTANCE == null) {
-                synchronized(MusicRepository::javaClass) {
-                    INSTANCE = MusicRepository(LocalDatabase.database.getMusicDao())
-                }
+            INSTANCE?:synchronized(MusicRepository::javaClass) {
+                INSTANCE?:MusicRepository(LocalDatabase.getDatabase().getMusicDao())
             }
             return INSTANCE!!
         }

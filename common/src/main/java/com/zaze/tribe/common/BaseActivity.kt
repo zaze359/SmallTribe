@@ -16,7 +16,7 @@ abstract class BaseActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setImmersion(getStatusBarColor())
+        setImmersion(color = getStatusBarColor())
         ZLog.i(ZTag.TAG_DEBUG, "${this.javaClass.name} >> onCreate")
     }
 
