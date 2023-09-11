@@ -27,7 +27,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentBottom="true"
                 app:labelVisibilityMode="labeled"
-                app:menu="@menu/bottom_navigation_main" />
+                app:menu="@menu/main_nav_bottom" />
 
             <fragment
                 android:id="@+id/mainMiniPlayerContainer"

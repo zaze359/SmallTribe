@@ -20,8 +20,9 @@ object MusicLoader {
     @JvmStatic
     fun getLocalMusics(context: Context): List<Music> {
         return buildMusics(query(context,
-                "${MediaStore.Audio.AudioColumns.IS_MUSIC}=? AND ${MediaStore.Audio.AudioColumns.TITLE} != ?",
-                arrayOf("1", ""), MediaStore.Audio.Media.DEFAULT_SORT_ORDER))
+                selection = "${MediaStore.Audio.AudioColumns.IS_MUSIC}=? AND ${MediaStore.Audio.AudioColumns.TITLE} != ?",
+                selectionArgs = arrayOf("1", "")
+        ))
     }
 
     // ------------------------------------------------------
@@ -52,7 +53,7 @@ object MusicLoader {
     }
 
     @JvmStatic
-    fun query(context: Context, selection: String, selectionArgs: Array<String>, sortOrder: String): Cursor? {
+    fun query(context: Context, selection: String, selectionArgs: Array<String>, sortOrder: String = MediaStore.Audio.Media.DEFAULT_SORT_ORDER): Cursor? {
         return context.contentResolver.query(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
                 arrayOf(BaseColumns._ID,
                         MediaStore.Audio.AudioColumns.TITLE,

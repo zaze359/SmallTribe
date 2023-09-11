@@ -11,6 +11,7 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.zaze.tribe.common.BaseActivity
 import com.zaze.tribe.common.util.get
+import com.zaze.tribe.common.util.obtainViewModel
 import com.zaze.tribe.reader.databinding.ReaderActBinding
 import com.zaze.tribe.reader.widget.ReaderMenuManager
 import kotlinx.android.synthetic.main.reader_act.*
@@ -23,11 +24,7 @@ import kotlinx.android.synthetic.main.reader_act.*
  */
 class ReaderActivity : BaseActivity(), ReaderMenuManager.ReaderMenuListener {
     private lateinit var viewDataBinding: ReaderActBinding
-    private val viewModel: ReaderViewModel by viewModels {
-        ReaderViewModelFactory.provideFactory(
-            application
-        )
-    }
+    private val viewModel: ReaderViewModel by viewModels { ReaderViewModelFactory.provideFactory(application) }
 
     private var readerMenuManager: ReaderMenuManager? = null
     private var catalogAdapter: ReaderCatalogAdapter? = null

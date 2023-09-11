@@ -28,6 +28,7 @@ class ReaderView : LinearLayout, OnConfigurationChangedListener, PageLoader {
     constructor(context: Context?, attrs: AttributeSet?, defStyleAttr: Int) : super(context, attrs, defStyleAttr)
     constructor(context: Context?, attrs: AttributeSet?, defStyleAttr: Int, defStyleRes: Int) : super(context, attrs, defStyleAttr, defStyleRes)
 
+
     init {
         val reader = inflate(context, R.layout.reader_view, this)
         readerConfiguration = ReaderConfiguration()

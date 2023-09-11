@@ -33,9 +33,9 @@ class BookshelfViewModel(application: Application) : BaseAndroidViewModel(applic
         viewModelScope.launch {
             bookData.value = withContext(Dispatchers.IO) {
                 Utils.searchFileBySuffix(Environment.getExternalStorageDirectory(), "txt", true)
-                    .mapTo(arrayListOf()) { file ->
-                        Book(file)
-                    }
+                        .mapTo(arrayListOf()) { file ->
+                            Book(file)
+                        }
             }
             dataLoading.set(false)
         }

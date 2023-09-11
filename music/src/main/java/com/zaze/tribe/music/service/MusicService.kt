@@ -57,6 +57,7 @@ class MusicService : Service(), IPlayer, MyMediaPlayer.MediaCallback {
         const val TAG = "MusicService"
         const val MUSIC = "music"
         const val ACTION_PLAY = "action_play"
+        const val ACTION_PREV = "action_prev"
         const val ACTION_NEXT = "action_next"
         const val ACTION_PAUSE = "action_pause"
         const val ACTION_QUIT = "action_quit"
@@ -91,7 +92,7 @@ class MusicService : Service(), IPlayer, MyMediaPlayer.MediaCallback {
     }
 
     override fun onBind(intent: Intent?): IBinder? {
-        setupMediaSession()
+//        setupMediaSession()
         return serviceBinder
     }
 
@@ -118,6 +119,10 @@ class MusicService : Service(), IPlayer, MyMediaPlayer.MediaCallback {
                 }
                 ACTION_PAUSE -> pause()
                 ACTION_NEXT -> playNext()
+                ACTION_PREV -> {
+                    stop()
+                    playAt(getPrevPosition())
+                }
                 ACTION_QUIT -> {
                     pause()
                     stopForeground(true)
@@ -169,18 +174,35 @@ class MusicService : Service(), IPlayer, MyMediaPlayer.MediaCallback {
             }
         }
     }
-
+    @Synchronized
+    fun playPrev() {
+        stop()
+        playAt(getNextPosition(true))
+    }
     @Synchronized
     override fun playNext() {
         stop()
         playAt(getNextPosition(true))
     }
 
+    private fun getPrevPosition(): Int {
+        var prevPosition = position
+        when (LOOP_MODE) {
+            LoopMode.LOOP_RANDOM -> {
+                prevPosition = Random().nextInt(playingQueue.size)
+            }
+            else -> {
+                prevPosition -= 1
+            }
+        }
+        if (prevPosition < 0) {
+            prevPosition = playingQueue.size - 1
+        }
+        return prevPosition
+    }
+
     private fun getNextPosition(fromUser: Boolean): Int {
         var nextPosition = position
-        if (nextPosition >= playingQueue.size - 1) {
-            nextPosition = 0
-        }
         when (LOOP_MODE) {
             LoopMode.LOOP_LIST -> {
                 nextPosition += 1
@@ -189,10 +211,13 @@ class MusicService : Service(), IPlayer, MyMediaPlayer.MediaCallback {
                 nextPosition = Random().nextInt(playingQueue.size)
             }
             LoopMode.LOOP_SINGLE -> {
-                if (!fromUser) {
+                if (fromUser) {
                     nextPosition += 1
                 }
             }
+        }
+        if (nextPosition > playingQueue.size - 1) {
+            nextPosition = 0
         }
         return nextPosition
     }

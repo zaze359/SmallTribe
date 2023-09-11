@@ -23,6 +23,7 @@ class MusicNotification {
     private lateinit var notificationManager: NotificationManager
     private lateinit var service: MusicService
     private lateinit var remoteViews: RemoteViews
+    private lateinit var remoteViewsBig: RemoteViews
     private lateinit var builder: NotificationCompat.Builder
 
     companion object {
@@ -34,32 +35,41 @@ class MusicNotification {
         notificationManager = service.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         val channelId = "zaze"
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val notificationChannel = NotificationChannel(channelId, channelId, NotificationManager.IMPORTANCE_LOW)
+            val notificationChannel = notificationManager.getNotificationChannel(channelId)
+                    ?: NotificationChannel(channelId, channelId, NotificationManager.IMPORTANCE_LOW)
             notificationManager.createNotificationChannel(notificationChannel)
         }
         remoteViews = RemoteViews(BaseApplication.INSTANCE.packageName, R.layout.music_notification_layout)
-        builder = NotificationCompat.Builder(service, channelId).apply {
-            setCustomContentView(remoteViews)
-            setContentIntent(PendingIntent.getActivity(service, 0,
-                    service.packageManager.getLaunchIntentForPackage(BaseApplication.INSTANCE.packageName), PendingIntent.FLAG_UPDATE_CURRENT))
-            //设置小图标
-            setSmallIcon(R.mipmap.music_note_white_24dp)
-        }
+        remoteViewsBig = RemoteViews(BaseApplication.INSTANCE.packageName, R.layout.music_notification_expend_layout)
+        builder = NotificationCompat.Builder(service, channelId)
+                //设置小图标
+                .setSmallIcon(R.mipmap.music_note_white_24dp)
+                .setCustomContentView(remoteViews)
+                // 展开
+                .setCustomBigContentView(remoteViewsBig)
+                .setContentIntent(PendingIntent.getActivity(service, 0, service.packageManager.getLaunchIntentForPackage(BaseApplication.INSTANCE.packageName), PendingIntent.FLAG_UPDATE_CURRENT))
+//        builder = NotificationCompat.Builder(service, channelId)
+//                .setContentTitle("title")
+//                .setContentText("content")
+//                .setDefaults(Notification.DEFAULT_SOUND.inv())
+//                .setLargeIcon(drawable2Bitmap(getAppIcon(service)))
+//                .setAutoCancel(true)
     }
 
     fun updateNotification(isPlaying: Boolean) {
         service.getCurMusic().let { music ->
-            remoteViews.setImageViewBitmap(R.id.musicNotificationIcon, MediaIconCache.getSmallMediaIcon(music.data))
-            remoteViews.setTextViewText(R.id.musicNotificationName, music.title)
-            remoteViews.setTextViewText(R.id.musicNotificationArtist, music.artistName)
-            remoteViews.setImageViewResource(R.id.musicNotificationPlayBtn,
+            remoteViews.setImageViewBitmap(R.id.music_notification_iv, MediaIconCache.getSmallMediaIcon(music.data))
+            remoteViews.setTextViewText(R.id.music_notification_name_tv, music.title)
+            remoteViews.setTextViewText(R.id.music_notification_artist_tv, music.artistName)
+            remoteViews.setImageViewResource(R.id.music_notification_play_btn,
                     if (isPlaying) R.drawable.music_pause_circle_outline_black_24dp else R.drawable.music_play_circle_outline_black_24dp
             )
-            remoteViews.setOnClickPendingIntent(R.id.musicNotificationPlayBtn, buildPendingIntent(
+            remoteViews.setOnClickPendingIntent(R.id.music_notification_play_btn, buildPendingIntent(
                     if (isPlaying) MusicService.ACTION_PAUSE else MusicService.ACTION_PLAY)
             )
-            remoteViews.setOnClickPendingIntent(R.id.musicNotificationNextBtn, buildPendingIntent(MusicService.ACTION_NEXT))
-            remoteViews.setOnClickPendingIntent(R.id.musicNotificationCloseBtn, buildPendingIntent(MusicService.ACTION_QUIT))
+            remoteViews.setOnClickPendingIntent(R.id.music_notification_pre_btn, buildPendingIntent(MusicService.ACTION_PREV))
+            remoteViews.setOnClickPendingIntent(R.id.music_notification_next_btn, buildPendingIntent(MusicService.ACTION_NEXT))
+            remoteViews.setOnClickPendingIntent(R.id.music_notification_close_btn, buildPendingIntent(MusicService.ACTION_QUIT))
         }
         service.startForeground(ID, builder.build())
     }

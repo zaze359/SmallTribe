@@ -15,6 +15,7 @@ import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.core.view.GravityCompat
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import com.zaze.tribe.common.BaseActivity
 import com.zaze.tribe.common.util.PermissionUtil
 import com.zaze.tribe.common.util.replaceFragmentInActivity
@@ -64,11 +65,10 @@ class MainActivity : BaseActivity() {
 //            setHomeAsUpIndicator(R.drawable.ic_menu)
         }
         initNavigationBar()
-        selectedFragment(R.id.action_home)
         // --------------------------------------------------
         // --------------------------------------------------
         drawerToggle = ActionBarDrawerToggle(
-            this, mainDrawerLayout, mainToolbar, R.string.app_name, R.string.app_name
+                this, mainDrawerLayout, mainToolbar, R.string.app_name, R.string.app_name
         ).apply {
             syncState()
         }
@@ -89,7 +89,6 @@ class MainActivity : BaseActivity() {
         if (setupPermission()) {
             MusicPlayerRemote.bindService(this, serviceConnection)
         }
-
         registerReceiver(debugReceiver, IntentFilter("com.zaze.test.action"))
     }
 
@@ -101,22 +100,15 @@ class MainActivity : BaseActivity() {
 
     private fun setupPermission(): Boolean {
 //        PermissionUtil.checkAndRequestUserPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE, 0)
-        return PermissionUtil.checkAndRequestUserPermission(
-            this, arrayOf(
+        return PermissionUtil.checkAndRequestUserPermission(this, arrayOf(
                 Manifest.permission.READ_EXTERNAL_STORAGE,
                 Manifest.permission.WAKE_LOCK
-            ), 0
-        )
+        ), 0)
     }
 
-    override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<out String>,
-        grantResults: IntArray
-    ) {
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        val isGranted =
-            grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED
+        val isGranted = grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED
         if (!isGranted) {
             finish()
         } else {
@@ -130,24 +122,24 @@ class MainActivity : BaseActivity() {
             }
             setOnNavigationItemSelectedListener { it ->
                 PreferenceUtil.saveLastPage(it.itemId)
-                selectedFragment(it.itemId)
+                findOrCreateViewFragment(it.itemId)
                 true
             }
             selectedItemId = PreferenceUtil.getLastPage()
         }
     }
 
-    private fun selectedFragment(itemId: Int) =
-        supportFragmentManager.findFragmentByTag("$itemId")
-            ?: when (itemId) {
-                R.id.action_home -> TestFragment.newInstance("$itemId")
-                R.id.action_reader -> BookshelfFragment.newInstance()
-                R.id.action_music -> LocalMusicFragment.newInstance()
-                R.id.action_game -> TestFragment.newInstance("$itemId")
-                else -> TestFragment.newInstance("$$itemId")
-            }.also { it ->
-                replaceFragmentInActivity(it as Fragment, R.id.mainContentFl)
-            }
+    private fun findOrCreateViewFragment(itemId: Int) =
+            supportFragmentManager.findFragmentByTag("$itemId")
+                    ?: when (itemId) {
+                        R.id.action_home -> TestFragment.newInstance("$itemId")
+                        R.id.action_reader -> BookshelfFragment.newInstance()
+                        R.id.action_music -> LocalMusicFragment.newInstance()
+                        R.id.action_game -> TestFragment.newInstance("$itemId")
+                        else -> TestFragment.newInstance("$$itemId")
+                    }.also { it ->
+                        replaceFragmentInActivity(it as Fragment, R.id.mainContentFl)
+                    }
 
     // --------------------------------------------------
 
