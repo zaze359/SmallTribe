@@ -9,7 +9,7 @@ import android.view.MotionEvent
 import android.view.View
 import androidx.core.content.ContextCompat
 import com.zaze.tribe.music.R
-import com.zaze.utils.ZDisplayUtil
+import com.zaze.utils.DisplayUtil
 
 /**
  * Description :
@@ -25,7 +25,7 @@ class LyricView : View {
 
     private val paintL: Paint
     private val paintH: Paint
-    private val interval = ZDisplayUtil.pxFromDp(24f)
+    private val interval = DisplayUtil.pxFromDp(24f)
     private var mOffset = 0F
 
     private var baseX = 0f
@@ -52,12 +52,12 @@ class LyricView : View {
 
     init {
         paintH = createPaint().also {
-            it.textSize = ZDisplayUtil.pxFromDp(22f) * 1.0f
+            it.textSize = DisplayUtil.pxFromDp(22f) * 1.0f
             it.color = ContextCompat.getColor(context, R.color.colorPrimary)
             it.alpha = 255
         }
         paintL = createPaint().also {
-            it.textSize = ZDisplayUtil.pxFromDp(18f) * 1.0f
+            it.textSize = DisplayUtil.pxFromDp(18f) * 1.0f
             it.color = ContextCompat.getColor(context, R.color.colorPrimary)
             it.alpha = DEFAULT_ALPHA
         }

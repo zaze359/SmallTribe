@@ -3,6 +3,7 @@ package com.zaze.tribe.common.util
 import android.os.Build
 import android.view.View
 import android.view.WindowManager
+import androidx.activity.ComponentActivity
 import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
@@ -10,6 +11,8 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import com.zaze.tribe.common.R
 
 /**
@@ -17,30 +20,39 @@ import com.zaze.tribe.common.R
  * @author : ZAZE
  * @version : 2018-07-04 - 21:45
  */
-fun AppCompatActivity.replaceFragmentInActivity(fragment: Fragment, frameId: Int) {
+fun AppCompatActivity.findFragment(frameId: Int): Fragment? {
+    return supportFragmentManager.findFragmentById(frameId)
+}
+
+fun AppCompatActivity.replaceFragment(frameId: Int, fragment: Fragment, tag: String? = null) {
     supportFragmentManager.transact {
-        replace(frameId, fragment)
+        replace(frameId, fragment, tag)
     }
 }
 
-fun AppCompatActivity.addFragmentToActivity(fragment: Fragment, tag: String) {
+fun AppCompatActivity.addFragment(frameId: Int, fragment: Fragment, tag: String) {
     supportFragmentManager.transact {
-        add(fragment, tag)
+        add(frameId, fragment, tag)
     }
 }
 
-fun AppCompatActivity.showFragmentToActivity(fragment: Fragment) {
+fun AppCompatActivity.showFragment(fragment: Fragment?) {
+    if (fragment == null) {
+        return
+    }
     supportFragmentManager.transact {
         show(fragment)
     }
 }
 
-fun AppCompatActivity.FragmentToActivity(fragment: Fragment) {
+fun AppCompatActivity.hideFragment(fragment: Fragment?) {
+    if (fragment == null) {
+        return
+    }
     supportFragmentManager.transact {
         hide(fragment)
     }
 }
-
 
 fun FragmentManager.transact(action: FragmentTransaction.() -> Unit) {
     beginTransaction().apply {
@@ -48,26 +60,47 @@ fun FragmentManager.transact(action: FragmentTransaction.() -> Unit) {
     }.commit()
 }
 
-// --------------------------------------------------
-
-fun AppCompatActivity.setupActionBar(toolbar: Toolbar, action: ActionBar.() -> Unit) {
-    setSupportActionBar(toolbar)
-    supportActionBar?.run {
+fun FragmentManager.transactAllowingStateLoss(action: FragmentTransaction.() -> Unit) {
+    beginTransaction().apply {
         action()
-    }
+    }.commitAllowingStateLoss()
 }
 
 // --------------------------------------------------
-/**
- * 设置沉浸式
- */
-fun AppCompatActivity.setImmersion(color: Int = R.color.colorPrimary) {
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-        window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN or View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-        window.statusBarColor = ContextCompat.getColor(this, color)
-    } else {
-        window.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
+fun <T : Toolbar> AppCompatActivity.setupActionBar(
+    toolbar: T,
+    action: ActionBar.(toolbar: T) -> Unit = {}
+) {
+    this.setSupportActionBar(toolbar)
+    supportActionBar?.run {
+        action(toolbar)
     }
 }
 
+fun <T : Toolbar> AppCompatActivity.initToolbar(
+    toolbar: T,
+    action: ActionBar.(toolbar: T) -> Unit = {}
+) {
+    setupActionBar(toolbar) {
+        action(this, it)
+        setHomeButtonEnabled(true)
+        setDisplayHomeAsUpEnabled(true)
+    }
+}
 
+//@MainThread
+//@Deprecated("此方法不支持 hilt，使用原生的viewModels 并 重写 ComponentActivity.getDefaultViewModelProviderFactory() 来处理。")
+//inline fun <reified VM : ViewModel> ComponentActivity.myViewModels(): Lazy<VM> = viewModels {
+//    obtainViewModelFactory()
+//}
+// --------------------------------------------------
+// --------------------------------------------------
+fun ComponentActivity.obtainViewModelFactory(delegateFactory: ViewModelProvider.Factory? = null): ViewModelProvider.Factory {
+    return object : ViewModelFactory(application, delegateFactory) {
+        override fun <T : ViewModel> create(modelClass: Class<T>): T {
+            return super.create(modelClass).also { vm ->
+                initAbsViewModel(this@obtainViewModelFactory, vm)
+            }
+        }
+    }
+}

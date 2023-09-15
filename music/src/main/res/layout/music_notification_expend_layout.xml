@@ -75,7 +75,7 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="4dp"
                 android:contentDescription="@null"
-                android:src="@drawable/music_close_gray_24dp" />
+                android:src="@drawable/music_ic_close" />
 
         </LinearLayout>
     </LinearLayout>

@@ -23,12 +23,15 @@ class MyMediaPlayer(private val context: Context) : MediaPlayer.OnErrorListener,
         mediaPlayer.setWakeMode(context, PowerManager.PARTIAL_WAKE_LOCK)
     }
 
-    fun setDataSource(path: String): Boolean {
+    fun setDataSource(path: String?): Boolean {
         isInitialized = false
         isInitialized = mediaPlayer.run {
             try {
                 reset()
                 setOnPreparedListener(null)
+                if(path.isNullOrEmpty()) {
+                    return false
+                }
                 if (path.startsWith("content://")) {
                     setDataSource(context, Uri.parse(path))
                 } else {

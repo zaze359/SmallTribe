@@ -2,11 +2,11 @@
   "formatVersion": 1,
   "database": {
     "version": 2,
-    "identityHash": "f7cc5ad9bfbb9e76c50380e3caf694a8",
+    "identityHash": "41feb02bd6d48780e53072dfeb4e338f",
     "entities": [
       {
         "tableName": "music",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `title` TEXT NOT NULL, `track` INTEGER NOT NULL, `year` INTEGER NOT NULL, `duration` INTEGER NOT NULL, `data` TEXT NOT NULL, `date_modified` INTEGER NOT NULL, `album_id` INTEGER NOT NULL, `album` TEXT NOT NULL, `artist_id` INTEGER NOT NULL, `artist` TEXT NOT NULL, PRIMARY KEY(`id`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `title` TEXT, `track` INTEGER NOT NULL, `year` INTEGER NOT NULL, `duration` INTEGER NOT NULL, `data` TEXT, `date_modified` INTEGER NOT NULL, `album_id` INTEGER NOT NULL, `album` TEXT, `artist_id` INTEGER NOT NULL, `artist` TEXT, PRIMARY KEY(`id`))",
         "fields": [
           {
             "fieldPath": "id",
@@ -18,7 +18,7 @@
             "fieldPath": "title",
             "columnName": "title",
             "affinity": "TEXT",
-            "notNull": true
+            "notNull": false
           },
           {
             "fieldPath": "track",
@@ -42,7 +42,7 @@
             "fieldPath": "data",
             "columnName": "data",
             "affinity": "TEXT",
-            "notNull": true
+            "notNull": false
           },
           {
             "fieldPath": "dateModified",
@@ -60,7 +60,7 @@
             "fieldPath": "albumName",
             "columnName": "album",
             "affinity": "TEXT",
-            "notNull": true
+            "notNull": false
           },
           {
             "fieldPath": "artistId",
@@ -72,14 +72,14 @@
             "fieldPath": "artistName",
             "columnName": "artist",
             "affinity": "TEXT",
-            "notNull": true
+            "notNull": false
           }
         ],
         "primaryKey": {
+          "autoGenerate": false,
           "columnNames": [
             "id"
-          ],
-          "autoGenerate": false
+          ]
         },
         "indices": [],
         "foreignKeys": []
@@ -114,18 +114,19 @@
           }
         ],
         "primaryKey": {
+          "autoGenerate": true,
           "columnNames": [
             "lrc_id"
-          ],
-          "autoGenerate": true
+          ]
         },
         "indices": [],
         "foreignKeys": []
       }
     ],
+    "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"f7cc5ad9bfbb9e76c50380e3caf694a8\")"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '41feb02bd6d48780e53072dfeb4e338f')"
     ]
   }
 }

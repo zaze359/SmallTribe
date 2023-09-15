@@ -6,9 +6,9 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.Observer
 import androidx.viewpager.widget.ViewPager
-import com.zaze.tribe.common.BaseFragment
+import com.zaze.tribe.common.base.AbsFragment
 import com.zaze.tribe.music.adapter.AlbumCoverPagerAdapter
-import kotlinx.android.synthetic.main.music_album_cover_pager_frag.*
+import com.zaze.tribe.music.databinding.MusicAlbumCoverPagerFragBinding
 
 /**
  * Description : 歌曲封面分页页
@@ -16,16 +16,22 @@ import kotlinx.android.synthetic.main.music_album_cover_pager_frag.*
  * @author : ZAZE
  * @version : 2018-07-05 - 23:25
  */
-class AlbumCoverPagerFragment : BaseFragment(), ViewPager.OnPageChangeListener {
-
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.music_album_cover_pager_frag, container, false)
+class AlbumCoverPagerFragment : AbsFragment(), ViewPager.OnPageChangeListener {
+    private var _binding: MusicAlbumCoverPagerFragBinding? = null
+    private val binding get() = _binding!!
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        _binding = MusicAlbumCoverPagerFragBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         childFragmentManager.let {
-            musicAlbumCoverPager.apply {
+            binding.musicAlbumCoverPager.apply {
                 adapter = AlbumCoverPagerAdapter(it, MusicPlayerRemote.getPlayingQueue())
                 clipToPadding = false
                 pageMargin = 12
@@ -33,14 +39,15 @@ class AlbumCoverPagerFragment : BaseFragment(), ViewPager.OnPageChangeListener {
                 addOnPageChangeListener(this@AlbumCoverPagerFragment)
             }
         }
-        MusicPlayerRemote.curMusicData.observe(this, Observer {
-            musicAlbumCoverPager.setCurrentItem(MusicPlayerRemote.getPosition(), true)
+        MusicPlayerRemote.curMusicData.observe(viewLifecycleOwner, Observer {
+            binding.musicAlbumCoverPager.setCurrentItem(MusicPlayerRemote.getPosition(), true)
         })
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
-        musicAlbumCoverPager.removeOnPageChangeListener(this)
+        binding.musicAlbumCoverPager.removeOnPageChangeListener(this)
+        _binding = null
     }
 
     override fun onPageScrollStateChanged(state: Int) {

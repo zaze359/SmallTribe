@@ -1,10 +1,9 @@
-package com.zaze.tribe.common
+package com.zaze.tribe.common.base
 
 import android.app.Application
-import com.squareup.leakcanary.LeakCanary
-import com.zaze.router.task.StartupStore
-import com.zaze.router.task.StartupTask
-import com.zaze.utils.ZDisplayUtil
+import com.zaze.tribe.common.util.StartupStore
+import com.zaze.tribe.common.util.StartupTask
+import com.zaze.utils.DisplayUtil
 
 /**
  * Description :
@@ -23,8 +22,7 @@ open class BaseApplication : Application() {
         val startupStore = StartupStore.build()
                 .push(object : StartupTask("LeakCanary, Default init") {
                     override fun doTask() {
-                        LeakCanary.install(INSTANCE)
-                        ZDisplayUtil.init(INSTANCE)
+                        DisplayUtil.init(INSTANCE)
                     }
                 })
         initStartupTask(INSTANCE, startupStore)

@@ -1,116 +1,102 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/rect_selector"
+    android:orientation="vertical"
+    android:visibility="gone">
 
-    <data>
+    <ProgressBar
+        android:id="@+id/musicMiniPlayerProgressBar"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:progressDrawable="@drawable/progress_horizontal" />
 
-        <import type="android.view.View" />
-
-        <import type="com.zaze.tribe.music.MusicPlayerRemote" />
-
-    </data>
-
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/rect_selector"
-        android:orientation="vertical"
-        android:visibility="@{MusicPlayerRemote.curMusicData == null ? View.GONE : View.VISIBLE}">
+        android:padding="4dp">
 
-        <ProgressBar
-            android:id="@+id/musicMiniPlayerProgressBar"
-            style="?android:attr/progressBarStyleHorizontal"
-            android:layout_width="match_parent"
-            android:layout_height="2dp"
-            android:progressDrawable="@drawable/progress_horizontal" />
-
-        <RelativeLayout
-            android:layout_width="match_parent"
+        <androidx.cardview.widget.CardView
+            android:id="@+id/musicMiniPlayerAlbumCard"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:padding="4dp">
+            android:layout_marginLeft="4dp"
+            android:layout_marginRight="4dp"
+            app:cardCornerRadius="4dp"
+            app:cardElevation="0dp">
 
-            <androidx.cardview.widget.CardView
-                android:id="@+id/musicMiniPlayerAlbumCard"
+            <ImageView
+                android:id="@+id/music_album_iv"
+                android:layout_width="@dimen/music_album_cover_size_mini"
+                android:layout_height="@dimen/music_album_cover_size_mini"
+                android:contentDescription="@null"
+                android:scaleType="fitCenter"
+                tools:src="@mipmap/ic_launcher" />
+        </androidx.cardview.widget.CardView>
+
+        <LinearLayout
+            android:id="@+id/musicMiniPlayerMenu"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:orientation="horizontal">
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/musicMiniPlayerStatus"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="4dp"
+                android:layout_marginRight="4dp"
+                tools:src="@drawable/music_play_circle_outline_black_24dp" />
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/musicMiniPlayerList"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="4dp"
                 android:layout_marginRight="4dp"
-                app:cardCornerRadius="4dp"
-                app:cardElevation="0dp">
+                android:src="@drawable/music_more_vert_black_24dp" />
+        </LinearLayout>
 
-                <ImageView
-                    android:layout_width="@dimen/music_album_cover_size_mini"
-                    android:layout_height="@dimen/music_album_cover_size_mini"
-                    android:contentDescription="@null"
-                    android:scaleType="fitCenter"
-                    app:bmp="@{MusicPlayerRemote.curMusicData}"
-                    tools:src="@mipmap/ic_launcher" />
-            </androidx.cardview.widget.CardView>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_toStartOf="@id/musicMiniPlayerMenu"
+            android:layout_toLeftOf="@id/musicMiniPlayerMenu"
+            android:layout_toEndOf="@id/musicMiniPlayerAlbumCard"
+            android:layout_toRightOf="@id/musicMiniPlayerAlbumCard"
+            android:orientation="vertical">
 
-            <LinearLayout
-                android:id="@+id/musicMiniPlayerMenu"
+            <TextView
+                android:id="@+id/musicMiniPlayerTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
-                android:layout_alignParentRight="true"
-                android:layout_centerVertical="true"
-                android:orientation="horizontal">
+                android:ellipsize="end"
+                android:maxLength="14"
+                android:maxLines="1"
+                android:textColor="#333333"
+                android:textSize="14sp"
+                tools:text="极乐净土极乐净土极乐净土极乐净土极乐净土" />
 
-                <androidx.appcompat.widget.AppCompatImageView
-                    android:id="@+id/musicMiniPlayerStatus"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="4dp"
-                    android:layout_marginRight="4dp"
-                    android:src="@{MusicPlayerRemote.isPlaying?@drawable/music_pause_circle_outline_black_24dp : @drawable/music_play_circle_outline_black_24dp}"
-                    tools:src="@drawable/music_play_circle_outline_black_24dp" />
-
-                <androidx.appcompat.widget.AppCompatImageView
-                    android:id="@+id/musicMiniPlayerList"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="4dp"
-                    android:layout_marginRight="4dp"
-                    android:src="@drawable/music_more_vert_black_24dp" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
+            <TextView
+                android:id="@+id/musicMiniPlayerArtist"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_toStartOf="@id/musicMiniPlayerMenu"
-                android:layout_toLeftOf="@id/musicMiniPlayerMenu"
-                android:layout_toEndOf="@id/musicMiniPlayerAlbumCard"
-                android:layout_toRightOf="@id/musicMiniPlayerAlbumCard"
-                android:orientation="vertical">
+                android:layout_marginTop="4dp"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:textSize="12sp"
+                tools:text="MARIA" />
 
-                <TextView
-                    android:id="@+id/musicMiniPlayerTitle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:ellipsize="end"
-                    android:maxLength="14"
-                    android:maxLines="1"
-                    android:text="@{MusicPlayerRemote.curMusicData.title}"
-                    android:textColor="#333333"
-                    android:textSize="14sp"
-                    tools:text="极乐净土极乐净土极乐净土极乐净土极乐净土" />
+        </LinearLayout>
 
-                <TextView
-                    android:id="@+id/musicMiniPlayerArtist"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="4dp"
-                    android:ellipsize="end"
-                    android:maxLines="1"
-                    android:text="@{MusicPlayerRemote.curMusicData.artistName}"
-                    android:textSize="12sp"
-                    tools:text="MARIA" />
+    </RelativeLayout>
 
-            </LinearLayout>
-
-        </RelativeLayout>
-
-    </LinearLayout>
-</layout>
+</LinearLayout>

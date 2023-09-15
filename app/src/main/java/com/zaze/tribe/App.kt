@@ -1,10 +1,11 @@
 package com.zaze.tribe
 
 import android.app.Application
-import com.zaze.router.task.StartupStore
-import com.zaze.router.task.StartupTask
-import com.zaze.tribe.common.BaseApplication
+import com.zaze.tribe.common.base.BaseApplication
+import com.zaze.tribe.common.util.StartupStore
+import com.zaze.tribe.common.util.StartupTask
 import com.zaze.utils.log.ZLog
+import dagger.hilt.android.HiltAndroidApp
 
 /**
  * Description :
@@ -12,6 +13,7 @@ import com.zaze.utils.log.ZLog
  * @author : ZAZE
  * @version : 2018-07-05 - 23:25
  */
+@HiltAndroidApp
 class App : BaseApplication() {
 
     override fun initStartupTask(application: Application, startupStore: StartupStore) {

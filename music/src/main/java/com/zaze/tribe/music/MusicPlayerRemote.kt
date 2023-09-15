@@ -25,13 +25,13 @@ object MusicPlayerRemote {
      * 当前播放 Music Data
      */
     @JvmStatic
-    val curMusicData = MutableLiveData<Music>()
+    val curMusicData = MutableLiveData<Music?>()
 
     /**
      * 是否在播放中
      */
     @JvmStatic
-    val isPlaying = ObservableBoolean(false)
+    val isPlaying = MutableLiveData(false)
 
     // ------------------------------------------------------
     var mBinder: MusicService.ServiceBinder? = null
@@ -71,13 +71,17 @@ object MusicPlayerRemote {
     // ------------------------------------------------------
 
     @JvmStatic
-    fun bindService(context: Context, serviceConnection : ServiceConnection) {
+    fun bindService(context: Context, serviceConnection: ServiceConnection): Boolean {
         context.startService(Intent(context, MusicService::class.java))
-        context.bindService(Intent(context, MusicService::class.java), serviceConnection, Context.BIND_AUTO_CREATE)
+        return context.bindService(
+            Intent(context, MusicService::class.java),
+            serviceConnection,
+            Context.BIND_AUTO_CREATE
+        )
     }
 
     @JvmStatic
-    fun unbindService(context: Context, serviceConnection : ServiceConnection) {
+    fun unbindService(context: Context, serviceConnection: ServiceConnection) {
         context.unbindService(serviceConnection)
     }
 

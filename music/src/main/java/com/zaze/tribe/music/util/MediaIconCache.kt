@@ -31,19 +31,28 @@ object MediaIconCache {
     }
 
     @JvmStatic
-    fun getSmallMediaIcon(path: String): Bitmap {
+    fun getSmallMediaIcon(path: String?): Bitmap {
+        if (path.isNullOrEmpty()) {
+            return getDefaultMediaIcon()
+        }
         return IconCache.getIconCache(path) ?: buildMediaIcon(path, BMP_SIZE, BMP_SIZE)?.apply {
             saveSmallMediaIcon(path, this)
         } ?: getDefaultMediaIcon()
     }
 
     @JvmStatic
-    fun buildMediaIcon(path: String, width: Int = -1, height: Int = -1): Bitmap? {
+    fun buildMediaIcon(path: String?, width: Int = -1, height: Int = -1): Bitmap? {
+        if(path.isNullOrEmpty()) return null
         return try {
             mediaMetadataRetriever.run {
                 setDataSource(path)
                 embeddedPicture?.run {
-                    BitmapFactory.decodeByteArray(this, 0, size, IconCache.buildBitmapOptions(width, height))
+                    BitmapFactory.decodeByteArray(
+                        this,
+                        0,
+                        size,
+                        IconCache.buildBitmapOptions(width, height)
+                    )
                 }
             }
         } catch (e: Throwable) {
@@ -56,10 +65,10 @@ object MediaIconCache {
     @JvmStatic
     fun getDefaultMediaIcon(): Bitmap {
         return defaultMediaIcon?.get()
-                ?: BmpUtil.drawable2Bitmap(IconCache.getFullResIcon(R.mipmap.ic_launcher))
-                        ?.apply {
-                            defaultMediaIcon = SoftReference(this)
-                        }
-                ?: Bitmap.createBitmap(BMP_SIZE, BMP_SIZE, Bitmap.Config.ALPHA_8)
+            ?: BmpUtil.drawable2Bitmap(IconCache.getFullResIcon(R.mipmap.ic_launcher))
+                ?.apply {
+                    defaultMediaIcon = SoftReference(this)
+                }
+            ?: Bitmap.createBitmap(BMP_SIZE, BMP_SIZE, Bitmap.Config.ALPHA_8)
     }
 }

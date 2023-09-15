@@ -1,6 +1,6 @@
 package com.zaze.tribe.common
 
-import androidx.fragment.app.Fragment
+import com.zaze.tribe.common.base.AbsFragment
 
 
 /**
@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment
  * @author : ZAZE
  * @version : 2018-10-16 - 1:04
  */
-abstract class BaseFragment : Fragment() {
+@Deprecated("use AbsFragment")
+abstract class BaseFragment : AbsFragment() {
 
 }

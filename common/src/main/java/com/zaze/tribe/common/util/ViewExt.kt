@@ -10,7 +10,7 @@ import com.zaze.tribe.common.BaseRecyclerAdapter
  * app:items --- Collection<V>
  * BaseRecyclerAdapter.setDataList()
  */
-@BindingAdapter("app:items")
+@BindingAdapter("items")
 fun <V> RecyclerView.setData(items: Collection<V>?) {
     adapter?.let {
         if (adapter is BaseRecyclerAdapter<*, *>) {

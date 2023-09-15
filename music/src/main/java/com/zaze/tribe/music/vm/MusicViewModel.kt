@@ -5,14 +5,14 @@ import android.media.MediaMetadataRetriever
 import androidx.databinding.ObservableArrayList
 import androidx.databinding.ObservableList
 import androidx.lifecycle.MutableLiveData
-import com.zaze.tribe.common.BaseAndroidViewModel
+import com.zaze.tribe.common.base.AbsAndroidViewModel
 import com.zaze.tribe.common.util.Utils
 import com.zaze.tribe.common.util.set
 import com.zaze.tribe.music.MusicPlayerRemote
 import com.zaze.tribe.music.data.dto.Music
 import com.zaze.tribe.music.data.loaders.MusicLoader
 import com.zaze.utils.FileUtil
-import com.zaze.utils.ZTipUtil
+import com.zaze.utils.ToastUtil
 import com.zaze.utils.log.ZLog
 import com.zaze.utils.log.ZTag
 import io.reactivex.Observable
@@ -27,7 +27,7 @@ import java.io.File
  */
 open class MusicViewModel(
         private val context: Application
-) : BaseAndroidViewModel(context) {
+) : AbsAndroidViewModel(context) {
     val musicList: ObservableList<Music> = ObservableArrayList()
 
     val isFavorite = MutableLiveData<Boolean>()
@@ -105,7 +105,7 @@ open class MusicViewModel(
      * [music] music
      */
     fun showMore(music: Music) {
-        ZTipUtil.toast(context, music.data)
+        ToastUtil.toast(context, music.data)
     }
 
     fun toggleFavorite(music: Music?) {

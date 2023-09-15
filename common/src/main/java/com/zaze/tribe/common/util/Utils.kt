@@ -51,7 +51,7 @@ object Utils {
      */
     @JvmStatic
     @JvmOverloads
-    fun searchFileBySuffix(dir: File, suffix: String, isDeep: Boolean = false): ArrayList<File> {
+    fun searchFileBySuffix(dir: File, suffix: String, isDeep: Boolean = false): List<File> {
         val searchedFileList = ArrayList<File>()
         if (dir.exists() && dir.isDirectory) {
             val childFileList = dir.listFiles()

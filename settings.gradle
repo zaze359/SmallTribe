@@ -1,1 +1,35 @@
+pluginManagement {
+    repositories {
+        maven {
+            allowInsecureProtocol true
+            url = uri("http://localhost:8081/repository/maven-public")
+        }
+        mavenLocal()
+        maven { url = uri("https://maven.aliyun.com/repository/public") }
+        maven { url = uri("https://maven.aliyun.com/repository/jcenter") }
+        maven { url = uri("https://maven.aliyun.com/repository/google") }
+        gradlePluginPortal()
+        google()
+        mavenCentral()
+    }
+}
+
+dependencyResolutionManagement {
+    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+    repositories {
+        maven {
+            allowInsecureProtocol true
+            url = uri("http://localhost:8081/repository/maven-public")
+        }
+        mavenLocal()
+        maven { url = uri("https://maven.aliyun.com/repository/public") }
+        maven { url = uri("https://maven.aliyun.com/repository/jcenter") }
+        maven { url = uri("https://maven.aliyun.com/repository/google") }
+        maven { url "https://jitpack.io" }
+        google()
+        mavenCentral()
+    }
+}
+
 include ':app', ':music', ':common', ':router', ':reader'
+include ':core:testing'

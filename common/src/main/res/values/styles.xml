@@ -1,16 +1,49 @@
 <resources>
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
+    <style name="AppTheme" parent="Theme.Custom.Base.Adaptive">
         <!-- Customize your theme here. -->
-        <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/colorAccent</item>
+<!--        <item name="colorPrimary">@color/colorPrimary</item>-->
+<!--        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>-->
+<!--        <item name="colorAccent">@color/colorAccent</item>-->
     </style>
 
-    <style name="AppFullScreen" parent="Theme.AppCompat.NoActionBar">
-        <item name="android:windowFullscreen">true</item>
-        <item name="android:windowNoTitle">true</item>
-        <item name="windowActionBar">false</item>
+    <style name="Theme.MyApp" parent="Theme.Custom.MD3" />
+
+    <style name="Theme.MyApp.MD3" parent="Theme.Custom.MD3" />
+
+    <style name="Theme.MyApp.Black" parent="Theme.Custom.MD3.Black" />
+
+    <style name="Theme.MyApp.Light" parent="Theme.Custom.Base.Light" />
+
+    <style name="Theme.MyApp.Dark" parent="Theme.Custom.Base.Dark" />
+
+    <style name="Theme.MyApp.Adaptive" parent="Theme.Custom.Base.Adaptive" />
+
+<!--    <style name="AppFullScreen" parent="Theme.Custom.Base.Adaptive">-->
+<!--        <item name="android:windowFullscreen">true</item>-->
+<!--        <item name="android:windowNoTitle">true</item>-->
+<!--        <item name="windowActionBar">false</item>-->
+<!--    </style>-->
+
+    <style name="TextSize">
+        <item name="android:textSize">18sp</item>
     </style>
+
+    <style name="TextSize.Small">
+        <item name="android:textSize">12sp</item>
+    </style>
+
+    <style name="TextSize.H1">
+        <item name="android:textSize">28sp</item>
+    </style>
+
+    <style name="TextSize.H2">
+        <item name="android:textSize">24sp</item>
+    </style>
+
+    <style name="TextSize.H3">
+        <item name="android:textSize">20sp</item>
+    </style>
+
 </resources>

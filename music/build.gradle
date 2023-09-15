@@ -1,14 +1,38 @@
+plugins {
+    alias(libs.plugins.android.library)
+    alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.kapt)
+    alias(libs.plugins.hilt)
+    alias(libs.plugins.google.devtools.ksp)
+}
 android {
-
+    namespace 'com.zaze.tribe.music'
+    compileSdk = Integer.parseInt(libs.versions.compileSdk.get())
     defaultConfig {
-        resourcePrefix "music"
+//        resourcePrefix "music"
+        minSdk = Integer.parseInt(libs.versions.minSdk.get())
+        targetSdk = Integer.parseInt(libs.versions.targetSdk.get())
         javaCompileOptions {
             annotationProcessorOptions {
                 arguments = ["room.schemaLocation": "$projectDir/schemas".toString()]
             }
         }
     }
+    buildFeatures {
+//            compose = true
+        viewBinding = true
+    }
+    dataBinding {
+        enabled = true
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
 
+    kotlinOptions {
+        jvmTarget = "1.8"
+    }
     buildTypes {
         release {
             minifyEnabled false
@@ -19,8 +43,25 @@ android {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation "androidx.room:room-runtime:$roomVersionx"
-    implementation "androidx.room:room-rxjava2:$roomVersionx"
-    kapt "androidx.room:room-compiler:$roomVersionx"
-    androidTestImplementation "androidx.room:room-testing:$roomVersionx"
+    testImplementation(project(":core:testing"))
+    androidTestImplementation(project(":core:testing"))
+
+    implementation(libs.hilt.android)
+    kapt(libs.hilt.compiler)
+    kapt(libs.hilt.ext.compiler)
+
+    implementation(libs.androidx.room.runtime)
+    implementation(libs.androidx.room.ktx)
+    implementation(libs.androidx.room.rxjava2)
+    kapt(libs.androidx.room.compiler)
+
+    implementation libs.glide
+    ksp libs.glide.ksp
+    implementation libs.glide.okhttp3.integration
+
+    implementation libs.androidx.palette.ktx
+    implementation(libs.androidx.mediarouter)
+
+    implementation project(rootProject.ext.modules.common)
+
 }

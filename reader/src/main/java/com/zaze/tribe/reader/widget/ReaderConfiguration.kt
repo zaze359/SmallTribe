@@ -20,7 +20,7 @@ import android.content.Context
 import android.graphics.Paint
 import androidx.core.content.ContextCompat
 import com.zaze.tribe.reader.R
-import com.zaze.utils.ZDisplayUtil
+import com.zaze.utils.DisplayUtil
 
 /**
  * 一些阅读的配置
@@ -37,7 +37,7 @@ class ReaderConfiguration {
     var fontSize: Float = 0F
         get() {
             if (field <= 0) {
-                field = ZDisplayUtil.pxFromSp(16F)
+                field = DisplayUtil.pxFromSp(16F)
             }
             return field
         }

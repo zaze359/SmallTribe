@@ -3,9 +3,10 @@ package com.zaze.tribe.music.data.db
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import androidx.room.migration.AutoMigrationSpec
 import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
-import com.zaze.tribe.common.BaseApplication
+import com.zaze.tribe.common.base.BaseApplication
 import com.zaze.tribe.music.data.dto.Lyric
 import com.zaze.tribe.music.data.dto.Music
 import com.zaze.utils.log.ZLog
@@ -16,7 +17,7 @@ import com.zaze.utils.log.ZTag
  * @author : ZAZE
  * @version : 2018-07-05 - 22:58
  */
-@Database(entities = [Music::class, Lyric::class], version = 2)
+@Database(entities = [Music::class, Lyric::class], version = 3)
 abstract class LocalDatabase : RoomDatabase() {
     companion object {
         /**
@@ -29,10 +30,14 @@ abstract class LocalDatabase : RoomDatabase() {
         }
 
         val database by lazy(mode = LazyThreadSafetyMode.SYNCHRONIZED) {
-            Room.databaseBuilder<LocalDatabase>(BaseApplication.INSTANCE,
-                    LocalDatabase::class.java, "small_tribe.db")
-                    .addMigrations(MIGRATION_1_2)
-                    .build()
+            Room.databaseBuilder<LocalDatabase>(
+                BaseApplication.INSTANCE,
+                LocalDatabase::class.java, "small_tribe.db"
+            )
+                .allowMainThreadQueries()
+//                .addMigrations(MIGRATION_1_2)
+                .fallbackToDestructiveMigrationFrom(1)
+                .build()
         }
     }
 

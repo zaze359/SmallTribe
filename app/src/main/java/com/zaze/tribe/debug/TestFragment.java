@@ -1,4 +1,4 @@
-package com.zaze.tribe;
+package com.zaze.tribe.debug;
 
 import android.os.Bundle;
 import android.os.Handler;
@@ -7,19 +7,23 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.zaze.tribe.music.data.entity.LrcLine;
-import com.zaze.tribe.music.util.LrcProcessor;
-import com.zaze.tribe.music.widget.LyricView;
-import com.zaze.utils.date.DateUtil;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.TimeZone;
-
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
+
+import com.zaze.tribe.BuildConfig;
+import com.zaze.tribe.R;
+import com.zaze.tribe.music.data.entity.LrcLine;
+import com.zaze.tribe.music.util.LrcProcessor;
+import com.zaze.tribe.music.widget.LyricView;
+import com.zaze.utils.date.DateUtil;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.TimeZone;
 
 /**
  * Description :
@@ -81,7 +85,13 @@ public class TestFragment extends Fragment {
         View view = inflater.inflate(R.layout.test_frag, container, false);
         testContentTv = view.findViewById(R.id.test_content_tv);
         testLyricView = view.findViewById(R.id.test_lyric_view);
-        mLiveData.observe(this, new Observer<String>() {
+        return view;
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        mLiveData.observe(getViewLifecycleOwner(), new Observer<String>() {
             @Override
             public void onChanged(@Nullable String s) {
                 testContentTv.setText(s);
@@ -98,7 +108,6 @@ public class TestFragment extends Fragment {
             e.printStackTrace();
         }
         handler.post(runnable);
-        return view;
     }
 
     @Override

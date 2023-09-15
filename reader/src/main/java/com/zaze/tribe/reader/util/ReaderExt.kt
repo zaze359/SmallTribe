@@ -10,8 +10,8 @@ import com.zaze.tribe.reader.bookshelf.BookshelfViewModel
  * @author : ZAZE
  * @version : 2019-06-08 - 19:18
  */
-@BindingAdapter("app:bookshelfLoader")
-fun SwipeRefreshLayout.setSwipeRefreshLayoutOnRefreshListener(
+@BindingAdapter("bookshelfLoader")
+fun SwipeRefreshLayout.bookshelfLoader(
         viewModel: BookshelfViewModel) {
     setOnRefreshListener { viewModel.loadBookshelf() }
 }

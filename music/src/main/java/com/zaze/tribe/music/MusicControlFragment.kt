@@ -7,12 +7,10 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.animation.LinearInterpolator
 import android.widget.SeekBar
-import com.zaze.tribe.common.BaseFragment
+import com.zaze.tribe.common.base.AbsFragment
 import com.zaze.tribe.music.databinding.MusicControlFragBinding
 import com.zaze.tribe.music.handler.MusicProgressHandler
 import com.zaze.tribe.common.util.Utils
-import com.zaze.tribe.music.R.id.*
-import kotlinx.android.synthetic.main.music_control_frag.*
 
 /**
  * Description : 音频控制操作
@@ -20,9 +18,10 @@ import kotlinx.android.synthetic.main.music_control_frag.*
  * @author : ZAZE
  * @version : 2018-10-16 - 0:45
  */
-class MusicControlFragment : BaseFragment(), MusicProgressHandler.Callback {
+class MusicControlFragment : AbsFragment(), MusicProgressHandler.Callback {
 
-    private lateinit var dataBinding: MusicControlFragBinding
+    private var _binding: MusicControlFragBinding? = null
+    private val binding get() = _binding!!
 
     private lateinit var progressHandler: MusicProgressHandler
 
@@ -31,14 +30,19 @@ class MusicControlFragment : BaseFragment(), MusicProgressHandler.Callback {
         progressHandler = MusicProgressHandler(this)
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        dataBinding = MusicControlFragBinding.inflate(inflater, container, false)
-        return dataBinding.root
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        _binding = MusicControlFragBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        musicControlSeekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+        binding.musicControlSeekBar.setOnSeekBarChangeListener(object :
+            SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
                 if (fromUser) {
                     MusicPlayerRemote.seekTo(progress)
@@ -53,16 +57,20 @@ class MusicControlFragment : BaseFragment(), MusicProgressHandler.Callback {
             }
 
         })
+        MusicPlayerRemote.curMusicData.observe(viewLifecycleOwner) {
+            binding.musicArtistTv.text = it?.title
+            binding.musicArtistTv.text = it?.artistName
+        }
     }
 
     override fun onProgress(progress: Int, total: Int) {
-        musicControlSeekBar.max = total
-        val animator = ObjectAnimator.ofInt(musicControlSeekBar, "progress", progress)
+        binding.musicControlSeekBar.max = total
+        val animator = ObjectAnimator.ofInt(binding.musicControlSeekBar, "progress", progress)
         animator.duration = 2000L
         animator.interpolator = LinearInterpolator()
         animator.start()
-        musicControlCurTime.text = Utils.getDurationString(progress.toLong())
-        musicControlTotalTime.text = Utils.getDurationString(total.toLong())
+        binding.musicControlCurTime.text = Utils.getDurationString(progress.toLong())
+        binding.musicControlTotalTime.text = Utils.getDurationString(total.toLong())
     }
 
     override fun onResume() {

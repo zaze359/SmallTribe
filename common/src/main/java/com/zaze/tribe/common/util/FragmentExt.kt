@@ -1,36 +1,41 @@
 package com.zaze.tribe.common.util
 
-import androidx.annotation.MainThread
+import androidx.appcompat.app.ActionBar
+import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 
 /**
  * Description :
  * @author : zaze
  * @version : 2021-04-29 - 10:27
  */
-fun Fragment.obtainViewModelFactory(): ViewModelFactory {
-    return object : ViewModelFactory() {
+fun Fragment.obtainViewModelFactory(delegateFactory: ViewModelProvider.Factory? = null): ViewModelProvider.Factory {
+    return object : ViewModelFactory(requireActivity().application, delegateFactory) {
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             return super.create(modelClass).also { vm ->
-                initAbsViewModel(this@obtainViewModelFactory.activity, vm)
+                initAbsViewModel(requireActivity(), vm)
             }
         }
     }
 }
 
-fun Fragment.obtainActivityViewModelFactory(): ViewModelFactory {
-    return ViewModelFactory()
+fun <T : Toolbar> Fragment.setupActionBar(
+    toolbar: T,
+    action: ActionBar.(toolbar: T) -> Unit = {}
+) {
+    (requireActivity() as AppCompatActivity).setupActionBar(toolbar, action)
 }
 
-@MainThread
-inline fun <reified VM : ViewModel> Fragment.myViewModel() = viewModels<VM> {
-    obtainViewModelFactory()
-}
-
-@MainThread
-inline fun <reified VM : ViewModel> Fragment.myActivityViewModels() = activityViewModels<VM> {
-    obtainActivityViewModelFactory()
+fun <T : Toolbar> Fragment.initToolbar(
+    toolbar: T,
+    action: ActionBar.(toolbar: T) -> Unit = {}
+) {
+    setupActionBar(toolbar) {
+        action(this, it)
+        setHomeButtonEnabled(true)
+        setDisplayHomeAsUpEnabled(true)
+    }
 }

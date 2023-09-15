@@ -1,7 +1,7 @@
 package com.zaze.tribe.music.util
 
-import com.zaze.tribe.common.BaseApplication
-import com.zaze.utils.ZSharedPrefUtil
+import com.zaze.tribe.common.base.BaseApplication
+import com.zaze.utils.SharedPrefUtil
 
 /**
  * Description :
@@ -11,7 +11,7 @@ import com.zaze.utils.ZSharedPrefUtil
  */
 object MusicPreference {
 
-    private val sharedPrefUtil = ZSharedPrefUtil.newInstance(BaseApplication.INSTANCE, "music_pref")
+    private val sharedPrefUtil = SharedPrefUtil.newInstance(BaseApplication.INSTANCE, "music_pref")
 
     private const val LATELY_MUSIC_POSITION = "LATELY_MUSIC_POSITION"
     private const val LATELY_MUSIC_TRACK = "LATELY_MUSIC_TRACK"

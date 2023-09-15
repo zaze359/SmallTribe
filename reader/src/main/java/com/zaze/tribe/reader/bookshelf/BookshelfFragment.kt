@@ -4,13 +4,14 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.GridLayoutManager
-import com.zaze.tribe.common.BaseFragment
-import com.zaze.tribe.common.util.obtainViewModel
+import com.zaze.tribe.common.base.AbsFragment
+import com.zaze.tribe.reader.R
 import com.zaze.tribe.reader.bean.Book
 import com.zaze.tribe.reader.databinding.BookshelfFragBinding
-import kotlinx.android.synthetic.main.bookshelf_frag.*
 
 /**
  * Description :
@@ -18,11 +19,12 @@ import kotlinx.android.synthetic.main.bookshelf_frag.*
  * @author : ZAZE
  * @version : 2019-06-08 - 0:02
  */
-class BookshelfFragment : BaseFragment() {
+class BookshelfFragment : AbsFragment() {
 
-    private lateinit var viewDataBinding: BookshelfFragBinding
+    private var _binding: BookshelfFragBinding? = null
+    private val binding get() = _binding!!
     private var adapter: BookshelfAdapter? = null
-    private lateinit var viewModel: BookshelfViewModel
+    private val viewModel: BookshelfViewModel by activityViewModels()
 
     companion object {
         fun newInstance(): BookshelfFragment {
@@ -30,21 +32,23 @@ class BookshelfFragment : BaseFragment() {
         }
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        viewDataBinding = BookshelfFragBinding.inflate(inflater, container, false)
-        viewDataBinding.setLifecycleOwner(this)
-        viewDataBinding.viewModel = obtainViewModel(BookshelfViewModel::class.java).apply {
-            this.bookData.observe(this@BookshelfFragment, Observer {
-                showBookshelf(it)
-            })
-            viewModel = this
-        }
-        return viewDataBinding.root
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        _binding = DataBindingUtil.inflate(inflater, R.layout.bookshelf_frag, container, false)
+        binding.viewModel = viewModel
+        binding.lifecycleOwner = this
+        viewModel.bookData.observe(viewLifecycleOwner, Observer {
+            showBookshelf(it ?: emptyList())
+        })
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        bookshelfRecyclerView.apply {
+        binding.bookshelfRecyclerView.apply {
             layoutManager = GridLayoutManager(context, 3)
         }
         viewModel.loadBookshelf()
@@ -54,9 +58,13 @@ class BookshelfFragment : BaseFragment() {
         context?.let { context ->
             adapter?.setDataList(data) ?: let {
                 adapter = BookshelfAdapter(context, data)
-                bookshelfRecyclerView.adapter = adapter
+                binding.bookshelfRecyclerView.adapter = adapter
             }
         }
+    }
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 }

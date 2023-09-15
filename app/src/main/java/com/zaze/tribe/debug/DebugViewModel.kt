@@ -1,8 +1,7 @@
 package com.zaze.tribe.debug
 
 import android.app.Application
-import androidx.lifecycle.AndroidViewModel
-import com.zaze.tribe.common.BaseAndroidViewModel
+import com.zaze.tribe.common.base.AbsAndroidViewModel
 
 /**
  * Description :
@@ -10,6 +9,6 @@ import com.zaze.tribe.common.BaseAndroidViewModel
  * @version : 2018-07-04 - 00:14
  */
 
-class DebugViewModel(context: Application) : BaseAndroidViewModel(context) {
+class DebugViewModel(context: Application) : AbsAndroidViewModel(context) {
 
 }

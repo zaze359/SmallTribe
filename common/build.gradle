@@ -1,8 +1,33 @@
+plugins {
+    alias(libs.plugins.android.library)
+    alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.kapt)
+    alias(libs.plugins.hilt)
+}
+
 android {
+    namespace 'com.zaze.tribe.common'
+    compileSdk = Integer.parseInt(libs.versions.compileSdk.get())
     defaultConfig {
-//        applicationId "com.zaze.tribe"
+        minSdk = Integer.parseInt(libs.versions.minSdk.get())
+        targetSdk = Integer.parseInt(libs.versions.targetSdk.get())
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+    buildFeatures {
+//            compose = true
+        viewBinding = true
+    }
+    dataBinding {
+        enabled = true
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
     }
 
+    kotlinOptions {
+        jvmTarget = "1.8"
+    }
     buildTypes {
         release {
             minifyEnabled false
@@ -13,4 +38,36 @@ android {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
+    testImplementation(project(":core:testing"))
+    androidTestImplementation(project(":core:testing"))
+    //
+    implementation(libs.hilt.android)
+    kapt(libs.hilt.compiler)
+    kapt(libs.hilt.ext.compiler)
+    //
+    api(libs.google.android.material)
+    api(libs.kotlin.stdlib)
+    api(libs.androidx.appcompat)
+    api(libs.androidx.recyclerview)
+    api(libs.androidx.lifecycle.runtime)
+    api(libs.androidx.lifecycle.viewmodel.ktx)
+    api(libs.androidx.core.ktx)
+    api(libs.androidx.activity.ktx)
+    api(libs.androidx.constraintlayout)
+    api(libs.androidx.navigation.fragment)
+    api(libs.androidx.navigation.ui.ktx)
+    api libs.androidx.annotation
+    api(libs.androidx.swiperefreshlayout)
+
+    api(libs.google.gson)
+//    implementation 'com.github.bumptech.glide:glide:3.8.0'
+
+    api(libs.rxjava2)
+    api(libs.rxandroid)
+    //
+    api(libs.androidx.compose.material3)
+    api(libs.androidx.compose.material.icons.extended)
+    //
+    api("io.github.zaze359:zaze-designsystem:1.0.0-SNAPSHOT")
+    api("io.github.zaze359:zaze-utils:1.1.0-SNAPSHOT")
 }

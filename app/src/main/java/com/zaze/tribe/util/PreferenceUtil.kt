@@ -1,8 +1,8 @@
 package com.zaze.tribe.util
 
 import com.zaze.tribe.R
-import com.zaze.tribe.common.BaseApplication
-import com.zaze.utils.ZSharedPrefUtil
+import com.zaze.tribe.common.base.BaseApplication
+import com.zaze.utils.SharedPrefUtil
 
 /**
  * Description :
@@ -12,7 +12,7 @@ import com.zaze.utils.ZSharedPrefUtil
  */
 object PreferenceUtil {
 
-    private val sharedPrefUtil = ZSharedPrefUtil.newInstance(BaseApplication.INSTANCE)
+    private val sharedPrefUtil = SharedPrefUtil.newInstance(BaseApplication.INSTANCE)
 
     private const val LATELY_PAGE = "LATELY_PAGE"
 

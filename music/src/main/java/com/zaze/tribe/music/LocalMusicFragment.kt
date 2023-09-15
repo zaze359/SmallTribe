@@ -4,24 +4,24 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.zaze.tribe.common.BaseFragment
-import com.zaze.tribe.common.util.obtainViewModel
+import com.zaze.tribe.common.base.AbsFragment
 import com.zaze.tribe.music.adapter.LocalMusicAdapter
 import com.zaze.tribe.music.databinding.MusicLocalFragBinding
 import com.zaze.tribe.music.vm.MusicViewModel
-import kotlinx.android.synthetic.main.music_local_frag.*
 
 /**
  * Description :
  * @author : ZAZE
  * @version : 2018-07-06 - 00:30
  */
-class LocalMusicFragment : BaseFragment() {
+class LocalMusicFragment : AbsFragment() {
 
-    private lateinit var viewDataBinding: MusicLocalFragBinding
+    private lateinit var binding: MusicLocalFragBinding
     private lateinit var localMusicAdapter: LocalMusicAdapter
-    private lateinit var viewModel: MusicViewModel
+    private val viewModel: MusicViewModel by activityViewModels()
 
     companion object {
         fun newInstance(): LocalMusicFragment {
@@ -29,24 +29,29 @@ class LocalMusicFragment : BaseFragment() {
         }
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        viewDataBinding = MusicLocalFragBinding.inflate(inflater, container, false)
-        viewDataBinding.setLifecycleOwner(this)
-        obtainViewModel(MusicViewModel::class.java).let {
-            viewModel = it
-            viewDataBinding.viewModel = viewModel
-            viewModel.loadMusics()
-        }
-        return viewDataBinding.root
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        binding = DataBindingUtil.inflate(
+            inflater,
+            R.layout.music_local_frag,
+            container,
+            false
+        )
+        binding.lifecycleOwner = this
+        binding.viewModel = viewModel
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        musicRecyclerView.apply {
+        binding.musicRecyclerView.apply {
             layoutManager = LinearLayoutManager(context)
             localMusicAdapter = LocalMusicAdapter(context, viewModel)
             adapter = localMusicAdapter
         }
-
+        viewModel.loadMusics()
     }
 }

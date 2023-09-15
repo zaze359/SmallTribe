@@ -1,9 +1,9 @@
 package com.zaze.tribe.reader.bookshelf
 
 import android.graphics.*
-import com.zaze.utils.ZDisplayUtil
 import com.zaze.tribe.common.util.IconCache
 import com.zaze.tribe.reader.bean.Book
+import com.zaze.utils.DisplayUtil
 
 
 /**
@@ -21,7 +21,7 @@ object BookIconCache {
         color = Color.parseColor("#333333")
         isAntiAlias = true
         isDither = true
-        textSize = ZDisplayUtil.pxFromDp(18F)
+        textSize = DisplayUtil.pxFromDp(18F)
         strokeWidth = 1F
     }
 

@@ -1,5 +1,6 @@
 package com.zaze.tribe.music.data.loaders
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.database.Cursor
 import android.provider.BaseColumns
@@ -37,17 +38,20 @@ object MusicLoader {
         return musics
     }
 
+    @SuppressLint("Range")
     private fun buildMusicFormCursor(cursor: Cursor): Music {
         val id = cursor.getInt(cursor.getColumnIndex(BaseColumns._ID))
+//        val id = cursor.getLong(MediaStore.Audio.Playlists.Members.AUDIO_ID)
+
         val title = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.AudioColumns.TITLE))
         val track = cursor.getInt(cursor.getColumnIndex(MediaStore.Audio.AudioColumns.TRACK))
         val year = cursor.getInt(cursor.getColumnIndex(MediaStore.Audio.AudioColumns.YEAR))
         val duration = cursor.getLong(cursor.getColumnIndex(MediaStore.Audio.AudioColumns.DURATION))
         val data = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.AudioColumns.DATA))
         val dateModified = cursor.getLong(cursor.getColumnIndex(MediaStore.Audio.AudioColumns.DATE_MODIFIED))
-        val albumId = cursor.getInt(cursor.getColumnIndex(MediaStore.Audio.AudioColumns.ALBUM_ID))
+        val albumId = cursor.getLong(cursor.getColumnIndex(MediaStore.Audio.AudioColumns.ALBUM_ID))
         val albumName = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.AudioColumns.ALBUM))
-        val artistId = cursor.getInt(cursor.getColumnIndex(MediaStore.Audio.AudioColumns.ARTIST_ID))
+        val artistId = cursor.getLong(cursor.getColumnIndex(MediaStore.Audio.AudioColumns.ARTIST_ID))
         val artistName = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.AudioColumns.ARTIST))
         return Music(id, title, track, year, duration, data, dateModified, albumId, albumName, artistId, artistName)
     }

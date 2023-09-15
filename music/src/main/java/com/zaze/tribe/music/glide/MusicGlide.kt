@@ -1,13 +1,11 @@
 package com.zaze.tribe.music.glide
 
-import android.graphics.Bitmap
-import android.net.Uri
-import com.bumptech.glide.BitmapRequestBuilder
-import com.bumptech.glide.DrawableRequestBuilder
+import com.bumptech.glide.RequestBuilder
 import com.bumptech.glide.RequestManager
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.zaze.tribe.music.data.dto.Music
 import com.zaze.tribe.music.R
+import com.zaze.tribe.music.glide.palette.BitmapPaletteWrapper
 import com.zaze.tribe.music.util.MusicHelper
 
 /**
@@ -19,29 +17,31 @@ import com.zaze.tribe.music.util.MusicHelper
 
 object MusicGlide {
 
-    fun create(requestManager: RequestManager, music: Music): Builder {
-        return Builder(requestManager, music)
-    }
+//    fun create(requestManager: RequestManager, music: Music): Builder {
+//        return Builder(requestManager, music)
+//    }
+//
+//    class Builder(val requestManager: RequestManager, val music: Music) {
+//        fun build(): RequestBuilder<Drawable> {
+//            return requestManager
+//                .load(MusicHelper.getMediaStoreAlbumCoverUri(music.albumId))
+//                .diskCacheStrategy(DiskCacheStrategy.NONE)
+//                .error(R.mipmap.ic_launcher)
+//        }
+//    }
 
-    class Builder(val requestManager: RequestManager, val music: Music) {
-        fun build(): DrawableRequestBuilder<Uri> {
-            return requestManager
-                    .loadFromMediaStore(MusicHelper.getMediaStoreAlbumCoverUri(music.albumId))
-                    .diskCacheStrategy(DiskCacheStrategy.NONE)
-                    .error(R.mipmap.ic_launcher)
-        }
-
-        fun asBitmap(): BmpBuilder {
-            return BmpBuilder(this)
-        }
+    fun getMusicModel(music: Music): Any {
+        return MusicHelper.getMediaStoreAlbumCoverUri(music.albumId)
     }
-
-    class BmpBuilder(private val builder: Builder) {
-        fun build(): DrawableRequestBuilder<Uri> {
-            return builder.requestManager
-                    .loadFromMediaStore(MusicHelper.getMediaStoreAlbumCoverUri(builder.music.albumId))
-                    .diskCacheStrategy(DiskCacheStrategy.NONE)
-                    .error(R.mipmap.ic_launcher)
-        }
+    fun <T> RequestBuilder<T>.musicCoverOptions(
+        music: Music
+    ): RequestBuilder<T> {
+        return diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
+            .error(R.mipmap.ic_launcher)
+//            .placeholder(getDrawable(DEFAULT_SONG_IMAGE))
+//            .signature(createSignature(song))
     }
+//    fun RequestManager.asBitmapPalette(): RequestBuilder<BitmapPaletteWrapper> {
+//        return this.`as`(BitmapPaletteWrapper::class.java)
+//    }
 }

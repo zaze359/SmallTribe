@@ -1,36 +1,81 @@
 buildscript {
-    ext.kotlin_version = '1.8.0'
-    ext.gradlePluginVersion = '3.3.2'
+    ext {
+        modules = [
+                common: ':common',
+                music : ':music',
+                reader: ':reader',
+                router: ':router'
+        ]
+    }
+//    ext.kotlin_version = '1.8.10'
+//    ext.hilt_version = '2.44.2'
+    Properties properties = new Properties()
+    properties.load(rootProject.file("local.properties").newDataInputStream())
+    ext.useLocalMaven = properties.getProperty("useLocalMaven")
+    println("useLocalMaven1: " + properties.getProperty("useLocalMaven"))
 
     repositories {
+        if (rootProject.ext.useLocalMaven == true) {
+            maven {
+                allowInsecureProtocol = true
+                url 'http://localhost:8081/repository/maven-public'
+            }
+        }
+        mavenLocal()
+        maven { url 'https://maven.aliyun.com/repository/public' }
         maven { url 'https://maven.aliyun.com/repository/jcenter' }
         maven { url 'https://maven.aliyun.com/repository/google' }
         maven { url 'https://jitpack.io' }
-        mavenCentral()
         google()
+        mavenCentral()
     }
+
     dependencies {
-        classpath "com.android.tools.build:gradle:$gradlePluginVersion"
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+        classpath libs.gradle
+        classpath libs.kotlin.gradle.plugin
+        classpath libs.androidx.navigation.safeargs.plugin
+        classpath libs.hilt.gradle.plugin
+//        classpath 'com.android.tools.build:gradle:7.4.2'
+//        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:${rootProject.ext.kotlin_version}"
     }
 }
 
-allprojects {
-    repositories {
-        maven { url 'https://maven.aliyun.com/repository/jcenter' }
-        maven { url 'https://maven.aliyun.com/repository/google' }
+plugins {
+//    alias libs.plugins.github.ben.manes
+//    alias libs.plugins.google.devtools.ksp apply false
+    alias(libs.plugins.android.application) apply false
+    alias(libs.plugins.android.library) apply false
+    alias(libs.plugins.kotlin.android) apply false
+    alias(libs.plugins.hilt) apply false
+    alias(libs.plugins.kapt) apply false
+    alias(libs.plugins.google.devtools.ksp) apply false
 
-        maven { url 'https://jitpack.io' }
-        google()
-        mavenCentral()
-//        maven {
-//            url "https://dl.bintray.com/zaze359/maven"
+}
+println("project build : -----------------------------------------------------")
+//
+//allprojects {
+//    repositories {
+//        if (rootProject.ext.useLocalMaven) {
+//            maven {
+//                allowInsecureProtocol = true
+//                url 'http://localhost:8081/repository/maven-public'
+//            }
 //        }
-    }
-}
+//        mavenLocal()
+//        maven { url 'https://maven.aliyun.com/repository/public' }
+//        maven { url 'https://maven.aliyun.com/repository/jcenter' }
+//        maven { url 'https://maven.aliyun.com/repository/google' }
+//        maven { url 'https://jitpack.io' }
+//        google()
+//        mavenCentral()
+////        maven {
+////            url "https://dl.bintray.com/zaze359/maven"
+////        }
+//    }
+//}
 
-apply from: 'ext.gradle'
+//apply from: 'ext.gradle'
 
-task clean(type: Delete) {
+tasks.register('clean', Delete) {
     delete rootProject.buildDir
 }

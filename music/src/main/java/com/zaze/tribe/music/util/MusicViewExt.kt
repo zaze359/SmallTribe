@@ -6,6 +6,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.bumptech.glide.Glide
 import com.zaze.tribe.music.data.dto.Music
 import com.zaze.tribe.music.glide.MusicGlide
+import com.zaze.tribe.music.glide.MusicGlide.musicCoverOptions
 import com.zaze.tribe.music.vm.MusicViewModel
 
 
@@ -15,8 +16,8 @@ import com.zaze.tribe.music.vm.MusicViewModel
  * SwipeRefreshLayout.setOnRefreshListener()
  *
  */
-@BindingAdapter("app:musicLoader")
-fun SwipeRefreshLayout.setSwipeRefreshLayoutOnRefreshListener(
+@BindingAdapter("musicLoader")
+fun SwipeRefreshLayout.musicLoader(
         viewModel: MusicViewModel) {
     setOnRefreshListener { viewModel.loadMusics() }
 }
@@ -26,11 +27,14 @@ fun SwipeRefreshLayout.setSwipeRefreshLayoutOnRefreshListener(
  * app:bmp --- Music
  * ImageView.setImageBitmap()
  */
-@BindingAdapter("app:bmp")
+@BindingAdapter("bmp")
 fun ImageView.setBitmap(music: Music?) {
     music?.let {
-        MusicGlide.create(Glide.with(context), it)
-                .build()
-                .into(this)
+        Glide.with(context)
+            .asBitmap()
+            .load(MusicGlide.getMusicModel(music))
+            .musicCoverOptions(music)
+            .into(this)
+
     }
 }

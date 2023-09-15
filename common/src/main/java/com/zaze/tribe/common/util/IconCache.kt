@@ -5,9 +5,7 @@ import android.graphics.BitmapFactory
 import android.graphics.drawable.Drawable
 import android.util.LruCache
 import androidx.core.content.res.ResourcesCompat
-import com.zaze.tribe.common.BaseApplication
-import com.zaze.utils.log.ZLog
-import com.zaze.utils.log.ZTag
+import com.zaze.tribe.common.base.BaseApplication
 
 /**
  * Description :

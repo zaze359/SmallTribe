@@ -3,6 +3,7 @@ package com.zaze.tribe.music.util
 import android.content.ContentUris
 import android.net.Uri
 import android.provider.MediaStore
+import androidx.core.net.toUri
 
 /**
  * Description :
@@ -11,10 +12,10 @@ import android.provider.MediaStore
  * @version : 2018-11-12 - 22:53
  */
 object MusicHelper {
-    private val artworkUri = Uri.parse("content://media/external/audio/albumart")
+    private val artworkUri = "content://media/external/audio/albumart".toUri()
 
-    fun getMediaStoreAlbumCoverUri(albumId: Int): Uri {
-        return ContentUris.withAppendedId(artworkUri, albumId.toLong())
+    fun getMediaStoreAlbumCoverUri(albumId: Long): Uri {
+        return ContentUris.withAppendedId(artworkUri, albumId)
     }
 
     fun getMusicFileUri(musicId: Int): Uri {

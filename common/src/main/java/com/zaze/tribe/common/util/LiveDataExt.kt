@@ -13,9 +13,9 @@ import androidx.lifecycle.MutableLiveData
 /**
  * 扩展observable的get方式
  */
-fun <T : Any> MutableLiveData<T>.set(value: T?) = postValue(value)
+fun <T : Any?> MutableLiveData<T>.set(value: T?) = postValue(value)
 
 /**
  * 扩展observable的set方式
  */
-fun <T : Any> MutableLiveData<T>.get() = value
+fun <T : Any?> MutableLiveData<T>.get() = value

@@ -4,7 +4,7 @@
 
     <item
         android:id="@+id/action_toggle_favorite"
-        android:icon="@drawable/music_favorite_border_black_24dp"
+        android:icon="@drawable/music_ic_favorite_border"
         android:orderInCategory="1"
         android:title="@string/music_favorites_menu"
         app:showAsAction="ifRoom" />
@@ -16,7 +16,7 @@
         app:showAsAction="ifRoom" />
 
     <item
-        android:icon="@drawable/music_favorite_border_black_24dp"
+        android:icon="@drawable/music_ic_favorite_border"
         android:orderInCategory="3"
         android:title="@string/music_favorites_menu" />
 </menu>
