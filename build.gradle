@@ -7,36 +7,12 @@ buildscript {
                 router: ':router'
         ]
     }
-//    ext.kotlin_version = '1.8.10'
-//    ext.hilt_version = '2.44.2'
-    Properties properties = new Properties()
-    properties.load(rootProject.file("local.properties").newDataInputStream())
-    ext.useLocalMaven = properties.getProperty("useLocalMaven")
-    println("useLocalMaven1: " + properties.getProperty("useLocalMaven"))
-
-    repositories {
-        if (rootProject.ext.useLocalMaven == true) {
-            maven {
-                allowInsecureProtocol = true
-                url 'http://localhost:8081/repository/maven-public'
-            }
-        }
-        mavenLocal()
-        maven { url 'https://maven.aliyun.com/repository/public' }
-        maven { url 'https://maven.aliyun.com/repository/jcenter' }
-        maven { url 'https://maven.aliyun.com/repository/google' }
-        maven { url 'https://jitpack.io' }
-        google()
-        mavenCentral()
-    }
 
     dependencies {
         classpath libs.gradle
         classpath libs.kotlin.gradle.plugin
         classpath libs.androidx.navigation.safeargs.plugin
         classpath libs.hilt.gradle.plugin
-//        classpath 'com.android.tools.build:gradle:7.4.2'
-//        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:${rootProject.ext.kotlin_version}"
     }
 }
 
@@ -52,27 +28,6 @@ plugins {
 
 }
 println("project build : -----------------------------------------------------")
-//
-//allprojects {
-//    repositories {
-//        if (rootProject.ext.useLocalMaven) {
-//            maven {
-//                allowInsecureProtocol = true
-//                url 'http://localhost:8081/repository/maven-public'
-//            }
-//        }
-//        mavenLocal()
-//        maven { url 'https://maven.aliyun.com/repository/public' }
-//        maven { url 'https://maven.aliyun.com/repository/jcenter' }
-//        maven { url 'https://maven.aliyun.com/repository/google' }
-//        maven { url 'https://jitpack.io' }
-//        google()
-//        mavenCentral()
-////        maven {
-////            url "https://dl.bintray.com/zaze359/maven"
-////        }
-//    }
-//}
 
 //apply from: 'ext.gradle'
 

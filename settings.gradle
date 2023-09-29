@@ -1,25 +1,37 @@
 pluginManagement {
+    def localPropertiesFile = new File(rootProject.projectDir, "local.properties")
+    def properties = new Properties()
+    properties.load(localPropertiesFile.newDataInputStream())
+    def useLocalMaven = properties.getProperty("useLocalMaven")
     repositories {
-        maven {
-            allowInsecureProtocol true
-            url = uri("http://localhost:8081/repository/maven-public")
+        if(useLocalMaven == "true") {
+
+            maven {
+                allowInsecureProtocol true
+                url = uri("http://localhost:8081/repository/maven-public")
+            }
         }
         mavenLocal()
-        maven { url = uri("https://maven.aliyun.com/repository/public") }
-        maven { url = uri("https://maven.aliyun.com/repository/jcenter") }
-        maven { url = uri("https://maven.aliyun.com/repository/google") }
+        maven { url = uri("https://maven.aliyun.com/repository/gradle-plugin") }
         gradlePluginPortal()
         google()
         mavenCentral()
     }
 }
 
+def localPropertiesFile = new File(rootProject.projectDir, "local.properties")
+def properties = new Properties()
+properties.load(localPropertiesFile.newDataInputStream())
+def useLocalMaven = properties.getProperty("useLocalMaven")
+
 dependencyResolutionManagement {
     repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
     repositories {
-        maven {
-            allowInsecureProtocol true
-            url = uri("http://localhost:8081/repository/maven-public")
+        if(useLocalMaven == "true") {
+            maven {
+                allowInsecureProtocol true
+                url = uri("http://localhost:8081/repository/maven-public")
+            }
         }
         mavenLocal()
         maven { url = uri("https://maven.aliyun.com/repository/public") }
